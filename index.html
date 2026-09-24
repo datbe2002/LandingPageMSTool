@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hexa Studio — SQL and Flows for Dataverse</title>
-  <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL and read Power Automate flows as a diagram." />
+  <title>Hexa Studio — SQL, FetchXML and Flows for Dataverse</title>
+  <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL, build FetchXML visually and read Power Automate flows as a diagram." />
   <meta name="theme-color" content="#16151f" />
   <meta property="og:title" content="Hexa Studio" />
-  <meta property="og:description" content="SQL and Flows for Dataverse, in a small native Windows app." />
+  <meta property="og:description" content="SQL, FetchXML and Flows for Dataverse, in a small native Windows app." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -170,6 +170,35 @@
     .lane.par .fill { background: var(--brand); width: 32.65%; }
     .race p { margin: 0; color: var(--subtle); font-size: 13px; }
 
+    /* FetchXML builder demo */
+    .fx-body { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+    .fx-tree { padding: 8px 0; border-right: 1px solid var(--line); font: 12.5px/1 var(--mono); }
+    .fx-row { display: flex; align-items: center; gap: 7px; height: 27px; padding-right: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+    .fx-row .kd { width: 30px; flex: none; font-size: 10.5px; }
+    .fx-row .nm { overflow: hidden; text-overflow: ellipsis; }
+    .fx-row .dt { color: var(--subtle); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+    .fx-row.b .nm { color: var(--fg); font-weight: 600; }
+    .fx-row.sel { background: oklch(0.76 0.13 278 / .13); color: var(--fg); }
+    .kd.tb { color: var(--info); } .kd.cl { color: var(--success); } .kd.so { color: var(--warning); } .kd.fl { color: var(--brand); } .kd.fx { color: var(--brand); }
+    .fx-props { padding: 14px 16px; display: grid; gap: 12px; align-content: start; font-size: 12.5px; }
+    .fx-props h4 { margin: 0; font: 600 10px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); }
+    .fx-field span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 500; }
+    .fx-input { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--s2); font: 12.5px var(--mono); color: var(--fg); }
+    .fx-input.on { border-color: var(--brand); box-shadow: 0 0 0 3px oklch(0.76 0.13 278 / .18); }
+    .fx-input small { color: var(--subtle); font: 11px var(--sans); }
+    .fx-menu { margin-top: 4px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--s2); padding: 4px; box-shadow: 0 16px 30px -12px oklch(0 0 0 / .6); }
+    .fx-menu div { display: flex; align-items: baseline; gap: 10px; padding: 6px 8px; border-radius: 6px; font: 12px var(--mono); color: var(--muted); }
+    .fx-menu div.on { background: oklch(0.76 0.13 278 / .13); color: var(--fg); }
+    .fx-menu small { color: var(--subtle); font: 11px var(--sans); }
+    .fx-xml { min-height: 0; font-size: 12px; line-height: 1.75; padding: 14px 18px; }
+    .fx-xml .ln { display: block; margin: 0 -18px; padding: 0 18px; border-left: 2px solid transparent; }
+    .fx-xml .ln.hl { background: oklch(0.76 0.13 278 / .09); border-left-color: var(--brand); }
+    .fx-xml .tg { color: oklch(0.78 0.14 290); } .fx-xml .at { color: oklch(0.8 0.12 60); } .fx-xml .vl { color: oklch(0.8 0.13 150); }
+    .fx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; font: 12px/1.4 var(--mono); color: var(--subtle); }
+    .fx-chip { padding: 4px 8px; border-radius: 6px; background: oklch(0.76 0.13 278 / .15); color: var(--brand); }
+    .fx-ok { display: inline-flex; align-items: center; gap: 6px; color: var(--success); }
+    .fx-ok i { width: 7px; height: 7px; border-radius: 99px; background: var(--success); }
+
     /* Flows story (pinned on wide screens) */
     .story { padding: 0; }
     .story .wrap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: center; min-height: 100vh; padding-block: 110px 60px; }
@@ -246,6 +275,8 @@
       .install-steps .rail { display: none; }
       .cta .btn { width: 100%; }
       .search { top: 10px; right: 10px; }
+      .fx-body { grid-template-columns: minmax(0, 1fr); }
+      .fx-tree { border-right: 0; border-bottom: 1px solid var(--line); }
       .titlebar .path { display: none; }
     }
   </style>
@@ -261,6 +292,7 @@
       </a>
       <nav aria-label="Page">
         <a href="#sql">SQL</a>
+        <a href="#fetchxml">FetchXML</a>
         <a href="#flows">Flows</a>
         <a href="#install">Install</a>
         <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
@@ -275,8 +307,8 @@
       <div class="wrap hero-grid">
         <div>
           <div class="label" data-hero-in><b data-version>Latest</b> &nbsp;·&nbsp; free for Windows</div>
-          <h1 data-split>SQL and Flows <span class="dim">for Dataverse.</span></h1>
-          <p class="lead" data-hero-in>Query any table like a database. Open any Power Automate flow and see how it really runs — every step, every variable.</p>
+          <h1 data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
+          <p class="lead" data-hero-in>Query any table like a database, build FetchXML without typing it, and open any Power Automate flow to see how it really runs — every step, every variable.</p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
               Download for Windows
@@ -382,11 +414,58 @@
       </div>
     </section>
 
-    <!-- ================= 02 Flows (pinned story) ================= -->
+    <!-- ================= 02 FetchXML ================= -->
+    <section id="fetchxml" aria-labelledby="fx-title" style="padding-top:0">
+      <div class="wrap split">
+        <div>
+          <div class="label" data-rise><b>02</b> / FetchXML</div>
+          <h2 id="fx-title" data-rise>Build FetchXML without typing it.</h2>
+          <p class="sub" data-rise>Pick a table, tick columns, join along real relationships — the XML writes itself. When you'd rather type, it completes every table and column name.</p>
+          <dl class="points">
+            <div data-rise><dt>Builder</dt><dd>A tree of the query and a panel that knows your columns, relationships and choice labels. Operators fit the column's type.</dd></div>
+            <div data-rise><dt>Checks</dt><dd>Missing columns, wrong operators and aggregate mistakes are flagged before you press F5.</dd></div>
+            <div data-rise><dt>Results</dt><dd>Page through or load everything, count rows without reading them, open system and personal views, export to CSV.</dd></div>
+          </dl>
+        </div>
+        <div class="panel" id="fx-demo" role="img" aria-label="The FetchXML builder: a tree of the query with a condition on statecode selected, its properties with the value picked from the choice labels (0, Active), the XML with that condition highlighted, and a row count of 1,284.">
+          <div class="ed-head" aria-hidden="true"><span class="mono">active-accounts.xml</span><span class="runkey">Execute <kbd>F5</kbd></span></div>
+          <div class="fx-body" aria-hidden="true">
+            <div class="fx-tree">
+              <div class="fx-row" data-fx-row style="padding-left:10px"><span class="kd fx">fx</span><span class="nm">fetch</span><span class="dt">top 50</span></div>
+              <div class="fx-row b" data-fx-row style="padding-left:22px"><span class="kd tb">tbl</span><span class="nm">account</span></div>
+              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">name</span></div>
+              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">revenue</span></div>
+              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd so">sort</span><span class="nm">revenue ↓</span></div>
+              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd fl">flt</span><span class="nm">AND</span></div>
+              <div class="fx-row sel" data-fx-row id="fx-cond" style="padding-left:50px"><span class="kd fl">if</span><span class="nm">statecode = 0</span></div>
+              <div class="fx-row b" data-fx-row style="padding-left:36px"><span class="kd tb">join</span><span class="nm">contact as c</span></div>
+              <div class="fx-row" data-fx-row style="padding-left:50px"><span class="kd cl">col</span><span class="nm">fullname</span></div>
+            </div>
+            <div class="fx-props" id="fx-props">
+              <h4>Condition</h4>
+              <div class="fx-field"><span>Column of account</span><div class="fx-input">statecode <small>Status</small></div></div>
+              <div class="fx-field"><span>Operator</span><div class="fx-input">eq — Equals <small>▾</small></div></div>
+              <div class="fx-field"><span>Value</span>
+                <div class="fx-input on">0 · Active <small>▾</small></div>
+                <div class="fx-menu" id="fx-menu"><div class="on">0 <small>Active</small></div><div>1 <small>Inactive</small></div></div>
+              </div>
+            </div>
+          </div>
+          <pre class="code fx-xml" aria-hidden="true"><span class="ln" data-fx-ln><span class="tg">&lt;fetch</span> <span class="at">top</span>=<span class="vl">"50"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;entity</span> <span class="at">name</span>=<span class="vl">"account"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"name"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"revenue"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;order</span> <span class="at">attribute</span>=<span class="vl">"revenue"</span> <span class="at">descending</span>=<span class="vl">"true"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;filter&gt;</span></span><span class="ln hl" data-fx-ln id="fx-hl">      <span class="tg">&lt;condition</span> <span class="at">attribute</span>=<span class="vl">"statecode"</span> <span class="at">operator</span>=<span class="vl">"eq"</span> <span class="at">value</span>=<span class="vl">"0"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/filter&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;link-entity</span> <span class="at">name</span>=<span class="vl">"contact"</span> <span class="at">from</span>=<span class="vl">"contactid"</span> <span class="at">to</span>=<span class="vl">"primarycontactid"</span> <span class="at">alias</span>=<span class="vl">"c"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>      <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"fullname"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/link-entity&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;/entity&gt;</span></span><span class="ln" data-fx-ln><span class="tg">&lt;/fetch&gt;</span></span></pre>
+          <div class="fx-bar" aria-hidden="true">
+            <span class="fx-ok"><i></i>No problems found</span>
+            <span class="fx-chip"><span id="fx-count">1,284</span> rows match</span>
+            <span class="page">counted without reading them</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 Flows (pinned story) ================= -->
     <section class="story" id="flows" aria-labelledby="flows-title">
       <div class="wrap">
         <div>
-          <div class="label" data-rise><b>02</b> / Flows</div>
+          <div class="label" data-rise><b>03</b> / Flows</div>
           <h2 id="flows-title" data-rise>Read a flow like the person who built it.</h2>
           <ol class="steps" id="story-steps">
             <li data-rise><span class="bar"></span><b>Designer</b><p>Steps in the order they run. Conditions and switches as columns, scopes and loops you can fold.</p></li>
@@ -404,11 +483,11 @@
       </div>
     </section>
 
-    <!-- ================= 03 Tenants ================= -->
+    <!-- ================= 04 Tenants ================= -->
     <section aria-labelledby="t-title">
       <div class="wrap split">
         <div>
-          <div class="label" data-rise><b>03</b> / Projects</div>
+          <div class="label" data-rise><b>04</b> / Projects</div>
           <h2 id="t-title" data-rise>Every customer, signed in side by side.</h2>
           <p class="sub" data-rise>One project per tenant, each with its own Microsoft sign-in and environments. Switching asks first — and warns you in red before you touch production.</p>
         </div>
@@ -423,7 +502,7 @@
     <!-- ================= Install ================= -->
     <section id="install" aria-labelledby="install-title" style="padding-top:0">
       <div class="wrap">
-        <div class="label" data-rise><b>04</b> / Install</div>
+        <div class="label" data-rise><b>05</b> / Install</div>
         <h2 id="install-title" data-rise>Running in a minute.</h2>
         <div class="install-steps" id="isteps">
           <div class="rail" aria-hidden="true"><i></i></div>
@@ -676,6 +755,22 @@
         .fromTo(counter, { n: 0 }, { n: 15779, duration: 1.6, ease: "power1.out",
           onUpdate: function () { rowsOut.textContent = Math.round(counter.n).toLocaleString("en-US"); } }, "<")
         .from("[data-page]", { opacity: 0, scale: 0.8, duration: 0.25, stagger: 0.4, ease: "back.out(2)" }, "<");
+
+      /* FetchXML: the tree and its XML build together, the condition is picked,
+         its value comes from the choice labels, then the rows are counted. */
+      var fxRows = gsap.utils.toArray("[data-fx-row]"), fxLines = gsap.utils.toArray("[data-fx-ln]");
+      var fxCount = document.getElementById("fx-count"), fxN = { n: 0 };
+      gsap.timeline({ scrollTrigger: { trigger: "#fx-demo", start: "top 75%", once: true } })
+        .set("#fx-cond", { className: "fx-row" })
+        .set("#fx-hl", { className: "ln" })
+        .from(fxRows, { opacity: 0, x: -8, duration: 0.35, stagger: 0.09, ease: EASE })
+        .from(fxLines, { opacity: 0, duration: 0.3, stagger: 0.065, ease: "power1.out" }, "<")
+        .from("#fx-props", { opacity: 0, x: 16, duration: 0.6, ease: EASE }, "+=0.2")
+        .set("#fx-cond", { className: "fx-row sel" }, "<")
+        .from("#fx-menu", { opacity: 0, y: -6, duration: 0.35, ease: EASE }, "+=0.15")
+        .set("#fx-hl", { className: "ln hl" }, "+=0.35")
+        .fromTo(fxN, { n: 0 }, { n: 1284, duration: 1.1, ease: "power2.out",
+          onUpdate: function () { fxCount.textContent = Math.round(fxN.n).toLocaleString("en-US"); } }, "+=0.2");
 
       /* Both strategies race at their measured speeds: steady progress, so linear. */
       var SEQ = 2.4, PAR = SEQ * 25.6 / 78.4;
