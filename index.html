@@ -3,109 +3,159 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hexa Studio — SQL, FetchXML and Flows for Dataverse</title>
+  <title>Hexa Studio: SQL, FetchXML and Flows for Dataverse</title>
   <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL, build FetchXML visually and read Power Automate flows as a diagram." />
-  <meta name="theme-color" content="#16151f" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9fb" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131316" />
   <meta property="og:title" content="Hexa Studio" />
   <meta property="og:description" content="SQL, FetchXML and Flows for Dataverse, in a small native Windows app." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5/files/geist-latin-wght-normal.woff2" />
   <style>
+    /* Geist + Geist Mono (variable), served from jsDelivr as plain @font-face. */
+    @font-face { font-family: "Geist"; font-style: normal; font-weight: 100 900; font-display: swap;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5/files/geist-latin-wght-normal.woff2") format("woff2-variations"); }
+    @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 100 900; font-display: swap;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono@5/files/geist-mono-latin-wght-normal.woff2") format("woff2-variations"); }
+
     /* ============================================================
-       Tokens — the app's "Ink & Indigo" dark theme (one hue, 278°).
-       Accent is used sparingly: links, the selected step, CTAs.
+       Tokens. Neutrals are near-grey (a trace of the logo's 278 hue),
+       the indigo brand is the only accent: CTAs, links, selection.
+       Semantic colours appear only inside the product previews.
+       Radius rule: 14px frames, 10px buttons and inner panels, 6px chips.
        ============================================================ */
     :root {
-      color-scheme: dark;
-      --bg: oklch(0.155 0.014 278);
-      --s1: oklch(0.185 0.016 278);
-      --s2: oklch(0.215 0.018 278);
-      --s3: oklch(0.255 0.02 278);
-      --fg: oklch(0.95 0.006 278);
-      --muted: oklch(0.8 0.016 278);
-      --subtle: oklch(0.68 0.02 278);
-      --line: oklch(0.27 0.02 278);
-      --line-strong: oklch(0.35 0.022 278);
-      --brand: oklch(0.76 0.13 278);
-      --brand-solid: oklch(0.54 0.2 278);
-      --brand-solid-hover: oklch(0.6 0.19 278);
-      --success: oklch(0.77 0.14 160);
-      --warning: oklch(0.82 0.14 80);
-      --danger: oklch(0.71 0.17 22);
-      --info: oklch(0.77 0.11 230);
-      --num: oklch(0.8 0.1 220);
-      --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-      --mono: "JetBrains Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
-      --r: 12px;
+      color-scheme: light;
+      --bg: oklch(0.985 0.002 278);
+      --s1: oklch(0.995 0.001 278);
+      --s2: oklch(0.97 0.004 278);
+      --s3: oklch(0.935 0.006 278);
+      --code: oklch(0.975 0.003 278);
+      --fg: oklch(0.21 0.012 278);
+      --muted: oklch(0.42 0.012 278);
+      --subtle: oklch(0.52 0.012 278);
+      --line: oklch(0.91 0.004 278);
+      --line-strong: oklch(0.84 0.007 278);
+      --dot: oklch(0.21 0.01 278 / 0.09);
+      --brand: oklch(0.5 0.18 278);
+      --brand-solid: oklch(0.5 0.18 278);
+      --brand-solid-hover: oklch(0.44 0.17 278);
+      --on-brand: oklch(0.99 0.004 278);
+      --success: oklch(0.52 0.13 160);
+      --warning: oklch(0.56 0.14 60);
+      --danger: oklch(0.54 0.19 25);
+      --info: oklch(0.52 0.12 235);
+      --num: oklch(0.5 0.13 235);
+      --syn-kw: oklch(0.48 0.17 292);
+      --syn-at: oklch(0.52 0.13 55);
+      --syn-vl: oklch(0.48 0.12 152);
+      --shadow-lg: 0 28px 60px -28px oklch(0.3 0.05 278 / 0.28), 0 0 0 1px oklch(0.3 0.03 278 / 0.03);
+      --shadow-md: 0 14px 30px -14px oklch(0.3 0.05 278 / 0.25);
+      --sans: "Geist", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+      --mono: "Geist Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
+      --r-lg: 14px;
+      --r-md: 10px;
+      --r-sm: 6px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --nav-h: 64px;
     }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: oklch(0.165 0.005 278);
+        --s1: oklch(0.195 0.006 278);
+        --s2: oklch(0.225 0.007 278);
+        --s3: oklch(0.265 0.009 278);
+        --code: oklch(0.175 0.005 278);
+        --fg: oklch(0.95 0.003 278);
+        --muted: oklch(0.79 0.007 278);
+        --subtle: oklch(0.66 0.009 278);
+        --line: oklch(0.275 0.007 278);
+        --line-strong: oklch(0.355 0.009 278);
+        --dot: oklch(1 0 0 / 0.065);
+        --brand: oklch(0.76 0.12 278);
+        --brand-solid: oklch(0.54 0.18 278);
+        --brand-solid-hover: oklch(0.6 0.17 278);
+        --success: oklch(0.77 0.13 160);
+        --warning: oklch(0.82 0.13 80);
+        --danger: oklch(0.71 0.16 22);
+        --info: oklch(0.77 0.1 230);
+        --num: oklch(0.8 0.1 220);
+        --syn-kw: oklch(0.78 0.13 292);
+        --syn-at: oklch(0.8 0.11 62);
+        --syn-vl: oklch(0.8 0.12 152);
+        --shadow-lg: 0 36px 70px -30px oklch(0.05 0.01 278 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.03);
+        --shadow-md: 0 16px 30px -12px oklch(0.05 0.01 278 / 0.7);
+      }
+    }
+
     *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     img, svg { display: block; }
     a { color: inherit; }
+    h1, h2, h3 { text-wrap: balance; }
+    p { text-wrap: pretty; }
+    ::selection { background: color-mix(in oklab, var(--brand) 28%, transparent); }
     :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 6px; }
     .wrap { width: min(1200px, 100% - 40px); margin-inline: auto; }
-    .skip { position: absolute; left: -999px; top: 8px; z-index: 20; background: var(--brand-solid); color: #fff; padding: 10px 14px; border-radius: 8px; }
+    .skip { position: absolute; left: -999px; top: 8px; z-index: 30; background: var(--brand-solid); color: var(--on-brand); padding: 10px 14px; border-radius: var(--r-md); }
     .skip:focus { left: 16px; }
     .mono { font-family: var(--mono); }
-    .label { font: 500 12.5px/1 var(--mono); letter-spacing: .02em; color: var(--subtle); text-transform: uppercase; }
-    .label b { color: var(--brand); font-weight: 500; }
-    .label [data-version] { text-transform: none; }
+    .ico { width: 18px; height: 18px; flex: none; }
 
     /* ---------- Buttons ---------- */
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 10px; border: 1px solid transparent; font: 600 15px/1 var(--sans); text-decoration: none; cursor: pointer; white-space: nowrap; transition: background-color .2s var(--ease), border-color .2s var(--ease), transform .12s var(--ease); }
-    .btn:active { transform: scale(.98); }
-    .btn-primary { background: var(--brand-solid); color: #fff; box-shadow: inset 0 1px 0 oklch(1 0 0 / .16); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 20px; border-radius: var(--r-md); border: 1px solid transparent; font: 550 15px/1 var(--sans); text-decoration: none; cursor: pointer; white-space: nowrap; transition: background-color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease); }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0) scale(.98); }
+    .btn-primary { background: var(--brand-solid); color: var(--on-brand); box-shadow: inset 0 1px 0 oklch(1 0 0 / .18), var(--shadow-md); }
     .btn-primary:hover { background: var(--brand-solid-hover); }
-    .btn-line { color: var(--fg); border-color: var(--line-strong); }
-    .btn-line:hover { background: var(--s2); }
-    .btn-sm { min-height: 40px; padding: 0 16px; font-size: 14px; }
-    .btn .arrow { transition: transform .25s var(--ease); }
-    .btn:hover .arrow { transform: translateY(2px); }
+    .btn-quiet { color: var(--fg); background: var(--s1); border-color: var(--line-strong); }
+    .btn-quiet:hover { background: var(--s2); }
+    .btn-sm { min-height: 38px; padding: 0 14px; font-size: 14px; gap: 8px; }
+    .btn-sm .ico { width: 16px; height: 16px; }
 
-    /* ---------- Header ---------- */
-    .top { position: fixed; inset: 0 0 auto; z-index: 10; transition: background-color .3s, border-color .3s; border-bottom: 1px solid transparent; }
-    .top.scrolled { background: color-mix(in oklab, var(--bg) 85%, transparent); backdrop-filter: blur(14px); border-color: var(--line); }
-    .top .wrap { display: flex; align-items: center; gap: 28px; height: 68px; }
-    .brand { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; font-weight: 600; font-size: 16.5px; letter-spacing: -.01em; }
+    /* ---------- Header (z-index scale: 10 header, 30 skip link) ---------- */
+    .top { position: fixed; inset: 0 0 auto; z-index: 10; border-bottom: 1px solid transparent; transition: background-color .3s, border-color .3s; }
+    .top.scrolled { background: color-mix(in oklab, var(--bg) 82%, transparent); backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); border-color: var(--line); }
+    @media (prefers-reduced-transparency: reduce) { .top.scrolled { background: var(--bg); backdrop-filter: none; } }
+    .top .wrap { display: flex; align-items: center; gap: 24px; height: var(--nav-h); }
+    .brand { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; font-weight: 600; font-size: 16px; letter-spacing: -.015em; }
     .top nav { display: flex; gap: 2px; margin-left: auto; }
-    .top nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; padding: 12px 12px; border-radius: 8px; transition: color .2s; }
-    .top nav a:hover { color: var(--fg); }
+    .top nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; padding: 10px 12px; border-radius: var(--r-md); transition: color .2s, background-color .2s; }
+    .top nav a:hover { color: var(--fg); background: var(--s2); }
 
     /* ---------- Hero ---------- */
-    .hero { padding: 148px 0 72px; position: relative; }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: center; }
-    h1 { margin: 20px 0 0; font-size: clamp(42px, 5.6vw, 76px); line-height: 1.02; letter-spacing: -.035em; font-weight: 600; }
+    .hero { padding: calc(var(--nav-h) + 64px) 0 96px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+    h1 { margin: 0; font-size: clamp(40px, 4.4vw, 60px); line-height: 1.04; letter-spacing: -.042em; font-weight: 620; }
     h1 .dim { color: var(--subtle); }
-    .line-mask { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
-    .lead { margin: 24px 0 0; max-width: 460px; color: var(--muted); font-size: 18px; }
-    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
-    .facts { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 28px 0 0; padding: 0; list-style: none; color: var(--subtle); font: 400 13px/1.4 var(--mono); }
-    .facts li { display: flex; align-items: center; gap: 8px; }
-    .facts li::before { content: ""; width: 5px; height: 5px; border-radius: 1px; background: var(--line-strong); }
+    .line-mask { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+    .lead { margin: 22px 0 0; max-width: 30em; color: var(--muted); font-size: 18px; line-height: 1.55; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 
-    /* The product window */
-    .window { border-radius: 14px; background: var(--s1); border: 1px solid var(--line-strong); box-shadow: 0 40px 80px -30px oklch(0 0 0 / .7), 0 0 0 1px oklch(1 0 0 / .03); overflow: hidden; }
+    /* Product window (a working preview of the app's own UI) */
+    .window { border-radius: var(--r-lg); background: var(--s1); border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg); overflow: hidden; }
     .titlebar { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--subtle); }
     .titlebar .sep { color: var(--line-strong); }
     .titlebar .fg { color: var(--muted); }
     .titlebar .path { margin-left: auto; white-space: nowrap; }
-    .tag { font: 600 10.5px/1 var(--sans); padding: 4px 6px; border-radius: 5px; background: oklch(0.82 0.14 80 / .15); color: var(--warning); }
-    .app { display: grid; grid-template-columns: 1fr 250px; }
-    .canvas { background-color: var(--bg); background-image: radial-gradient(oklch(1 0 0 / .06) 1px, transparent 1px); background-size: 16px 16px; }
+    .tag { font: 600 10.5px/1 var(--sans); padding: 4px 6px; border-radius: 5px; background: color-mix(in oklab, var(--danger) 14%, transparent); color: var(--danger); }
+    .app { display: grid; grid-template-columns: minmax(0, 1fr) 236px; }
+    .canvas { background-color: var(--bg); background-image: radial-gradient(var(--dot) 1px, transparent 1px); background-size: 16px 16px; }
     .canvas svg { width: 100%; height: auto; }
     .side { border-left: 1px solid var(--line); padding: 14px 14px 16px; font-size: 12.5px; }
-    .side h4 { margin: 0 0 8px; font: 600 10px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); }
+    .side h4 { margin: 0 0 8px; font: 600 11px/1 var(--sans); color: var(--subtle); }
     .side .step { display: flex; align-items: center; gap: 9px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
     .side .step b { display: block; font-weight: 600; font-size: 13px; }
     .side .step small { color: var(--subtle); font-size: 11px; }
     .chip-ico { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; flex: none; font: 600 11px/1 var(--mono); }
-    .t-warn { background: oklch(0.82 0.14 80 / .15); color: var(--warning); }
-    .expr { font: 11px/1.6 var(--mono); background: oklch(0.76 0.13 278 / .09); border-radius: 5px; padding: 6px 7px; margin-bottom: 14px; color: var(--muted); }
+    .t-warn { background: color-mix(in oklab, var(--warning) 16%, transparent); color: var(--warning); }
+    .expr { font: 11px/1.6 var(--mono); background: color-mix(in oklab, var(--brand) 8%, transparent); border-radius: var(--r-sm); padding: 6px 7px; margin-bottom: 14px; color: var(--muted); overflow-wrap: anywhere; }
     .expr .fn { color: var(--brand); } .expr .ref { color: var(--info); text-decoration: underline dotted; }
     .vrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border-radius: 7px; margin-top: 3px; border: 1px solid transparent; }
     .vrow small { display: block; color: var(--subtle); font-size: 10.5px; }
@@ -113,171 +163,191 @@
     .vrow.on { background: var(--s2); border-color: var(--line); }
     .vname { font: 600 12px var(--mono); color: var(--warning); }
 
-    /* SVG diagram parts (used by the hero and the Flows stage) */
+    /* SVG diagram parts (hero and the Flows stage) */
     .dg text { font-family: var(--sans); }
-    .dg .box { fill: var(--s2); stroke: var(--line); stroke-width: 1; }
-    .dg .t1 { font-size: 12.5px; font-weight: 500; fill: var(--fg); }
+    .dg .box { fill: var(--s1); stroke: var(--line-strong); stroke-width: 1; }
+    .dg .t1 { font-size: 12.5px; font-weight: 550; fill: var(--fg); }
     .dg .t2 { font-size: 10.5px; fill: var(--subtle); }
     .dg .ic-t { font-family: var(--mono); font-size: 10.5px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
     .dg .edge { stroke: var(--line-strong); stroke-width: 1.5; fill: none; }
-    .dg .frame { fill: oklch(0.76 0.13 278 / .035); stroke: var(--line-strong); stroke-dasharray: 5 4; }
+    .dg .frame { fill: color-mix(in oklab, var(--brand) 3%, transparent); stroke: var(--line-strong); stroke-dasharray: 5 4; }
     .dg .pill-t { font-size: 10.5px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
     .dg .sel .box { stroke: var(--brand); stroke-width: 1.5; }
     .dg .hit .box { stroke: var(--warning); stroke-width: 1.5; }
-    .dg .ring { fill: none; stroke: var(--brand); stroke-opacity: .28; stroke-width: 6; }
+    .dg .ring { fill: none; stroke: var(--brand); stroke-opacity: .25; stroke-width: 6; }
     .dg .lineage { fill: none; stroke-width: 1.5; }
     .dg .tag-t { font-family: var(--mono); font-size: 10px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
 
-    /* ---------- Proof numbers ---------- */
+    /* ---------- Numbers (asymmetric strip, dividers only) ---------- */
     .proof { border-block: 1px solid var(--line); }
-    .proof .wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
-    .stat { padding: 34px 28px 34px 0; }
-    .stat + .stat { padding-left: 28px; border-left: 1px solid var(--line); }
-    .stat .big { font: 600 clamp(34px, 4vw, 46px)/1 var(--sans); letter-spacing: -.03em; }
-    .stat p { margin: 10px 0 0; color: var(--muted); font-size: 14.5px; max-width: 290px; }
+    .proof-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); }
+    .stat { padding: 40px 32px; }
+    .stat:first-child { padding-left: 0; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat:last-child { padding-right: 0; }
+    .big { font: 600 clamp(36px, 4vw, 52px)/1 var(--sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .big small { font-size: .5em; letter-spacing: -.02em; color: var(--muted); font-weight: 550; }
+    .stat p { margin: 12px 0 0; color: var(--muted); font-size: 15px; max-width: 34ch; }
+    .race { margin-top: 26px; display: grid; gap: 10px; max-width: 520px; }
+    .lane { display: grid; grid-template-columns: 150px minmax(0, 1fr) 60px; align-items: center; gap: 14px; font-size: 13.5px; color: var(--muted); }
+    .lane .bar { display: block; height: 8px; }
+    .lane .bar i { display: block; height: 100%; border-radius: 99px; transform-origin: left center; }
+    .lane.seq .bar i { width: 100%; background: var(--line-strong); }
+    .lane.par .bar i { width: 32.65%; background: var(--brand); }
+    .lane .t { font-family: var(--mono); text-align: right; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .lane.par { color: var(--fg); }
 
     /* ---------- Sections ---------- */
-    section { padding: 128px 0; }
-    h2 { margin: 18px 0 0; font-size: clamp(32px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; font-weight: 600; }
-    .sub { margin: 18px 0 0; color: var(--muted); font-size: 17.5px; max-width: 470px; }
-    .split { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: start; }
-    .points { margin: 36px 0 0; display: grid; gap: 0; }
-    .points div { padding: 16px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 110px 1fr; gap: 16px; }
-    .points dt { font: 500 12.5px/1.6 var(--mono); color: var(--subtle); text-transform: uppercase; letter-spacing: .02em; }
-    .points dd { margin: 0; color: var(--muted); font-size: 15.5px; }
+    .sec { padding: 120px 0; }
+    h2 { margin: 0; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -.035em; font-weight: 620; }
+    .sub { margin: 16px 0 0; color: var(--muted); font-size: 18px; max-width: 36em; }
+    .sec-head { max-width: 760px; margin-bottom: 48px; }
 
-    /* SQL demo */
-    .panel { background: var(--s1); border: 1px solid var(--line-strong); border-radius: var(--r); overflow: hidden; }
+    /* Shared panel chrome */
+    .panel { background: var(--s1); border: 1px solid var(--line-strong); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-md); }
     .ed-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--subtle); }
-    .runkey { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 7px; background: var(--brand-solid); color: #fff; font: 600 12px/1 var(--sans); }
-    .runkey kbd { font: 500 10.5px/1 var(--mono); padding: 3px 5px; border-radius: 4px; background: oklch(1 0 0 / .16); }
-    .code { margin: 0; padding: 18px 20px; font: 13.5px/1.8 var(--mono); background: var(--bg); color: var(--fg); min-height: 150px; white-space: pre; overflow-x: auto; }
-    .code .k { color: oklch(0.78 0.14 290); } .code .n { color: var(--num); }
-    table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .grid th, .grid td { text-align: left; padding: 9px 14px; border-top: 1px solid var(--line); white-space: nowrap; }
-    .grid th { color: var(--subtle); font-weight: 500; font-size: 11.5px; background: var(--s2); }
-    .grid td.n { font-family: var(--mono); color: var(--num); }
-    .streambar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); font: 12px/1.4 var(--mono); color: var(--subtle); }
-    .streambar .count { color: var(--fg); }
-    .page { padding: 3px 7px; border-radius: 5px; background: var(--s3); color: var(--muted); font-size: 11px; }
-    .race { margin-top: 18px; padding: 18px 20px; display: grid; gap: 14px; }
-    .race h3 { margin: 0; font: 600 12px/1 var(--mono); color: var(--subtle); text-transform: uppercase; letter-spacing: .03em; }
-    .lane { display: grid; grid-template-columns: 150px 1fr 64px; align-items: center; gap: 14px; font-size: 13.5px; }
-    .lane .track { height: 10px; border-radius: 99px; background: var(--s3); overflow: hidden; }
-    .lane .fill { height: 100%; border-radius: 99px; transform-origin: left center; }
-    .lane .t { font-family: var(--mono); text-align: right; color: var(--muted); font-size: 13px; }
-    .lane.seq .fill { background: var(--line-strong); width: 100%; }
-    .lane.par .fill { background: var(--brand); width: 32.65%; }
-    .race p { margin: 0; color: var(--subtle); font-size: 13px; }
+    .runkey { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 7px; background: var(--brand-solid); color: var(--on-brand); font: 600 12px/1 var(--sans); }
+    .runkey kbd { font: 500 10.5px/1 var(--mono); padding: 3px 5px; border-radius: 4px; background: oklch(1 0 0 / .18); }
+    .code { margin: 0; padding: 18px 20px; font: 13px/1.8 var(--mono); background: var(--code); color: var(--fg); white-space: pre; overflow-x: auto; }
+    .code .k, .code .tg { color: var(--syn-kw); } .code .n { color: var(--num); } .code .at { color: var(--syn-at); } .code .vl { color: var(--syn-vl); }
 
-    /* FetchXML builder demo */
-    .fx-body { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+    /* SQL: one wide editor, query beside the rows it returns */
+    .sql-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    .sql-body .code { border-right: 1px solid var(--line); min-height: 100%; }
+    .results { display: flex; flex-direction: column; }
+    table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .grid th, .grid td { text-align: left; padding: 10px 14px; white-space: nowrap; }
+    .grid td { border-top: 1px solid var(--line); }
+    .grid th { color: var(--subtle); font-weight: 500; font-size: 12px; background: var(--s2); }
+    .grid td.n { font-family: var(--mono); color: var(--num); font-variant-numeric: tabular-nums; }
+    .streambar { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); font: 12px/1.4 var(--mono); color: var(--subtle); }
+    .streambar .count { color: var(--fg); font-variant-numeric: tabular-nums; }
+    .page { padding: 3px 7px; border-radius: 5px; background: var(--s3); color: var(--muted); font-size: 11px; }
+    .points { margin: 40px 0 0; padding-top: 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; }
+    .points dt { font-weight: 600; font-size: 16px; }
+    .points dd { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+
+    /* FetchXML bento: builder + check on top, the XML it writes across the bottom */
+    .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+    .cell-builder { grid-column: 1 / 8; }
+    .cell-check { grid-column: 8 / 13; }
+    .cell-xml { grid-column: 1 / 13; }
+    .fx-body { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); }
     .fx-tree { padding: 8px 0; border-right: 1px solid var(--line); font: 12.5px/1 var(--mono); }
-    .fx-row { display: flex; align-items: center; gap: 7px; height: 27px; padding-right: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+    .fx-row { display: flex; align-items: center; gap: 7px; height: 28px; padding-right: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; }
     .fx-row .kd { width: 30px; flex: none; font-size: 10.5px; }
     .fx-row .nm { overflow: hidden; text-overflow: ellipsis; }
-    .fx-row .dt { color: var(--subtle); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+    .fx-row .dt { color: var(--subtle); font-size: 11px; }
     .fx-row.b .nm { color: var(--fg); font-weight: 600; }
-    .fx-row.sel { background: oklch(0.76 0.13 278 / .13); color: var(--fg); }
-    .kd.tb { color: var(--info); } .kd.cl { color: var(--success); } .kd.so { color: var(--warning); } .kd.fl { color: var(--brand); } .kd.fx { color: var(--brand); }
+    .fx-row.sel { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
+    .kd.tb { color: var(--info); } .kd.cl { color: var(--success); } .kd.so { color: var(--warning); } .kd.fl, .kd.fx { color: var(--brand); }
     .fx-props { padding: 14px 16px; display: grid; gap: 12px; align-content: start; font-size: 12.5px; }
-    .fx-props h4 { margin: 0; font: 600 10px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--subtle); }
+    .fx-props h4 { margin: 0; font: 600 11px/1 var(--sans); color: var(--subtle); }
     .fx-field span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 500; }
-    .fx-input { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--s2); font: 12.5px var(--mono); color: var(--fg); }
-    .fx-input.on { border-color: var(--brand); box-shadow: 0 0 0 3px oklch(0.76 0.13 278 / .18); }
+    .fx-input { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line-strong); background: var(--s2); font: 12.5px var(--mono); color: var(--fg); }
+    .fx-input.on { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 18%, transparent); }
     .fx-input small { color: var(--subtle); font: 11px var(--sans); }
-    .fx-menu { margin-top: 4px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--s2); padding: 4px; box-shadow: 0 16px 30px -12px oklch(0 0 0 / .6); }
+    .fx-menu { margin-top: 4px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--s1); padding: 4px; box-shadow: var(--shadow-md); }
     .fx-menu div { display: flex; align-items: baseline; gap: 10px; padding: 6px 8px; border-radius: 6px; font: 12px var(--mono); color: var(--muted); }
-    .fx-menu div.on { background: oklch(0.76 0.13 278 / .13); color: var(--fg); }
+    .fx-menu div.on { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
     .fx-menu small { color: var(--subtle); font: 11px var(--sans); }
-    .fx-xml { min-height: 0; font-size: 12px; line-height: 1.75; padding: 14px 18px; }
-    .fx-xml .ln { display: block; margin: 0 -18px; padding: 0 18px; border-left: 2px solid transparent; }
-    .fx-xml .ln.hl { background: oklch(0.76 0.13 278 / .09); border-left-color: var(--brand); }
-    .fx-xml .tg { color: oklch(0.78 0.14 290); } .fx-xml .at { color: oklch(0.8 0.12 60); } .fx-xml .vl { color: oklch(0.8 0.13 150); }
-    .fx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; font: 12px/1.4 var(--mono); color: var(--subtle); }
-    .fx-chip { padding: 4px 8px; border-radius: 6px; background: oklch(0.76 0.13 278 / .15); color: var(--brand); }
-    .fx-ok { display: inline-flex; align-items: center; gap: 6px; color: var(--success); }
-    .fx-ok i { width: 7px; height: 7px; border-radius: 99px; background: var(--success); }
+    .cell-check { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 28px; border-radius: var(--r-lg); border: 1px solid color-mix(in oklab, var(--brand) 22%, var(--line)); background:
+        radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 60%),
+        color-mix(in oklab, var(--brand) 5%, var(--s1)); }
+    .fx-ok { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--mono); color: var(--success); }
+    .fx-ok svg { width: 16px; height: 16px; }
+    .cell-check .big { color: var(--fg); }
+    .cell-check .big + p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+    .cell-check .more { margin: 0; padding-top: 18px; border-top: 1px solid color-mix(in oklab, var(--brand) 18%, var(--line)); color: var(--muted); font-size: 14.5px; }
+    .fx-xml { font-size: 12.5px; line-height: 1.75; padding: 16px 20px; }
+    .fx-xml .ln { display: block; margin: 0 -20px; padding: 0 20px; border-left: 2px solid transparent; }
+    .fx-xml .ln.hl { background: color-mix(in oklab, var(--brand) 9%, transparent); border-left-color: var(--brand); }
 
-    /* Flows story (pinned on wide screens) */
+    /* Flows: pinned scroll story on wide screens */
     .story { padding: 0; }
-    .story .wrap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: center; min-height: 100vh; padding-block: 110px 60px; }
-    .steps { list-style: none; padding: 0; margin: 36px 0 0; display: grid; gap: 4px; }
+    .story .wrap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 64px; align-items: center; min-height: 100dvh; padding-block: calc(var(--nav-h) + 40px) 48px; }
+    .steps { list-style: none; padding: 0; margin: 32px 0 0; display: grid; gap: 4px; }
     .steps li { position: relative; padding: 14px 0 14px 22px; color: var(--subtle); }
     .steps li::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 2px; border-radius: 2px; background: var(--line); }
     .steps li .bar { position: absolute; left: 0; top: 14px; bottom: 14px; width: 2px; border-radius: 2px; background: var(--brand); transform-origin: top; transform: scaleY(0); }
-    .steps li b { display: block; color: var(--muted); font-weight: 600; font-size: 16px; }
-    .steps li p { margin: 4px 0 0; font-size: 15px; }
-    .stage { position: relative; border-radius: var(--r); border: 1px solid var(--line-strong); background-color: var(--bg); background-image: radial-gradient(oklch(1 0 0 / .06) 1px, transparent 1px); background-size: 16px 16px; overflow: hidden; }
+    .steps li b { display: block; color: var(--fg); font-weight: 600; font-size: 16px; }
+    .steps li p { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+    .stage { position: relative; border-radius: var(--r-lg); border: 1px solid var(--line-strong); background-color: var(--bg); background-image: radial-gradient(var(--dot) 1px, transparent 1px); background-size: 16px 16px; overflow: hidden; box-shadow: var(--shadow-md); }
     .stage svg { width: 100%; height: auto; }
-    .search { position: absolute; top: 16px; right: 16px; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--brand); background: var(--s2); font-size: 13px; box-shadow: 0 10px 30px -10px oklch(0 0 0 / .6); }
+    .search { position: absolute; top: 16px; right: 16px; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--brand); background: var(--s1); font-size: 13px; box-shadow: var(--shadow-md); }
+    .search svg { width: 14px; height: 14px; color: var(--subtle); }
     .search .q { font-family: var(--mono); min-width: 64px; }
     .search .caret { width: 1.5px; height: 16px; background: var(--brand); }
     .search .hits { color: var(--subtle); font: 11.5px var(--mono); white-space: nowrap; }
 
-    /* Tenants */
-    .tenants { display: grid; gap: 0; }
-    .tenant { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 14px; padding: 16px 18px; border-top: 1px solid var(--line); }
-    .tenant:first-child { border-top: 0; }
-    .tenant .sq { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font: 600 13px/1 var(--sans); }
-    .tenant b { display: block; font-weight: 600; }
-    .tenant small { color: var(--subtle); font-size: 13px; }
-    .state { display: inline-flex; align-items: center; gap: 8px; font: 12px/1 var(--mono); color: var(--success); }
-    .state i { width: 8px; height: 8px; border-radius: 99px; background: var(--success); box-shadow: 0 0 0 4px oklch(0.77 0.14 160 / .15); }
-    .state.wait { color: var(--subtle); } .state.wait i { background: var(--line-strong); box-shadow: none; }
+    /* Projects: the tenants sit inside the sentence */
+    .statement { font-size: clamp(34px, 4.6vw, 64px); line-height: 1.18; letter-spacing: -.04em; max-width: 17em; }
+    .tn { display: inline-flex; align-items: center; gap: .2em; padding: .04em .26em .04em .12em; margin: .04em 0; border-radius: .22em; border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-md); vertical-align: .04em; line-height: 1.1; white-space: nowrap; }
+    .tn .sq { width: .78em; height: .78em; border-radius: .16em; display: grid; place-items: center; background: color-mix(in oklab, var(--brand) 16%, var(--s2)); color: var(--brand); }
+    .tn .sq b { font-size: .42em; font-weight: 650; letter-spacing: 0; }
+    .tn i { width: .16em; height: .16em; margin-left: .04em; border-radius: 99px; background: var(--success); transition: background-color .3s; }
+    .tn.wait i { background: var(--line-strong); }
+    .nw { white-space: nowrap; }
+    .tenants-sec .sub { margin-top: 28px; }
 
-    /* Install */
-    .install-steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 56px; }
-    .install-steps .rail { position: absolute; left: 17px; right: 17px; top: 17px; height: 2px; background: var(--line); }
-    .install-steps .rail i { position: absolute; inset: 0; background: var(--brand); transform-origin: left; }
-    .istep { position: relative; }
-    .istep .dot { width: 36px; height: 36px; border-radius: 99px; display: grid; place-items: center; background: var(--brand-solid); border: 2px solid var(--brand-solid); font: 600 13px/1 var(--mono); color: #fff; position: relative; z-index: 1; transition: background-color .3s, border-color .3s, color .3s; }
-    .istep.off .dot { background: var(--s2); border-color: var(--line-strong); color: var(--muted); }
-    .istep h3 { margin: 20px 0 0; font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
-    .istep p { margin: 8px 0 0; color: var(--muted); font-size: 15px; max-width: 320px; }
-    kbd.k { font: 500 12.5px var(--mono); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-strong); border-bottom-width: 2px; background: var(--s2); color: var(--fg); }
-    .req { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 28px; color: var(--subtle); font-size: 14px; }
-    .req a { color: var(--brand); }
+    /* Install: closing section, centred */
+    .final { text-align: center; border-top: 1px solid var(--line); background: radial-gradient(60% 50% at 50% 0%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 70%); }
+    .final .mark { margin: 0 auto 28px; width: 64px; height: 64px; border-radius: 15px; box-shadow: var(--shadow-md); }
+    .final .sub { margin-inline: auto; }
+    .final .cta { justify-content: center; }
+    .final .meta { margin-top: 14px; color: var(--subtle); font: 13px var(--mono); }
+    .isteps { position: relative; list-style: none; padding: 0; margin: 80px auto 0; max-width: 980px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; text-align: left; }
+    .isteps .rail { position: absolute; left: 5px; right: 5px; top: 5px; height: 2px; background: var(--line); }
+    .isteps .rail i { position: absolute; inset: 0; background: var(--brand); transform-origin: left; }
+    .istep .pip { position: relative; z-index: 1; width: 12px; height: 12px; border-radius: 99px; background: var(--brand); box-shadow: 0 0 0 4px var(--bg); transition: background-color .3s; }
+    .istep.off .pip { background: var(--line-strong); }
+    .istep h3 { margin: 22px 0 0; font-size: 19px; font-weight: 600; letter-spacing: -.015em; }
+    .istep p { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+    kbd.k { font: 500 12.5px var(--mono); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-strong); border-bottom-width: 2px; background: var(--s2); color: var(--fg); white-space: nowrap; }
+    .req { margin: 56px auto 0; max-width: 60ch; color: var(--subtle); font-size: 14px; }
+    .req a { color: var(--brand); text-underline-offset: 3px; }
 
-    /* Final */
-    .final { position: relative; overflow: hidden; border-top: 1px solid var(--line); }
-    .final .hex { position: absolute; inset: 0; opacity: .5; pointer-events: none; }
-    .final .wrap { position: relative; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 32px; }
-    .final h2 { max-width: 620px; }
-    .final .meta { margin-top: 12px; color: var(--subtle); font: 13px var(--mono); }
-
-    footer { border-top: 1px solid var(--line); padding: 28px 0 44px; color: var(--subtle); font-size: 14px; }
-    footer .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; }
+    footer { border-top: 1px solid var(--line); padding: 20px 0 36px; color: var(--subtle); font-size: 14px; }
+    footer .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; }
+    footer .brand { font-size: 14px; color: var(--muted); }
     footer a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--fg); }
     footer .sp { flex: 1; }
 
-    /* ---------- Responsive ---------- */
-    @media (max-width: 1000px) {
-      /* minmax(0, …): a 1fr track would grow to the longest line of the SQL <pre>. */
-      .hero-grid, .split, .story .wrap { grid-template-columns: minmax(0, 1fr); gap: 44px; }
-      .story .wrap { min-height: 0; padding-block: 96px 40px; }
+    /* ---------- Responsive: every multi-column block collapses to one column below 768px ---------- */
+    @media (max-width: 1023px) {
+      .hero-grid, .story .wrap { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+      .story .wrap { min-height: 0; padding-block: 96px 24px; }
       .app { grid-template-columns: minmax(0, 1fr); }
       .side { display: none; }
+      .sql-body { grid-template-columns: minmax(0, 1fr); }
+      .sql-body .code { border-right: 0; border-bottom: 1px solid var(--line); }
+      .cell-builder, .cell-check, .cell-xml { grid-column: 1 / -1; }
+      .proof-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .stat:first-child { grid-column: 1 / -1; padding-right: 0; border-bottom: 1px solid var(--line); }
+      .stat:nth-child(2) { padding-left: 0; border-left: 0; }
     }
-    @media (max-width: 700px) {
-      .top nav { display: none; }
-      .top .btn { margin-left: auto; }
-      .hero { padding-top: 112px; }
-      section { padding: 88px 0; }
-      .proof .wrap { grid-template-columns: minmax(0, 1fr); }
-      .stat, .stat + .stat { padding: 24px 0; border-left: 0; }
-      .stat + .stat { border-top: 1px solid var(--line); }
-      .points div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
-      .lane { grid-template-columns: 1fr 56px; }
-      .lane .name { grid-column: 1 / -1; }
-      .install-steps { grid-template-columns: minmax(0, 1fr); }
-      .install-steps .rail { display: none; }
+    @media (max-width: 767px) {
+      .top nav, .top .btn { display: none; }
+      .hero { padding: calc(var(--nav-h) + 40px) 0 72px; }
+      .sec { padding: 80px 0; }
+      .sec-head { margin-bottom: 32px; }
       .cta .btn { width: 100%; }
-      .search { top: 10px; right: 10px; }
+      .proof-grid { grid-template-columns: minmax(0, 1fr); }
+      .stat, .stat + .stat { padding: 28px 0; border-left: 0; }
+      .stat + .stat { border-top: 1px solid var(--line); }
+      .stat:first-child { border-bottom: 0; }
+      .lane { grid-template-columns: minmax(0, 1fr) 56px; gap: 6px 12px; }
+      .lane .name { grid-column: 1 / -1; }
+      .points { grid-template-columns: minmax(0, 1fr); gap: 20px; }
       .fx-body { grid-template-columns: minmax(0, 1fr); }
       .fx-tree { border-right: 0; border-bottom: 1px solid var(--line); }
+      .cell-check { padding: 22px; }
       .titlebar .path { display: none; }
+      .search { top: 10px; right: 10px; }
+      .isteps { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 56px; }
+      .isteps .rail { display: none; }
+      .istep h3 { margin-top: 14px; }
     }
   </style>
 </head>
@@ -287,7 +357,7 @@
   <header class="top" id="top">
     <div class="wrap">
       <a class="brand" href="#" aria-label="Hexa Studio, back to top">
-        <img src="favicon.svg" width="28" height="28" alt="" />
+        <img src="favicon.svg" width="26" height="26" alt="" />
         Hexa Studio
       </a>
       <nav aria-label="Page">
@@ -297,30 +367,30 @@
         <a href="#install">Install</a>
         <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
       </nav>
-      <a class="btn btn-primary btn-sm" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">Download</a>
+      <a class="btn btn-primary btn-sm" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
+        <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
+        Download for Windows
+      </a>
     </div>
   </header>
 
   <main id="main">
     <!-- ================= Hero ================= -->
-    <div class="hero">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-grid">
         <div>
-          <div class="label" data-hero-in><b data-version>Latest</b> &nbsp;·&nbsp; free for Windows</div>
-          <h1 data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
-          <p class="lead" data-hero-in>Query any table like a database, build FetchXML without typing it, and open any Power Automate flow to see how it really runs — every step, every variable.</p>
+          <h1 id="hero-title" data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
+          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually and read every Power Automate flow step by step.</p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
+              <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
               Download for Windows
-              <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v13M6 12l6 6 6-6"/></svg>
             </a>
-            <a class="btn btn-line" href="https://github.com/datbe2002/MSDataverseTool">Source on GitHub</a>
+            <a class="btn btn-quiet" href="https://github.com/datbe2002/MSDataverseTool">
+              <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></svg>
+              GitHub
+            </a>
           </div>
-          <ul class="facts" data-hero-in>
-            <li data-size>16 MB installer</li>
-            <li>No admin rights</li>
-            <li>No passwords stored</li>
-          </ul>
         </div>
 
         <!-- The flow diagram builds itself in run order, then a step is picked
@@ -336,7 +406,7 @@
             <div class="side" id="hero-side">
               <div class="step">
                 <span class="chip-ico t-warn">{x}</span>
-                <div><b>Set variable - varTotal</b><small>Set variable · in Condition › True</small></div>
+                <div><b>Set variable - varTotal</b><small>in Condition › True</small></div>
               </div>
               <h4>Value</h4>
               <div class="expr">@<span class="fn">add</span>(<span class="fn">variables</span>('varTotal'), <span class="fn">body</span>(<span class="ref">'Get_order'</span>)?['amount'])</div>
@@ -349,209 +419,185 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ================= Proof ================= -->
-    <div class="proof">
-      <div class="wrap">
+    <!-- ================= Numbers ================= -->
+    <section class="proof" aria-label="Hexa Studio in numbers">
+      <div class="wrap proof-grid">
         <div class="stat">
-          <div class="big"><span data-count="3.1" data-dec="1">3.1</span>×</div>
-          <p>faster SELECT on a 15,779-row table — parallel reads, 25.6 s instead of 78.4 s in our test.</p>
+          <div class="big"><span data-count="3.1" data-dec="1">3.1</span>× <small>faster SELECT</small></div>
+          <p>On a 15,779-row table, Hexa reads key ranges side by side instead of one page at a time.</p>
+          <div class="race" id="race" role="img" aria-label="Reading 15,779 rows: 78.4 seconds one request at a time, 25.6 seconds with Hexa reading 4 in parallel.">
+            <div class="lane seq" aria-hidden="true"><span class="name">One request at a time</span><span class="bar"><i></i></span><span class="t" data-t="78.4">78.4 s</span></div>
+            <div class="lane par" aria-hidden="true"><span class="name">Hexa, 4 in parallel</span><span class="bar"><i></i></span><span class="t" data-t="25.6">25.6 s</span></div>
+          </div>
         </div>
         <div class="stat">
-          <div class="big"><span data-count="16" data-dec="0" data-size-num>16</span> MB</div>
-          <p>A native app built with Tauri and Rust. Starts in a blink, no browser in a box.</p>
+          <div class="big"><span data-size-num>16</span> <small>MB</small></div>
+          <p>A native app built with Tauri and Rust. It installs for your user, no admin rights.</p>
         </div>
         <div class="stat">
-          <div class="big"><span>0</span></div>
-          <p>passwords stored. You sign in with Microsoft; the token stays in Windows Credential Manager.</p>
+          <div class="big">0</div>
+          <p>Passwords stored. You sign in with Microsoft and the token stays in Windows Credential Manager.</p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ================= 01 SQL ================= -->
-    <section id="sql" aria-labelledby="sql-title">
-      <div class="wrap split">
-        <div>
-          <div class="label" data-rise><b>01</b> / SQL</div>
-          <h2 id="sql-title" data-rise>Every table. Even the big ones.</h2>
-          <p class="sub" data-rise>Write T-SQL, press F5. Hexa plans it into FetchXML, reads large tables in parallel and streams rows into the grid as they land.</p>
-          <dl class="points">
-            <div data-rise><dt>Reads</dt><dd>Any table, virtual ones included. The TDS endpoint takes over for what FetchXML can't plan.</dd></div>
-            <div data-rise><dt>Writes</dt><dd>INSERT, UPDATE and DELETE show how many records change and wait for your OK.</dd></div>
-            <div data-rise><dt>Editor</dt><dd>Monaco with table and column completion, tabs per environment, full history.</dd></div>
-          </dl>
+    <!-- ================= SQL ================= -->
+    <section class="sec" id="sql" aria-labelledby="sql-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2 id="sql-title" data-rise>Query any table with SQL. Even the big ones.</h2>
+          <p class="sub" data-rise>Write T-SQL and press F5. Hexa plans it into FetchXML and streams rows into the grid as they land.</p>
         </div>
-        <div>
-          <div class="panel" id="sql-demo" role="img" aria-label="A SQL query runs; rows stream into the grid page by page until 15,779 rows have arrived.">
-            <div class="ed-head" aria-hidden="true"><span class="mono">orders.sql</span><span class="runkey" id="runkey">Run <kbd>F5</kbd></span></div>
-            <pre class="code" id="sql-code" aria-hidden="true"><span class="k">SELECT</span> o.name, o.totalamount, a.name <span class="k">AS</span> customer
+        <div class="panel" id="sql-demo" role="img" aria-label="A SQL query runs; rows stream into the grid page by page until 15,779 rows have arrived.">
+          <div class="ed-head" aria-hidden="true"><span class="mono">orders.sql</span><span class="runkey" id="runkey">Run <kbd>F5</kbd></span></div>
+          <div class="sql-body" aria-hidden="true">
+            <pre class="code" id="sql-code"><span class="k">SELECT</span> o.name, o.totalamount, a.name <span class="k">AS</span> customer
 <span class="k">FROM</span>   salesorder o
 <span class="k">JOIN</span>   account a <span class="k">ON</span> a.accountid = o.customerid
 <span class="k">WHERE</span>  o.statecode = <span class="n">0</span>
 <span class="k">ORDER BY</span> o.totalamount <span class="k">DESC</span></pre>
-            <table class="grid" aria-hidden="true">
-              <thead><tr><th>name</th><th>totalamount</th><th>customer</th></tr></thead>
-              <tbody>
-                <tr data-row><td>SO-10482</td><td class="n">48,200.00</td><td>Contoso Ltd</td></tr>
-                <tr data-row><td>SO-10477</td><td class="n">31,505.50</td><td>Fabrikam Inc</td></tr>
-                <tr data-row><td>SO-10469</td><td class="n">29,040.00</td><td>Adventure Works</td></tr>
-                <tr data-row><td>SO-10455</td><td class="n">17,602.25</td><td>Northwind Traders</td></tr>
-              </tbody>
-            </table>
-            <div class="streambar" aria-hidden="true">
-              <span><span class="count" id="rows">15,779</span> rows</span>
-              <span class="page" data-page>page 1</span><span class="page" data-page>page 2</span><span class="page" data-page>page 3</span><span class="page" data-page>page 4</span>
-            </div>
-          </div>
-          <div class="panel race" id="race" role="img" aria-label="Reading 15,779 rows: 78.4 seconds sequentially, 25.6 seconds with parallel reads.">
-            <h3 aria-hidden="true">Reading 15,779 wide rows</h3>
-            <div class="lane seq" aria-hidden="true"><span class="name">One request at a time</span><div class="track"><div class="fill"></div></div><span class="t" data-t="78.4">78.4 s</span></div>
-            <div class="lane par" aria-hidden="true"><span class="name">Hexa, 4 in parallel</span><div class="track"><div class="fill"></div></div><span class="t" data-t="25.6">25.6 s</span></div>
-            <p aria-hidden="true">Same query, same environment. The server was the bottleneck, so Hexa splits the table into key ranges and reads them side by side.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= 02 FetchXML ================= -->
-    <section id="fetchxml" aria-labelledby="fx-title" style="padding-top:0">
-      <div class="wrap split">
-        <div>
-          <div class="label" data-rise><b>02</b> / FetchXML</div>
-          <h2 id="fx-title" data-rise>Build FetchXML without typing it.</h2>
-          <p class="sub" data-rise>Pick a table, tick columns, join along real relationships — the XML writes itself. When you'd rather type, it completes every table and column name.</p>
-          <dl class="points">
-            <div data-rise><dt>Builder</dt><dd>A tree of the query and a panel that knows your columns, relationships and choice labels. Operators fit the column's type.</dd></div>
-            <div data-rise><dt>Checks</dt><dd>Missing columns, wrong operators and aggregate mistakes are flagged before you press F5.</dd></div>
-            <div data-rise><dt>Results</dt><dd>Page through or load everything, count rows without reading them, open system and personal views, export to CSV.</dd></div>
-          </dl>
-        </div>
-        <div class="panel" id="fx-demo" role="img" aria-label="The FetchXML builder: a tree of the query with a condition on statecode selected, its properties with the value picked from the choice labels (0, Active), the XML with that condition highlighted, and a row count of 1,284.">
-          <div class="ed-head" aria-hidden="true"><span class="mono">active-accounts.xml</span><span class="runkey">Execute <kbd>F5</kbd></span></div>
-          <div class="fx-body" aria-hidden="true">
-            <div class="fx-tree">
-              <div class="fx-row" data-fx-row style="padding-left:10px"><span class="kd fx">fx</span><span class="nm">fetch</span><span class="dt">top 50</span></div>
-              <div class="fx-row b" data-fx-row style="padding-left:22px"><span class="kd tb">tbl</span><span class="nm">account</span></div>
-              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">name</span></div>
-              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">revenue</span></div>
-              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd so">sort</span><span class="nm">revenue ↓</span></div>
-              <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd fl">flt</span><span class="nm">AND</span></div>
-              <div class="fx-row sel" data-fx-row id="fx-cond" style="padding-left:50px"><span class="kd fl">if</span><span class="nm">statecode = 0</span></div>
-              <div class="fx-row b" data-fx-row style="padding-left:36px"><span class="kd tb">join</span><span class="nm">contact as c</span></div>
-              <div class="fx-row" data-fx-row style="padding-left:50px"><span class="kd cl">col</span><span class="nm">fullname</span></div>
-            </div>
-            <div class="fx-props" id="fx-props">
-              <h4>Condition</h4>
-              <div class="fx-field"><span>Column of account</span><div class="fx-input">statecode <small>Status</small></div></div>
-              <div class="fx-field"><span>Operator</span><div class="fx-input">eq — Equals <small>▾</small></div></div>
-              <div class="fx-field"><span>Value</span>
-                <div class="fx-input on">0 · Active <small>▾</small></div>
-                <div class="fx-menu" id="fx-menu"><div class="on">0 <small>Active</small></div><div>1 <small>Inactive</small></div></div>
+            <div class="results">
+              <table class="grid">
+                <thead><tr><th>name</th><th>totalamount</th><th>customer</th></tr></thead>
+                <tbody>
+                  <tr data-row><td>SO-10482</td><td class="n">48,200.00</td><td>Contoso Ltd</td></tr>
+                  <tr data-row><td>SO-10477</td><td class="n">31,505.50</td><td>Fabrikam Inc</td></tr>
+                  <tr data-row><td>SO-10469</td><td class="n">29,040.00</td><td>Adventure Works</td></tr>
+                  <tr data-row><td>SO-10455</td><td class="n">17,602.25</td><td>Northwind Traders</td></tr>
+                </tbody>
+              </table>
+              <div class="streambar">
+                <span><span class="count" id="rows">15,779</span> rows</span>
+                <span class="page" data-page>page 1</span><span class="page" data-page>page 2</span><span class="page" data-page>page 3</span><span class="page" data-page>page 4</span>
               </div>
             </div>
           </div>
-          <pre class="code fx-xml" aria-hidden="true"><span class="ln" data-fx-ln><span class="tg">&lt;fetch</span> <span class="at">top</span>=<span class="vl">"50"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;entity</span> <span class="at">name</span>=<span class="vl">"account"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"name"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"revenue"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;order</span> <span class="at">attribute</span>=<span class="vl">"revenue"</span> <span class="at">descending</span>=<span class="vl">"true"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;filter&gt;</span></span><span class="ln hl" data-fx-ln id="fx-hl">      <span class="tg">&lt;condition</span> <span class="at">attribute</span>=<span class="vl">"statecode"</span> <span class="at">operator</span>=<span class="vl">"eq"</span> <span class="at">value</span>=<span class="vl">"0"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/filter&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;link-entity</span> <span class="at">name</span>=<span class="vl">"contact"</span> <span class="at">from</span>=<span class="vl">"contactid"</span> <span class="at">to</span>=<span class="vl">"primarycontactid"</span> <span class="at">alias</span>=<span class="vl">"c"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>      <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"fullname"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/link-entity&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;/entity&gt;</span></span><span class="ln" data-fx-ln><span class="tg">&lt;/fetch&gt;</span></span></pre>
-          <div class="fx-bar" aria-hidden="true">
-            <span class="fx-ok"><i></i>No problems found</span>
-            <span class="fx-chip"><span id="fx-count">1,284</span> rows match</span>
-            <span class="page">counted without reading them</span>
+        </div>
+        <dl class="points">
+          <div data-rise><dt>Reads every table</dt><dd>Virtual tables included. The TDS endpoint takes over for what FetchXML can't plan.</dd></div>
+          <div data-rise><dt>Writes ask first</dt><dd>INSERT, UPDATE and DELETE show how many records change and wait for your OK.</dd></div>
+          <div data-rise><dt>A real editor</dt><dd>Monaco with table and column completion, tabs per environment and full history.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ================= FetchXML ================= -->
+    <section class="sec" id="fetchxml" aria-labelledby="fx-title" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2 id="fx-title" data-rise>Build FetchXML without typing it.</h2>
+          <p class="sub" data-rise>Pick a table, tick columns, join along real relationships and the XML writes itself. Prefer typing? Every table and column name completes.</p>
+        </div>
+        <div class="bento" id="fx-demo">
+          <div class="panel cell-builder" role="img" aria-label="The FetchXML builder: a tree of the query with a condition on statecode selected, and its properties with the value picked from the choice labels, 0 Active.">
+            <div class="ed-head" aria-hidden="true"><span class="mono">active-accounts.xml</span><span class="runkey">Execute <kbd>F5</kbd></span></div>
+            <div class="fx-body" aria-hidden="true">
+              <div class="fx-tree">
+                <div class="fx-row" data-fx-row style="padding-left:10px"><span class="kd fx">fx</span><span class="nm">fetch</span><span class="dt">top 50</span></div>
+                <div class="fx-row b" data-fx-row style="padding-left:22px"><span class="kd tb">tbl</span><span class="nm">account</span></div>
+                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">name</span></div>
+                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">revenue</span></div>
+                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd so">sort</span><span class="nm">revenue ↓</span></div>
+                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd fl">flt</span><span class="nm">AND</span></div>
+                <div class="fx-row sel" data-fx-row id="fx-cond" style="padding-left:50px"><span class="kd fl">if</span><span class="nm">statecode = 0</span></div>
+                <div class="fx-row b" data-fx-row style="padding-left:36px"><span class="kd tb">join</span><span class="nm">contact as c</span></div>
+                <div class="fx-row" data-fx-row style="padding-left:50px"><span class="kd cl">col</span><span class="nm">fullname</span></div>
+              </div>
+              <div class="fx-props" id="fx-props">
+                <h4>Condition</h4>
+                <div class="fx-field"><span>Column of account</span><div class="fx-input">statecode <small>Status</small></div></div>
+                <div class="fx-field"><span>Operator</span><div class="fx-input">eq, Equals <small>▾</small></div></div>
+                <div class="fx-field"><span>Value</span>
+                  <div class="fx-input on">0 · Active <small>▾</small></div>
+                  <div class="fx-menu" id="fx-menu"><div class="on">0 <small>Active</small></div><div>1 <small>Inactive</small></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cell-check">
+            <span class="fx-ok"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>No problems found</span>
+            <div>
+              <div class="big"><span id="fx-count">1,284</span></div>
+              <p>rows match, counted without reading them. Missing columns and wrong operators are flagged before you run.</p>
+            </div>
+            <p class="more">Page through or load everything, open system and personal views, export to CSV.</p>
+          </div>
+
+          <div class="panel cell-xml" role="img" aria-label="The XML the builder wrote, with the statecode condition highlighted.">
+            <pre class="code fx-xml" aria-hidden="true"><span class="ln" data-fx-ln><span class="tg">&lt;fetch</span> <span class="at">top</span>=<span class="vl">"50"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;entity</span> <span class="at">name</span>=<span class="vl">"account"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"name"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"revenue"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;order</span> <span class="at">attribute</span>=<span class="vl">"revenue"</span> <span class="at">descending</span>=<span class="vl">"true"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;filter&gt;</span></span><span class="ln hl" data-fx-ln id="fx-hl">      <span class="tg">&lt;condition</span> <span class="at">attribute</span>=<span class="vl">"statecode"</span> <span class="at">operator</span>=<span class="vl">"eq"</span> <span class="at">value</span>=<span class="vl">"0"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/filter&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;link-entity</span> <span class="at">name</span>=<span class="vl">"contact"</span> <span class="at">from</span>=<span class="vl">"contactid"</span> <span class="at">to</span>=<span class="vl">"primarycontactid"</span> <span class="at">alias</span>=<span class="vl">"c"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>      <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"fullname"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/link-entity&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;/entity&gt;</span></span><span class="ln" data-fx-ln><span class="tg">&lt;/fetch&gt;</span></span></pre>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 03 Flows (pinned story) ================= -->
+    <!-- ================= Flows (pinned story) ================= -->
     <section class="story" id="flows" aria-labelledby="flows-title">
       <div class="wrap">
         <div>
-          <div class="label" data-rise><b>03</b> / Flows</div>
           <h2 id="flows-title" data-rise>Read a flow like the person who built it.</h2>
           <ol class="steps" id="story-steps">
             <li data-rise><span class="bar"></span><b>Designer</b><p>Steps in the order they run. Conditions and switches as columns, scopes and loops you can fold.</p></li>
-            <li data-rise><span class="bar"></span><b>Variables</b><p>Where each variable is declared, changed and read — with a warning when a parallel loop changes it.</p></li>
+            <li data-rise><span class="bar"></span><b>Variables</b><p>Where each variable is declared, changed and read, with a warning when a parallel loop changes it.</p></li>
             <li data-rise><span class="bar"></span><b>Search</b><p>Ctrl+F across step names, connectors and settings. Matches light up, the rest steps back.</p></li>
           </ol>
         </div>
         <div class="stage" id="stage" role="img" aria-label="A flow diagram: varTotal is declared, incremented inside an Apply to each loop that runs 20 iterations in parallel, and read by Update a row. A search for varTotal highlights those three steps.">
           <svg class="dg" id="story-dg" viewBox="0 0 600 548" aria-hidden="true"></svg>
           <div class="search" id="search" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--subtle)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
             <span class="q" id="q">varTotal</span><span class="caret"></span><span class="hits" id="hits">3 matches</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= 04 Tenants ================= -->
-    <section aria-labelledby="t-title">
-      <div class="wrap split">
-        <div>
-          <div class="label" data-rise><b>04</b> / Projects</div>
-          <h2 id="t-title" data-rise>Every customer, signed in side by side.</h2>
-          <p class="sub" data-rise>One project per tenant, each with its own Microsoft sign-in and environments. Switching asks first — and warns you in red before you touch production.</p>
-        </div>
-        <div class="panel tenants" id="tenants" role="img" aria-label="Three projects, Contoso, Fabrikam and Northwind, each signed in with its own account.">
-          <div class="tenant" aria-hidden="true"><span class="sq" style="background:oklch(0.76 0.13 278 / .16);color:var(--brand)">C</span><div><b>Contoso</b><small>alex@contoso.com · 4 environments</small></div><span class="state" data-state><i></i><span>signed in</span></span></div>
-          <div class="tenant" aria-hidden="true"><span class="sq" style="background:oklch(0.77 0.14 160 / .16);color:var(--success)">F</span><div><b>Fabrikam</b><small>alex@fabrikam.onmicrosoft.com · 2 environments</small></div><span class="state" data-state><i></i><span>signed in</span></span></div>
-          <div class="tenant" aria-hidden="true"><span class="sq" style="background:oklch(0.82 0.14 80 / .16);color:var(--warning)">N</span><div><b>Northwind</b><small>alex@northwind.com · 3 environments</small></div><span class="state" data-state><i></i><span>signed in</span></span></div>
-        </div>
+    <!-- ================= Projects ================= -->
+    <section class="sec tenants-sec" aria-labelledby="t-title">
+      <div class="wrap">
+        <h2 id="t-title" class="statement" data-rise>
+          <span class="nw"><span class="tn" data-state><span class="sq"><b>C</b></span>Contoso<i></i></span>,</span>
+          <span class="tn" data-state><span class="sq"><b>F</b></span>Fabrikam<i></i></span> and
+          <span class="nw"><span class="tn" data-state><span class="sq"><b>N</b></span>Northwind<i></i></span>.</span>
+          All signed in.
+        </h2>
+        <p class="sub" data-rise>One project per tenant, each with its own Microsoft sign-in and environments. Switching asks first, and production is marked in red.</p>
       </div>
     </section>
 
     <!-- ================= Install ================= -->
-    <section id="install" aria-labelledby="install-title" style="padding-top:0">
+    <section class="sec final" id="install" aria-labelledby="install-title">
       <div class="wrap">
-        <div class="label" data-rise><b>05</b> / Install</div>
+        <img class="mark" src="favicon.svg" width="64" height="64" alt="" data-rise />
         <h2 id="install-title" data-rise>Running in a minute.</h2>
-        <div class="install-steps" id="isteps">
-          <div class="rail" aria-hidden="true"><i></i></div>
-          <div class="istep"><div class="dot">1</div><h3>Download</h3><p>Get <span class="mono" data-file>the latest setup.exe</span>.</p></div>
-          <div class="istep"><div class="dot">2</div><h3>Install</h3><p>It installs for your user only. If Windows says it protected your PC, choose <kbd class="k">More info</kbd> then <kbd class="k">Run anyway</kbd> — the app isn't code-signed yet.</p></div>
-          <div class="istep"><div class="dot">3</div><h3>Sign in</h3><p>Create a project, sign in with your Microsoft account, pick an environment.</p></div>
-        </div>
-        <div class="req" data-rise>
-          <span>Windows 10/11, 64&#8209;bit</span>
-          <span>WebView2 — installed for you if missing</span>
-          <span>For the TDS endpoint and writes only: <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Final ================= -->
-    <section class="final" aria-labelledby="final-title">
-      <svg class="hex" aria-hidden="true" width="100%" height="100%">
-        <defs>
-          <pattern id="hexes" width="56" height="97" patternUnits="userSpaceOnUse" patternTransform="scale(1.1)">
-            <path d="M28 0 L56 16.2 L56 48.5 L28 64.7 L0 48.5 L0 16.2 Z M28 64.7 L28 97" fill="none" stroke="oklch(0.35 0.022 278)" stroke-width="1"/>
-          </pattern>
-          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".9"/></linearGradient>
-          <mask id="fade-mask"><rect width="100%" height="100%" fill="url(#fade)"/></mask>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hexes)" mask="url(#fade-mask)"/>
-      </svg>
-      <div class="wrap">
-        <div>
-          <div class="label" data-rise>Free · Windows 10/11</div>
-          <h2 id="final-title" data-rise>Open your first flow in the next five minutes.</h2>
-        </div>
-        <div data-rise>
+        <p class="sub" data-rise>Free for Windows 10 and 11, 64-bit. It updates itself from then on.</p>
+        <div class="cta" data-rise>
           <a class="btn btn-primary" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
+            <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
             Download for Windows
-            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v13M6 12l6 6 6-6"/></svg>
           </a>
-          <div class="meta" data-meta>Latest release on GitHub</div>
         </div>
+        <div class="meta" data-meta data-rise>Latest release on GitHub</div>
+
+        <ol class="isteps" id="isteps">
+          <li class="rail" aria-hidden="true"><i></i></li>
+          <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Download</h3><p>Get <span class="mono" data-file>the latest setup.exe</span> from GitHub Releases.</p></li>
+          <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Install</h3><p>It installs for your user only. The app isn't code-signed yet, so if Windows warns you, choose <kbd class="k">More info</kbd> then <kbd class="k">Run anyway</kbd>.</p></li>
+          <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Sign in</h3><p>Create a project, sign in with your Microsoft account and pick an environment.</p></li>
+        </ol>
+        <p class="req" data-rise>WebView2 is installed for you if it's missing. The TDS endpoint and writes also need the <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a>.</p>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="wrap">
-      <span>Hexa Studio</span>
+      <span class="brand"><img src="favicon.svg" width="18" height="18" alt="" />Hexa Studio</span>
       <span class="sp"></span>
-      <a href="https://github.com/datbe2002/MSDataverseTool/releases">All releases</a>
-      <a href="https://github.com/datbe2002/MSDataverseTool">Source</a>
+      <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
+      <a href="https://github.com/datbe2002/MSDataverseTool/releases">Releases</a>
       <a href="https://github.com/datbe2002/MSDataverseTool/issues">Report an issue</a>
     </div>
   </footer>
@@ -563,7 +609,7 @@
   (function () {
     "use strict";
 
-    /* ---------------- Latest release → download links ---------------- */
+    /* ---------------- Latest release: download links, size, version ---------------- */
     fetch("https://api.github.com/repos/datbe2002/MSDataverseTool/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function (rel) {
@@ -571,11 +617,10 @@
         if (!a) return;
         var mb = a.size / 1e6;
         document.querySelectorAll("[data-download]").forEach(function (el) { el.href = a.browser_download_url; });
-        document.querySelectorAll("[data-version]").forEach(function (el) { el.textContent = rel.tag_name; });
         document.querySelectorAll("[data-file]").forEach(function (el) { el.textContent = a.name; });
-        document.querySelectorAll("[data-size]").forEach(function (el) { el.textContent = mb.toFixed(0) + " MB installer"; });
+        document.querySelectorAll("[data-size-num]").forEach(function (el) { el.textContent = mb.toFixed(0); });
         document.querySelectorAll("[data-meta]").forEach(function (el) {
-          el.textContent = rel.tag_name + " · " + mb.toFixed(1) + " MB · " + new Date(rel.published_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+          el.textContent = rel.tag_name + ", " + mb.toFixed(1) + " MB, released " + new Date(rel.published_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
         });
       })
       .catch(function () {});
@@ -589,23 +634,18 @@
       if (parent) parent.appendChild(e);
       return e;
     }
-    var TONES = {
-      brand: ["oklch(0.76 0.13 278 / .16)", "var(--brand)"],
-      warn: ["oklch(0.82 0.14 80 / .16)", "var(--warning)"],
-      ok: ["oklch(0.77 0.14 160 / .16)", "var(--success)"],
-      info: ["oklch(0.77 0.11 230 / .16)", "var(--info)"],
-    };
+    function tint(color, pct) { return "fill: color-mix(in oklab, " + color + " " + pct + "%, transparent)"; }
+    var TONES = { brand: "var(--brand)", warn: "var(--warning)", ok: "var(--success)", info: "var(--info)" };
     // A step card: the outer <g> places it, the inner <g class="n"> is what animates.
     function card(svg, o) {
-      var w = o.w || 220, h = 46;
+      var w = o.w || 220, h = 46, c = TONES[o.tone];
       var place = el("g", { transform: "translate(" + o.x + " " + o.y + ")" }, svg);
       var g = el("g", { class: "n", "data-id": o.id }, place);
       el("rect", { class: "ring", x: -3, y: -3, width: w + 6, height: h + 6, rx: 11, opacity: o.ring ? 1 : 0 }, g);
       el("rect", { class: "box", width: w, height: h, rx: 9 }, g);
-      var t = TONES[o.tone];
-      el("rect", { x: 10, y: 10, width: 26, height: 26, rx: 7, fill: t[0] }, g);
-      if (o.icon === "diamond") el("path", { d: "M23 16 L30 23 L23 30 L16 23 Z", fill: "none", stroke: t[1], "stroke-width": 1.8, "stroke-linejoin": "round" }, g);
-      else el("text", { class: "ic-t", x: 23, y: 23, fill: t[1] }, g, o.icon);
+      el("rect", { x: 10, y: 10, width: 26, height: 26, rx: 7, style: tint(c, 16) }, g);
+      if (o.icon === "diamond") el("path", { d: "M23 16 L30 23 L23 30 L16 23 Z", fill: "none", stroke: c, "stroke-width": 1.8, "stroke-linejoin": "round" }, g);
+      else el("text", { class: "ic-t", x: 23, y: 23, fill: c }, g, o.icon);
       el("text", { class: "t1", x: 46, y: 20 }, g, o.title);
       el("text", { class: "t2", x: 46, y: 35 }, g, o.sub);
       if (o.ring) g.setAttribute("class", "n sel");
@@ -614,21 +654,21 @@
     function arrowDef(svg) {
       var defs = el("defs", {}, svg);
       var m = el("marker", { id: "arrow-" + svg.id, viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse" }, defs);
-      el("path", { d: "M0 0 L8 4 L0 8 Z", fill: "oklch(0.35 0.022 278)" }, m);
+      el("path", { d: "M0 0 L8 4 L0 8 Z", fill: "var(--line-strong)" }, m);
     }
     function edge(svg, x, y1, y2) {
       return el("path", { class: "edge", d: "M" + x + " " + y1 + " L" + x + " " + (y2 - 2), "marker-end": "url(#arrow-" + svg.id + ")" }, svg);
     }
     function pill(svg, cx, y, text, tone) {
-      var colors = tone === "t" ? ["oklch(0.77 0.14 160 / .12)", "var(--success)"] : ["oklch(0.71 0.17 22 / .12)", "var(--danger)"];
+      var c = tone === "t" ? "var(--success)" : "var(--danger)";
       var g = el("g", { class: "pill" }, svg);
-      el("rect", { x: cx - 30, y: y, width: 60, height: 22, rx: 11, fill: colors[0], stroke: colors[1], "stroke-opacity": 0.45 }, g);
-      el("text", { class: "pill-t", x: cx, y: y + 11, fill: colors[1] }, g, text);
+      el("rect", { x: cx - 30, y: y, width: 60, height: 22, rx: 11, style: tint(c, 12), stroke: c, "stroke-opacity": 0.45 }, g);
+      el("text", { class: "pill-t", x: cx, y: y + 11, fill: c }, g, text);
       return g;
     }
     function tag(svg, x, y, w, text, color) {
       var g = el("g", { class: "tag" }, svg);
-      el("rect", { x: x, y: y, width: w, height: 20, rx: 6, fill: "var(--s2)", stroke: color, "stroke-opacity": 0.5 }, g);
+      el("rect", { x: x, y: y, width: w, height: 20, rx: 6, fill: "var(--s1)", stroke: color, "stroke-opacity": 0.5 }, g);
       el("text", { class: "tag-t", x: x + w / 2, y: y + 10, fill: color }, g, text);
       return g;
     }
@@ -643,9 +683,9 @@
       card(hero, { id: "h1", x: 100, y: 20, tone: "brand", icon: "DV", title: "When a row is added", sub: "Dataverse · salesorder" }),
       card(hero, { id: "h2", x: 100, y: 92, tone: "warn", icon: "{x}", title: "Initialize variable - varTotal", sub: "Initialize variable" }),
       card(hero, { id: "h3", x: 100, y: 164, tone: "info", icon: "diamond", title: "Condition - Is key account", sub: "Condition" }),
-      card(hero, { id: "h4", x: 22, y: 302, w: 176, tone: "warn", icon: "{x}", title: "Set variable - varTotal", sub: "Set variable", ring: true }),
-      card(hero, { id: "h5", x: 22, y: 372, w: 176, tone: "ok", icon: "AP", title: "Start an approval", sub: "Approvals" }),
-      card(hero, { id: "h6", x: 222, y: 302, w: 176, tone: "ok", icon: "OL", title: "Send an email", sub: "Office 365 Outlook" }),
+      card(hero, { id: "h4", x: 17, y: 302, w: 186, tone: "warn", icon: "{x}", title: "Set variable - varTotal", sub: "Set variable", ring: true }),
+      card(hero, { id: "h5", x: 17, y: 372, w: 186, tone: "ok", icon: "AP", title: "Start an approval", sub: "Approvals" }),
+      card(hero, { id: "h6", x: 217, y: 302, w: 186, tone: "ok", icon: "OL", title: "Send an email", sub: "Office 365 Outlook" }),
     ];
 
     // Flows story: a loop that changes a variable in parallel. Default state
@@ -653,17 +693,17 @@
     var st = document.getElementById("story-dg");
     arrowDef(st);
     [edge(st, 250, 66, 94), edge(st, 250, 140, 168), edge(st, 250, 214, 242), edge(st, 250, 288, 318), edge(st, 250, 392, 424), edge(st, 250, 470, 498)];
-    el("rect", { class: "frame", x: 100, y: 265, width: 300, height: 127, rx: 14 }, st);
+    el("rect", { class: "frame", x: 100, y: 302, width: 300, height: 90, rx: 14 }, st);
     var S = {
       A: card(st, { id: "A", x: 130, y: 20, w: 240, tone: "brand", icon: "DV", title: "When a row is added", sub: "Dataverse · salesorder" }),
-      B: card(st, { id: "B", x: 130, y: 94, w: 240, tone: "warn", icon: "{x}", title: "Initialize variable - varTotal", sub: "Initialize variable · integer" }),
+      B: card(st, { id: "B", x: 130, y: 94, w: 240, tone: "warn", icon: "{x}", title: "Initialize variable - varTotal", sub: "Initialize variable, integer" }),
       C: card(st, { id: "C", x: 130, y: 168, w: 240, tone: "brand", icon: "DV", title: "List rows - Order lines", sub: "Dataverse · salesorderdetail" }),
-      D: card(st, { id: "D", x: 130, y: 242, w: 240, tone: "info", icon: "↻", title: "Apply to each - line", sub: "Apply to each · 20 in parallel" }),
+      D: card(st, { id: "D", x: 130, y: 242, w: 240, tone: "info", icon: "↻", title: "Apply to each - line", sub: "Apply to each, 20 in parallel" }),
       E: card(st, { id: "E", x: 130, y: 318, w: 240, tone: "warn", icon: "{x}", title: "Increment variable - varTotal", sub: "Increment variable" }),
       F: card(st, { id: "F", x: 130, y: 424, w: 240, tone: "brand", icon: "DV", title: "Update a row - Order", sub: "Dataverse · salesorder" }),
       G: card(st, { id: "G", x: 130, y: 498, w: 240, tone: "ok", icon: "OL", title: "Send summary email", sub: "Office 365 Outlook" }),
     };
-    // Lineage: declared → changed → read, drawn on the right.
+    // Lineage: declared, then changed, then read, drawn on the right.
     var lin1 = el("path", { class: "lineage", d: "M370 117 C 540 117, 540 341, 370 341", stroke: "var(--warning)" }, st);
     var lin2 = el("path", { class: "lineage", d: "M370 341 C 540 341, 540 447, 370 447", stroke: "var(--info)" }, st);
     var tags = [
@@ -702,7 +742,7 @@
           .from("[data-hero-in]", { opacity: 0, y: 14, duration: 0.8, stagger: 0.08 }, "-=0.7")
           .from("#hero-window", { opacity: 0, y: 30, scale: 0.97, duration: 1.1 }, 0.15);
 
-        // Card, then the edge to the next one — the order the flow runs in.
+        // Card, then the edge to the next one: the order the flow runs in.
         var build = gsap.timeline({ defaults: { ease: EASE } });
         var order = [heroCards[0], heroEdges[0], heroCards[1], heroEdges[1], heroCards[2], heroEdges[2], heroFrame, heroPills, [heroEdges[3], heroEdges[5]], [heroCards[3], heroCards[5]], heroEdges[4], heroCards[4]];
         order.forEach(function (item) {
@@ -725,11 +765,22 @@
         gsap.from(x, { opacity: 0, y: 16, duration: 0.8, ease: EASE, scrollTrigger: { trigger: x, start: "top 88%", once: true } });
       });
 
-      /* Proof numbers count up to the measured values. */
+      /* Numbers count up to the measured values. */
       gsap.utils.toArray("[data-count]").forEach(function (n) {
         var end = parseFloat(n.dataset.count), dec = +n.dataset.dec, o = { v: 0 };
         gsap.to(o, { v: end, duration: 1.4, ease: "power2.out", scrollTrigger: { trigger: n, start: "top 90%", once: true },
           onStart: function () { o.v = 0; }, onUpdate: function () { n.textContent = o.v.toFixed(dec); } });
+      });
+
+      /* Both strategies race at their measured speeds: steady progress, so linear. */
+      var SEQ = 2.4, PAR = SEQ * 25.6 / 78.4;
+      var race = gsap.timeline({ scrollTrigger: { trigger: "#race", start: "top 85%", once: true } });
+      race.from(".lane.seq .bar i", { scaleX: 0, duration: SEQ, ease: "none" })
+        .from(".lane.par .bar i", { scaleX: 0, duration: PAR, ease: "none" }, 0);
+      gsap.utils.toArray(".lane .t").forEach(function (t, i) {
+        var end = parseFloat(t.dataset.t), o = { v: 0 };
+        race.fromTo(o, { v: 0 }, { v: end, duration: i === 0 ? SEQ : PAR, ease: "none",
+          onUpdate: function () { t.textContent = o.v.toFixed(1) + " s"; } }, 0);
       });
 
       /* SQL: the query is typed, Run is pressed, rows stream in page by page. */
@@ -760,7 +811,7 @@
          its value comes from the choice labels, then the rows are counted. */
       var fxRows = gsap.utils.toArray("[data-fx-row]"), fxLines = gsap.utils.toArray("[data-fx-ln]");
       var fxCount = document.getElementById("fx-count"), fxN = { n: 0 };
-      gsap.timeline({ scrollTrigger: { trigger: "#fx-demo", start: "top 75%", once: true } })
+      gsap.timeline({ scrollTrigger: { trigger: "#fx-demo", start: "top 70%", once: true } })
         .set("#fx-cond", { className: "fx-row" })
         .set("#fx-hl", { className: "ln" })
         .from(fxRows, { opacity: 0, x: -8, duration: 0.35, stagger: 0.09, ease: EASE })
@@ -772,24 +823,12 @@
         .fromTo(fxN, { n: 0 }, { n: 1284, duration: 1.1, ease: "power2.out",
           onUpdate: function () { fxCount.textContent = Math.round(fxN.n).toLocaleString("en-US"); } }, "+=0.2");
 
-      /* Both strategies race at their measured speeds: steady progress, so linear. */
-      var SEQ = 2.4, PAR = SEQ * 25.6 / 78.4;
-      var race = gsap.timeline({ scrollTrigger: { trigger: "#race", start: "top 80%", once: true } });
-      race.from(".lane.seq .fill", { scaleX: 0, duration: SEQ, ease: "none" })
-        .from(".lane.par .fill", { scaleX: 0, duration: PAR, ease: "none" }, 0);
-      gsap.utils.toArray(".lane .t").forEach(function (t, i) {
-        var end = parseFloat(t.dataset.t), o = { v: 0 };
-        race.fromTo(o, { v: 0 }, { v: end, duration: i === 0 ? SEQ : PAR, ease: "none",
-          onUpdate: function () { t.textContent = o.v.toFixed(1) + " s"; } }, 0);
-      });
-
-      /* Projects sign in one after another. */
-      var sign = gsap.timeline({ scrollTrigger: { trigger: "#tenants", start: "top 75%", once: true } });
+      /* Projects: the tenants in the sentence sign in one after another. */
+      var sign = gsap.timeline({ scrollTrigger: { trigger: "#t-title", start: "top 75%", once: true } });
       gsap.utils.toArray("[data-state]").forEach(function (s, i) {
-        var label = s.lastElementChild;
-        sign.set(s, { className: "state wait" }, 0).set(label, { textContent: "signing in…" }, 0)
-          .set(s, { className: "state" }, 0.6 + i * 0.55).set(label, { textContent: "signed in" }, 0.6 + i * 0.55)
-          .from(s, { scale: 0.9, duration: 0.3, ease: "back.out(2)" }, 0.6 + i * 0.55);
+        sign.set(s, { className: "tn wait" }, 0)
+          .set(s, { className: "tn" }, 0.7 + i * 0.5)
+          .from(s.querySelector("i"), { scale: 0.2, duration: 0.35, ease: "back.out(3)" }, 0.7 + i * 0.5);
       });
 
       /* Install: the rail fills as you scroll, lighting each step it reaches. */
@@ -804,7 +843,7 @@
 
     /* Flows story: pinned and scrubbed on wide screens (the page's only pin). */
     var stepsLi = gsap.utils.toArray("#story-steps li");
-    mm.add("(min-width: 1001px) and (prefers-reduced-motion: no-preference)", function () {
+    mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", function () {
       var q = document.getElementById("q"), hitsOut = document.getElementById("hits"), typed = { n: 0 }, WORD = "varTotal";
       var bars = stepsLi.map(function (li) { return li.querySelector(".bar"); });
       // Start from the plain designer.
@@ -817,7 +856,7 @@
       var tl = gsap.timeline({ defaults: { ease: "power2.inOut" }, scrollTrigger: {
         trigger: "#flows", start: "top top", end: "+=220%", pin: true, scrub: 1, anticipatePin: 1 } });
       tl.to(bars[0], { scaleY: 1, duration: 0.5 })
-        // → Variables: everything else steps back, the trail is drawn.
+        // Variables: everything else steps back, the trail is drawn.
         .to(dimSet, { opacity: 0.25, duration: 0.6 }, "+=0.4")
         .to(bars[0], { scaleY: 0, duration: 0.3 }, "<")
         .to(bars[1], { scaleY: 1, duration: 0.5 }, "<")
@@ -826,7 +865,7 @@
         .to(tags[1], { opacity: 1, duration: 0.3 }, ">-0.2")
         .to(lin2, { strokeDashoffset: 0, duration: 0.6 })
         .to(tags[2], { opacity: 1, duration: 0.3 }, ">-0.2")
-        // → Search: the trail makes way for the matches.
+        // Search: the trail makes way for the matches.
         .to(bars[1], { scaleY: 0, duration: 0.3 }, "+=0.5")
         .to(bars[2], { scaleY: 1, duration: 0.5 }, "<")
         .to(lines.concat(tags), { opacity: 0, duration: 0.4 }, "<")

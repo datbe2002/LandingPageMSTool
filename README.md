@@ -3,7 +3,7 @@
 Static landing page for [Hexa Studio](https://github.com/datbe2002/MSDataverseTool),
 a Windows desktop toolkit for Power Platform / Dataverse.
 
-- `index.html` — the whole page (inline CSS/JS, Google Fonts for IBM Plex Sans and JetBrains Mono)
+- `index.html` — the whole page (inline CSS/JS; Geist and Geist Mono from jsDelivr; GSAP for motion). Follows light/dark system theme and `prefers-reduced-motion`.
 - `favicon.svg` — the app icon
 
 The download buttons ask the GitHub API for the latest release of
