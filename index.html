@@ -12,20 +12,22 @@
   <meta property="og:description" content="SQL, FetchXML and Flows for Dataverse, in a small native Windows app." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5/files/geist-latin-wght-normal.woff2" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/geist-latin-wght-normal.woff2" />
+  <script>document.documentElement.classList.add("js");</script>
   <style>
-    /* Geist + Geist Mono (variable), served from jsDelivr as plain @font-face. */
+    /* Geist + Geist Mono (variable, SIL OFL 1.1, see fonts/OFL.txt), self-hosted. */
     @font-face { font-family: "Geist"; font-style: normal; font-weight: 100 900; font-display: swap;
-      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5/files/geist-latin-wght-normal.woff2") format("woff2-variations"); }
+      src: url("fonts/geist-latin-wght-normal.woff2") format("woff2-variations"); }
     @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 100 900; font-display: swap;
-      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono@5/files/geist-mono-latin-wght-normal.woff2") format("woff2-variations"); }
+      src: url("fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations"); }
 
     /* ============================================================
        Tokens. Neutrals are near-grey (a trace of the logo's 278 hue),
        the indigo brand is the only accent: CTAs, links, selection.
        Semantic colours appear only inside the product previews.
-       Radius rule: 14px frames, 10px buttons and inner panels, 6px chips.
+       Radius rule: 14px frames, 10px buttons, inner panels and inline chips,
+       6px small chips and tiles, full round for pills. The product previews
+       reproduce the app's own control radii (5-11px) inside their frames.
        ============================================================ */
     :root {
       color-scheme: light;
@@ -125,7 +127,12 @@
     @media (prefers-reduced-transparency: reduce) { .top.scrolled { background: var(--bg); backdrop-filter: none; } }
     .top .wrap { display: flex; align-items: center; gap: 24px; height: var(--nav-h); }
     .brand { display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; font-weight: 600; font-size: 16px; letter-spacing: -.015em; }
-    .top nav { display: flex; gap: 2px; margin-left: auto; }
+    .navset { display: flex; align-items: center; gap: 24px; margin-left: auto; }
+    .top nav { display: flex; gap: 2px; }
+    .menu-btn { display: none; margin-left: auto; width: 44px; height: 44px; place-items: center; border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--s1); color: var(--fg); cursor: pointer; }
+    .menu-btn svg { width: 20px; height: 20px; }
+    .menu-btn .x, .top.open .menu-btn .burger { display: none; }
+    .top.open .menu-btn .x { display: block; }
     .top nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; padding: 10px 12px; border-radius: var(--r-md); transition: color .2s, background-color .2s; }
     .top nav a:hover { color: var(--fg); background: var(--s2); }
 
@@ -198,7 +205,7 @@
     .lane.par { color: var(--fg); }
 
     /* ---------- Sections ---------- */
-    .sec { padding: 120px 0; }
+    .sec { padding: 112px 0; }
     h2 { margin: 0; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -.035em; font-weight: 620; }
     .sub { margin: 16px 0 0; color: var(--muted); font-size: 18px; max-width: 36em; }
     .sec-head { max-width: 760px; margin-bottom: 48px; }
@@ -251,10 +258,10 @@
     .fx-menu div { display: flex; align-items: baseline; gap: 10px; padding: 6px 8px; border-radius: 6px; font: 12px var(--mono); color: var(--muted); }
     .fx-menu div.on { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
     .fx-menu small { color: var(--subtle); font: 11px var(--sans); }
-    .cell-check { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 28px; border-radius: var(--r-lg); border: 1px solid color-mix(in oklab, var(--brand) 22%, var(--line)); background:
-        radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--brand) 14%, transparent), transparent 60%),
-        color-mix(in oklab, var(--brand) 5%, var(--s1)); }
-    .fx-ok { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--mono); color: var(--success); }
+    .cell-check { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 28px; border-radius: var(--r-lg); border: 1px solid color-mix(in oklab, var(--brand) 30%, var(--line)); background:
+        radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--brand) 24%, transparent), transparent 62%),
+        color-mix(in oklab, var(--brand) 9%, var(--s1)); }
+    .fx-ok { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--mono); color: var(--brand); }
     .fx-ok svg { width: 16px; height: 16px; }
     .cell-check .big { color: var(--fg); }
     .cell-check .big + p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
@@ -281,13 +288,13 @@
     .search .hits { color: var(--subtle); font: 11.5px var(--mono); white-space: nowrap; }
 
     /* Projects: the tenants sit inside the sentence */
-    .statement { font-size: clamp(34px, 4.6vw, 64px); line-height: 1.18; letter-spacing: -.04em; max-width: 17em; }
-    .tn { display: inline-flex; align-items: center; gap: .2em; padding: .04em .26em .04em .12em; margin: .04em 0; border-radius: .22em; border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-md); vertical-align: .04em; line-height: 1.1; white-space: nowrap; }
-    .tn .sq { width: .78em; height: .78em; border-radius: .16em; display: grid; place-items: center; background: color-mix(in oklab, var(--brand) 16%, var(--s2)); color: var(--brand); }
+    .statement { font-size: clamp(34px, 4.4vw, 56px); line-height: 1.18; letter-spacing: -.04em; max-width: 17em; }
+    .tn { display: inline-flex; align-items: center; gap: .2em; padding: .04em .26em .04em .12em; margin: .04em 0; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-md); vertical-align: .04em; line-height: 1.1; white-space: nowrap; }
+    .tn .sq { width: .78em; height: .78em; border-radius: var(--r-sm); display: grid; place-items: center; background: color-mix(in oklab, var(--brand) 16%, var(--s2)); color: var(--brand); transition: background-color .3s, color .3s; }
     .tn .sq b { font-size: .42em; font-weight: 650; letter-spacing: 0; }
-    .tn i { width: .16em; height: .16em; margin-left: .04em; border-radius: 99px; background: var(--success); transition: background-color .3s; }
-    .tn.wait i { background: var(--line-strong); }
+    .tn.wait .sq { background: var(--s3); color: var(--subtle); }
     .nw { white-space: nowrap; }
+    .tenants-sec { padding-bottom: 88px; }
     .tenants-sec .sub { margin-top: 28px; }
 
     /* Install: closing section, centred */
@@ -328,7 +335,16 @@
       .stat:nth-child(2) { padding-left: 0; border-left: 0; }
     }
     @media (max-width: 767px) {
-      .top nav, .top .btn { display: none; }
+      /* Menu: the same links and Download button, folded under a toggle (only with JS). */
+      .js .menu-btn { display: grid; }
+      .top .wrap { position: relative; }
+      .js .navset { display: none; position: absolute; top: var(--nav-h); left: -20px; right: -20px; flex-direction: column; align-items: stretch; gap: 12px; padding: 8px 20px 20px; background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: var(--shadow-md); }
+      .js .top.open .navset { display: flex; }
+      .top.open { background: var(--bg); border-color: var(--line); }
+      .navset { flex-wrap: wrap; }
+      .top nav { flex-direction: column; }
+      .top nav a { min-height: 48px; display: flex; align-items: center; font-size: 16px; }
+      .top .btn-sm { min-height: 48px; font-size: 15px; }
       .hero { padding: calc(var(--nav-h) + 40px) 0 72px; }
       .sec { padding: 80px 0; }
       .sec-head { margin-bottom: 32px; }
@@ -360,6 +376,11 @@
         <img src="favicon.svg" width="26" height="26" alt="" />
         Hexa Studio
       </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg class="burger" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></svg>
+        <svg class="x" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+      </button>
+      <div class="navset" id="site-nav">
       <nav aria-label="Page">
         <a href="#sql">SQL</a>
         <a href="#fetchxml">FetchXML</a>
@@ -371,6 +392,7 @@
         <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
         Download for Windows
       </a>
+      </div>
     </div>
   </header>
 
@@ -425,6 +447,7 @@
     <section class="proof" aria-label="Hexa Studio in numbers">
       <div class="wrap proof-grid">
         <div class="stat">
+          <!-- measured: 15,779 wide rows, same query and environment, 78.4 s vs 25.6 s -->
           <div class="big"><span data-count="3.1" data-dec="1">3.1</span>× <small>faster SELECT</small></div>
           <p>On a 15,779-row table, Hexa reads key ranges side by side instead of one page at a time.</p>
           <div class="race" id="race" role="img" aria-label="Reading 15,779 rows: 78.4 seconds one request at a time, 25.6 seconds with Hexa reading 4 in parallel.">
@@ -458,6 +481,7 @@
 <span class="k">JOIN</span>   account a <span class="k">ON</span> a.accountid = o.customerid
 <span class="k">WHERE</span>  o.statecode = <span class="n">0</span>
 <span class="k">ORDER BY</span> o.totalamount <span class="k">DESC</span></pre>
+            <!-- mock: sample rows and amounts. 15,779 rows is the measured test table. -->
             <div class="results">
               <table class="grid">
                 <thead><tr><th>name</th><th>totalamount</th><th>customer</th></tr></thead>
@@ -517,6 +541,7 @@
             </div>
           </div>
 
+          <!-- mock: 1,284 is a sample row count -->
           <div class="cell-check">
             <span class="fx-ok"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>No problems found</span>
             <div>
@@ -558,9 +583,9 @@
     <section class="sec tenants-sec" aria-labelledby="t-title">
       <div class="wrap">
         <h2 id="t-title" class="statement" data-rise>
-          <span class="nw"><span class="tn" data-state><span class="sq"><b>C</b></span>Contoso<i></i></span>,</span>
-          <span class="tn" data-state><span class="sq"><b>F</b></span>Fabrikam<i></i></span> and
-          <span class="nw"><span class="tn" data-state><span class="sq"><b>N</b></span>Northwind<i></i></span>.</span>
+          <span class="nw"><span class="tn" data-state><span class="sq"><b>C</b></span>Contoso</span>,</span>
+          <span class="tn" data-state><span class="sq"><b>F</b></span>Fabrikam</span> and
+          <span class="nw"><span class="tn" data-state><span class="sq"><b>N</b></span>Northwind</span>.</span>
           All signed in.
         </h2>
         <p class="sub" data-rise>One project per tenant, each with its own Microsoft sign-in and environments. Switching asks first, and production is marked in red.</p>
@@ -625,6 +650,14 @@
       })
       .catch(function () {});
 
+    /* ---------------- Mobile menu (before the GSAP guard: works without the CDN) ---------------- */
+    var topBar = document.getElementById("top"), menuBtn = topBar.querySelector(".menu-btn");
+    function setMenu(open) { topBar.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", String(open)); }
+    menuBtn.addEventListener("click", function () { setMenu(!topBar.classList.contains("open")); });
+    document.getElementById("site-nav").addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && topBar.classList.contains("open")) { setMenu(false); menuBtn.focus(); } });
+    window.matchMedia("(min-width: 768px)").addEventListener("change", function (e) { if (e.matches) setMenu(false); });
+
     /* ---------------- Diagrams (SVG built from data) ---------------- */
     var NS = "http://www.w3.org/2000/svg";
     function el(tag, attrs, parent, text) {
@@ -635,6 +668,11 @@
       return e;
     }
     function tint(color, pct) { return "fill: color-mix(in oklab, " + color + " " + pct + "%, transparent)"; }
+    // Phosphor (regular) paths, 256 grid.
+    var ICONS = {
+      diamond: "M235.33,116.72,139.28,20.66a16,16,0,0,0-22.56,0l-96,96.06a16,16,0,0,0,0,22.56l96.05,96.06h0a16,16,0,0,0,22.56,0l96.05-96.06a16,16,0,0,0,0-22.56ZM128,224h0L32,128,128,32,224,128Z",
+      repeat: "M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z",
+    };
     var TONES = { brand: "var(--brand)", warn: "var(--warning)", ok: "var(--success)", info: "var(--info)" };
     // A step card: the outer <g> places it, the inner <g class="n"> is what animates.
     function card(svg, o) {
@@ -644,7 +682,7 @@
       el("rect", { class: "ring", x: -3, y: -3, width: w + 6, height: h + 6, rx: 11, opacity: o.ring ? 1 : 0 }, g);
       el("rect", { class: "box", width: w, height: h, rx: 9 }, g);
       el("rect", { x: 10, y: 10, width: 26, height: 26, rx: 7, style: tint(c, 16) }, g);
-      if (o.icon === "diamond") el("path", { d: "M23 16 L30 23 L23 30 L16 23 Z", fill: "none", stroke: c, "stroke-width": 1.8, "stroke-linejoin": "round" }, g);
+      if (ICONS[o.icon]) el("path", { d: ICONS[o.icon], fill: c }, el("svg", { x: 16, y: 16, width: 14, height: 14, viewBox: "0 0 256 256" }, g));
       else el("text", { class: "ic-t", x: 23, y: 23, fill: c }, g, o.icon);
       el("text", { class: "t1", x: 46, y: 20 }, g, o.title);
       el("text", { class: "t2", x: 46, y: 35 }, g, o.sub);
@@ -673,6 +711,7 @@
       return g;
     }
 
+    // Sample flows (mock data), drawn with the app's own step-card design.
     // Hero: a condition with two branches. Final state (step picked) is the default.
     var hero = document.getElementById("hero-dg");
     arrowDef(hero);
@@ -698,7 +737,7 @@
       A: card(st, { id: "A", x: 130, y: 20, w: 240, tone: "brand", icon: "DV", title: "When a row is added", sub: "Dataverse · salesorder" }),
       B: card(st, { id: "B", x: 130, y: 94, w: 240, tone: "warn", icon: "{x}", title: "Initialize variable - varTotal", sub: "Initialize variable, integer" }),
       C: card(st, { id: "C", x: 130, y: 168, w: 240, tone: "brand", icon: "DV", title: "List rows - Order lines", sub: "Dataverse · salesorderdetail" }),
-      D: card(st, { id: "D", x: 130, y: 242, w: 240, tone: "info", icon: "↻", title: "Apply to each - line", sub: "Apply to each, 20 in parallel" }),
+      D: card(st, { id: "D", x: 130, y: 242, w: 240, tone: "info", icon: "repeat", title: "Apply to each - line", sub: "Apply to each, 20 in parallel" }),
       E: card(st, { id: "E", x: 130, y: 318, w: 240, tone: "warn", icon: "{x}", title: "Increment variable - varTotal", sub: "Increment variable" }),
       F: card(st, { id: "F", x: 130, y: 424, w: 240, tone: "brand", icon: "DV", title: "Update a row - Order", sub: "Dataverse · salesorder" }),
       G: card(st, { id: "G", x: 130, y: 498, w: 240, tone: "ok", icon: "OL", title: "Send summary email", sub: "Office 365 Outlook" }),
@@ -828,7 +867,7 @@
       gsap.utils.toArray("[data-state]").forEach(function (s, i) {
         sign.set(s, { className: "tn wait" }, 0)
           .set(s, { className: "tn" }, 0.7 + i * 0.5)
-          .from(s.querySelector("i"), { scale: 0.2, duration: 0.35, ease: "back.out(3)" }, 0.7 + i * 0.5);
+          .from(s.querySelector(".sq"), { scale: 0.6, duration: 0.35, ease: "back.out(3)" }, 0.7 + i * 0.5);
       });
 
       /* Install: the rail fills as you scroll, lighting each step it reaches. */
