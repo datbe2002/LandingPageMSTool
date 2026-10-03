@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hexa Studio: SQL, FetchXML and Flows for Dataverse</title>
-  <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL, build FetchXML visually and read Power Automate flows as a diagram." />
+  <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL, build FetchXML visually, read Power Automate flows as a diagram and see which flow runs failed." />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9fb" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131316" />
@@ -314,6 +314,79 @@
     .req { margin: 56px auto 0; max-width: 60ch; color: var(--subtle); font-size: 14px; }
     .req a { color: var(--brand); text-underline-offset: 3px; }
 
+    /* Flow runs: a wide monitor window, the run detail overlapping its lower corner */
+    .runs-sec { padding-bottom: 224px; }
+    .runs-stage { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end; isolation: isolate; }
+    .monitor { grid-column: 1 / 10; grid-row: 1; }
+    .chain { grid-column: 9 / 13; grid-row: 1; position: relative; top: 112px; z-index: 1; }
+    .seg-mock { display: inline-flex; gap: 2px; padding: 2px; border-radius: 8px; background: var(--s2); border: 1px solid var(--line); }
+    .seg-mock span { padding: 4px 8px; border-radius: 6px; font: 500 11.5px/1 var(--sans); color: var(--subtle); }
+    .seg-mock span.on { background: var(--s1); color: var(--fg); box-shadow: 0 1px 2px oklch(0.3 0.03 278 / .12); }
+    .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+    .kpi { padding: 16px 18px; }
+    .kpi + .kpi { border-left: 1px solid var(--line); }
+    .kpi span { display: block; font-size: 12px; color: var(--subtle); }
+    .kpi b { display: block; margin-top: 6px; font: 600 28px/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+    .kpi small { display: block; margin-top: 6px; font-size: 12px; color: var(--subtle); }
+    .kpi.bad b, .kpi.bad small { color: var(--danger); }
+    .runchart { padding: 14px 18px 12px; border-bottom: 1px solid var(--line); }
+    .legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--muted); margin-bottom: 10px; }
+    .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+    .bars { display: flex; align-items: flex-end; gap: 2px; height: 96px; border-bottom: 1px solid var(--line); }
+    .bars .b { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; transform-origin: 50% 100%; }
+    .bars .ok { background: var(--line-strong); border-radius: 4px 4px 0 0; }
+    .bars .bad { background: var(--danger); }
+    .bars .b.only .bad { border-radius: 4px 4px 0 0; }
+    .axis { display: flex; justify-content: space-between; margin-top: 6px; font: 10.5px var(--mono); color: var(--subtle); }
+    .mon-list { padding: 6px 12% 8px 0; font-size: 13px; }
+    .mon-row { display: grid; grid-template-columns: minmax(0, 1fr) 54px 92px 74px; align-items: center; gap: 12px; padding: 8px 18px; }
+    .mon-row.head { color: var(--subtle); font-size: 11.5px; padding-block: 6px; }
+    .mon-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mon-row .f { text-align: right; font-family: var(--mono); color: var(--danger); font-variant-numeric: tabular-nums; }
+    .mon-row.head .f { color: var(--subtle); font-family: var(--sans); }
+    .mon-row .rate { display: flex; align-items: center; gap: 8px; font: 11.5px var(--mono); color: var(--muted); }
+    .mon-row .rate i { display: block; height: 5px; border-radius: 99px; background: var(--danger); transform-origin: left center; }
+    .mon-row .when { color: var(--subtle); font-size: 12px; white-space: nowrap; }
+    .mon-row.on { background: var(--s2); }
+    .chain { background: var(--s1); border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 18px; font-size: 13px; }
+    .badges { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .bdg { font: 600 11px/1 var(--sans); padding: 4px 7px; border-radius: 5px; background: var(--s3); color: var(--muted); }
+    .bdg.bad { background: color-mix(in oklab, var(--danger) 14%, transparent); color: var(--danger); }
+    .chain h3 { margin: 10px 0 2px; font-size: 16px; font-weight: 600; letter-spacing: -.015em; }
+    .chain .meta2 { color: var(--subtle); font-size: 12.5px; }
+    .err { margin-top: 12px; border-radius: var(--r-md); border: 1px solid color-mix(in oklab, var(--danger) 30%, transparent); background: color-mix(in oklab, var(--danger) 8%, transparent); }
+    .err .code-t { padding: 7px 10px; border-bottom: 1px solid color-mix(in oklab, var(--danger) 20%, transparent); font: 600 11.5px var(--mono); color: var(--danger); }
+    .err p { margin: 0; padding: 8px 10px; font: 12px/1.55 var(--mono); color: var(--fg); }
+    .parent { margin-top: 12px; padding: 12px; border-radius: var(--r-md); background: var(--s2); border: 1px solid var(--line); }
+    .parent h4 { margin: 0 0 8px; font: 600 11px/1 var(--sans); color: var(--subtle); }
+    .prow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .prow .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--danger); flex: none; }
+    .prow b { font-weight: 600; white-space: nowrap; }
+    .prow small { color: var(--subtle); font-size: 12px; white-space: nowrap; }
+    .go { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 7px 10px; border-radius: 7px; background: var(--brand-solid); color: var(--on-brand); font: 600 12px/1 var(--sans); }
+    .go svg { width: 13px; height: 13px; }
+
+    /* Other tools: sticky heading, the tools grouped beside it */
+    .tools-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+    .tools-head { position: sticky; top: calc(var(--nav-h) + 40px); }
+    .palette { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 10px 14px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--s1); color: var(--muted); font-size: 15px; box-shadow: var(--shadow-md); }
+    .palette svg { width: 18px; height: 18px; color: var(--brand); flex: none; }
+    .cluster + .cluster { margin-top: 40px; padding-top: 36px; border-top: 1px solid var(--line); }
+    .cluster h3 { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+    .cluster h3 .tile { width: 34px; height: 34px; border-radius: var(--r-sm); display: grid; place-items: center; background: color-mix(in oklab, var(--brand) 14%, var(--s2)); color: var(--brand); }
+    .cluster h3 svg { width: 18px; height: 18px; }
+    .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 36px; margin: 20px 0 0; }
+    .tools dt { font-weight: 600; font-size: 16px; }
+    .tools dd { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+    .tools .wide { grid-column: 1 / -1; }
+    .diff { margin-top: 14px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--code); overflow: hidden; font: 12.5px/1.8 var(--mono); }
+    .diff .dh { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); color: var(--subtle); font-size: 11.5px; }
+    .diff .dh svg { width: 14px; height: 14px; }
+    .diff .dh .n { margin-left: auto; }
+    .diff .l { display: block; padding: 0 12px; white-space: pre; overflow: hidden; text-overflow: ellipsis; color: var(--muted); }
+    .diff .del { background: color-mix(in oklab, var(--danger) 10%, transparent); }
+    .diff .add { background: color-mix(in oklab, var(--success) 12%, transparent); color: var(--fg); }
+
     footer { border-top: 1px solid var(--line); padding: 20px 0 36px; color: var(--subtle); font-size: 14px; }
     footer .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; }
     footer .brand { font-size: 14px; color: var(--muted); }
@@ -333,6 +406,12 @@
       .proof-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
       .stat:first-child { grid-column: 1 / -1; padding-right: 0; border-bottom: 1px solid var(--line); }
       .stat:nth-child(2) { padding-left: 0; border-left: 0; }
+      .runs-sec { padding-bottom: 112px; }
+      .monitor, .chain { grid-column: 1 / -1; }
+      .chain { grid-row: 2; top: 0; margin-top: 16px; }
+      .mon-list { padding-right: 0; }
+      .tools-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+      .tools-head { position: static; }
     }
     @media (max-width: 767px) {
       /* Menu: the same links and Download button, folded under a toggle (only with JS). */
@@ -364,6 +443,15 @@
       .isteps { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 56px; }
       .isteps .rail { display: none; }
       .istep h3 { margin-top: 14px; }
+      .runs-sec { padding-bottom: 80px; }
+      .kpi { padding: 14px 12px; }
+      .kpi b { font-size: 22px; }
+      .mon-row { grid-template-columns: minmax(0, 1fr) 40px 70px; gap: 8px; padding-inline: 12px; }
+      .mon-row .when { display: none; }
+      .runchart { padding-inline: 12px; }
+      .seg-mock span:not(.on) { display: none; }
+      .chain { padding: 14px; }
+      .tools { grid-template-columns: minmax(0, 1fr); gap: 18px; }
     }
   </style>
 </head>
@@ -385,6 +473,7 @@
         <a href="#sql">SQL</a>
         <a href="#fetchxml">FetchXML</a>
         <a href="#flows">Flows</a>
+        <a href="#runs">Runs</a>
         <a href="#install">Install</a>
         <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
       </nav>
@@ -402,7 +491,7 @@
       <div class="wrap hero-grid">
         <div>
           <h1 id="hero-title" data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
-          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually and read every Power Automate flow step by step.</p>
+          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually, read every flow and see which runs failed.</p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
@@ -574,6 +663,107 @@
           <div class="search" id="search" aria-hidden="true">
             <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
             <span class="q" id="q">varTotal</span><span class="caret"></span><span class="hits" id="hits">3 matches</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Flow runs ================= -->
+    <section class="sec runs-sec" id="runs" aria-labelledby="runs-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2 id="runs-title" data-rise>See which flows failed, and what started them.</h2>
+          <p class="sub" data-rise>Run history for every flow in a solution, read from Dataverse. Count the failures, then follow a failed child flow up to the run that called it.</p>
+        </div>
+        <!-- mock: run counts, flow names and the error are sample data -->
+        <div class="runs-stage" id="runs-demo">
+          <div class="panel monitor" role="img" aria-label="The Flow runs monitor for the last 24 hours: 1,847 runs, 63 failed, 4 of 38 flows with failures, a chart of runs per hour with the failed share in red, and the failing flows ranked.">
+            <div class="ed-head" aria-hidden="true">
+              <span class="mono">Monitoring › Flow runs</span>
+              <span class="seg-mock"><span>1h</span><span class="on">24h</span><span>7 days</span><span>28 days</span></span>
+            </div>
+            <div aria-hidden="true">
+              <div class="kpis">
+                <div class="kpi"><span>Runs</span><b data-run-count="1847">1,847</b><small>in the last 24 hours</small></div>
+                <div class="kpi bad"><span>Failed</span><b data-run-count="63">63</b><small>3.4% of runs</small></div>
+                <div class="kpi"><span>Flows with failures</span><b>4</b><small>of 38 that ran</small></div>
+              </div>
+              <div class="runchart">
+                <div class="legend"><span><i style="background:var(--danger)"></i>Failed</span><span><i style="background:var(--line-strong)"></i>Other runs</span></div>
+                <div class="bars" id="run-bars"></div>
+                <div class="axis"><span>1 PM</span><span>1 AM</span><span>now</span></div>
+              </div>
+              <div class="mon-list">
+                <div class="mon-row head"><span>Flow</span><span class="f">Failed</span><span>Fail rate</span><span class="when">Last failure</span></div>
+                <div class="mon-row on" data-mon-row><span class="nm">Sync orders to ERP</span><span class="f">38</span><span class="rate"><i style="width:9px"></i>4.2%</span><span class="when">8 min ago</span></div>
+                <div class="mon-row" data-mon-row><span class="nm">Validate shipping address</span><span class="f">17</span><span class="rate"><i style="width:8px"></i>3.7%</span><span class="when">8 min ago</span></div>
+                <div class="mon-row" data-mon-row><span class="nm">Nightly invoice export</span><span class="f">6</span><span class="rate"><i style="width:56px"></i>25%</span><span class="when">9 h ago</span></div>
+                <div class="mon-row" data-mon-row><span class="nm">Notify account owner</span><span class="f">2</span><span class="rate"><i style="width:3px"></i>1.1%</span><span class="when">3 h ago</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chain" id="run-chain" role="img" aria-label="A failed run of the child flow Validate shipping address, with its error and the parent run that started it: Sync orders to ERP, with a Go to parent run button.">
+            <div aria-hidden="true">
+              <div class="badges"><span class="bdg bad">Failed</span><span class="bdg">child run</span></div>
+              <h3>Validate shipping address</h3>
+              <div class="meta2">Today 11:52 AM, took 7.8 s</div>
+              <div class="err"><div class="code-t">Terminated</div><p>Address line 1 is empty on order SO-10482.</p></div>
+              <div class="parent" id="run-parent">
+                <h4>Started by (parent run)</h4>
+                <div class="prow"><span class="dot"></span><b>Sync orders to ERP</b><small>Failed, 11:52 AM</small></div>
+                <span class="go" id="run-go"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208,224a8,8,0,0,1-8,8A104.11,104.11,0,0,1,96,128V51.31L61.66,85.66A8,8,0,0,1,50.34,74.34l48-48a8,8,0,0,1,11.32,0l48,48a8,8,0,0,1-11.32,11.32L112,51.31V128a88.1,88.1,0,0,0,88,88A8,8,0,0,1,208,224Z"/></svg>Go to parent run</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Other tools ================= -->
+    <section class="sec" id="tools" aria-labelledby="tools-title" style="padding-top:0">
+      <div class="wrap tools-grid">
+        <div class="tools-head">
+          <h2 id="tools-title" data-rise>The rest of your admin toolbox, in the same window.</h2>
+          <p class="sub" data-rise>Each tool reads the environment you already have open. Nothing is written until you review it and say so.</p>
+          <div class="palette" data-rise>
+            <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M180,144H160V112h20a36,36,0,1,0-36-36V96H112V76a36,36,0,1,0-36,36H96v32H76a36,36,0,1,0,36,36V160h32v20a36,36,0,1,0,36-36ZM160,76a20,20,0,1,1,20,20H160ZM56,76a20,20,0,0,1,40,0V96H76A20,20,0,0,1,56,76ZM96,180a20,20,0,1,1-20-20H96Zm16-68h32v32H112Zm68,88a20,20,0,0,1-20-20V160h20a20,20,0,0,1,0,40Z"/></svg>
+            <span>Press <kbd class="k">Ctrl</kbd> <kbd class="k">K</kbd> to jump to any table, flow or tool.</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="cluster" data-rise>
+            <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M240,128a8,8,0,0,1-8,8H204.94l-37.78,75.58A8,8,0,0,1,160,216h-.4a8,8,0,0,1-7.08-5.14L95.35,60.76,63.28,131.31A8,8,0,0,1,56,136H24a8,8,0,0,1,0-16H50.85L88.72,36.69a8,8,0,0,1,14.76.46l57.51,151,31.85-63.71A8,8,0,0,1,200,120h32A8,8,0,0,1,240,128Z"/></svg></span>Monitoring</h3>
+            <dl class="tools">
+              <div><dt>Plug-in traces</dt><dd>The trace log, newest first. Filter by class, message or table and follow one execution chain.</dd></div>
+              <div><dt>System jobs</dt><dd>Async plug-ins, workflows and imports, with their status and the reason they failed.</dd></div>
+            </dl>
+          </div>
+
+          <div class="cluster" data-rise>
+            <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M237.66,18.34a8,8,0,0,0-11.32,0l-52.4,52.41-5.37-5.38a32.05,32.05,0,0,0-45.26,0L100,88.69l-6.34-6.35A8,8,0,0,0,82.34,93.66L88.69,100,65.37,123.31a32,32,0,0,0,0,45.26l5.38,5.37-52.41,52.4a8,8,0,0,0,11.32,11.32l52.4-52.41,5.37,5.38a32,32,0,0,0,45.26,0L156,167.31l6.34,6.35a8,8,0,0,0,11.32-11.32L167.31,156l23.32-23.31a32,32,0,0,0,0-45.26l-5.38-5.37,52.41-52.4A8,8,0,0,0,237.66,18.34Zm-116.29,161a16,16,0,0,1-22.62,0L76.69,157.25a16,16,0,0,1,0-22.62L100,111.31,144.69,156Zm57.94-57.94L156,144.69,111.31,100l23.32-23.31a16,16,0,0,1,22.62,0l22.06,22A16,16,0,0,1,179.31,121.37ZM88.57,35A8,8,0,0,1,103.43,29l8,20A8,8,0,0,1,96.57,55ZM24.57,93A8,8,0,0,1,35,88.57l20,8A8,8,0,0,1,49,111.43l-20-8A8,8,0,0,1,24.57,93ZM231.43,163a8,8,0,0,1-10.4,4.46l-20-8A8,8,0,1,1,207,144.57l20,8A8,8,0,0,1,231.43,163Zm-64,58.06A8,8,0,0,1,152.57,227l-8-20A8,8,0,0,1,159.43,201Z"/></svg></span>Configuration</h3>
+            <dl class="tools">
+              <div><dt>Plug-in steps</dt><dd>Assemblies, steps and images by assembly or by table. Microsoft's stay hidden until you ask.</dd></div>
+              <div><dt>Dependencies</dt><dd>What blocks deleting a table or column, including the plug-in steps and flows Dataverse doesn't track.</dd></div>
+              <div class="wide"><dt>Security</dt><dd>A user's real privileges across every role and team, two roles side by side, and why someone can or can't open a record.</dd></div>
+            </dl>
+          </div>
+
+          <div class="cluster" data-rise>
+            <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg></span>Customization</h3>
+            <dl class="tools">
+              <div class="wide"><dt>Web resources</dt><dd>Edit JavaScript, HTML and CSS in place. Before anything is saved you see the diff, then save and publish in one step.</dd></div>
+            </dl>
+            <!-- mock: a sample change to a sample web resource -->
+            <div class="diff" role="img" aria-label="The review before saving: one line of contoso_/js/account.js changes the name field from not required to required.">
+              <div class="dh" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M112,152a8,8,0,0,0-8,8v28.69L66.34,151A8,8,0,0,1,64,145.37V95a32,32,0,1,0-16,0v50.38a23.85,23.85,0,0,0,7,17L92.69,200H64a8,8,0,0,0,0,16h48a8,8,0,0,0,8-8V160A8,8,0,0,0,112,152ZM40,64A16,16,0,1,1,56,80,16,16,0,0,1,40,64Zm168,97V110.63a23.85,23.85,0,0,0-7-17L163.31,56H192a8,8,0,0,0,0-16H144a8,8,0,0,0-8,8V96a8,8,0,0,0,16,0V67.31L189.66,105a8,8,0,0,1,2.34,5.66V161a32,32,0,1,0,16,0Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,200,208Z"/></svg><span class="mono">contoso_/js/account.js</span><span class="n mono">+1 -1</span></div>
+              <div aria-hidden="true">
+                <span class="l">  const name = formContext.getAttribute("name");</span>
+                <span class="l del">- name.setRequiredLevel("none");</span>
+                <span class="l add">+ name.setRequiredLevel("required");</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -757,6 +947,19 @@
     dimSet.forEach(function (g) { g.style.opacity = 0.3; });
     document.getElementById("search").style.opacity = 0;
 
+    // Flow runs chart (mock): runs and failures per hour, last 24 hours,
+    // summing to the 1,847 runs and 63 failures shown above it.
+    var RUNS = [44, 36, 32, 28, 26, 29, 48, 74, 108, 122, 131, 115, 111, 118, 126, 112, 103, 92, 83, 75, 68, 61, 55, 50];
+    var FAILS = [1, 0, 0, 0, 0, 1, 1, 3, 5, 7, 12, 4, 3, 4, 7, 4, 3, 2, 2, 1, 1, 1, 0, 1];
+    var barsBox = document.getElementById("run-bars"), peak = Math.max.apply(null, RUNS);
+    RUNS.forEach(function (n, i) {
+      var b = document.createElement("div"), ok = n - FAILS[i];
+      b.className = "b" + (ok > 0 ? "" : " only");
+      b.style.height = (n / peak * 100) + "%";
+      b.innerHTML = '<div class="ok" style="flex:' + ok + ' 1 0"></div>' + (FAILS[i] ? '<div class="bad" style="flex:' + FAILS[i] + ' 1 0;min-height:2px"></div>' : "");
+      barsBox.appendChild(b);
+    });
+
     /* ---------------- Motion ---------------- */
     if (!window.gsap) return; // CDN blocked: the page stays complete, just still.
     gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -861,6 +1064,21 @@
         .set("#fx-hl", { className: "ln hl" }, "+=0.35")
         .fromTo(fxN, { n: 0 }, { n: 1284, duration: 1.1, ease: "power2.out",
           onUpdate: function () { fxCount.textContent = Math.round(fxN.n).toLocaleString("en-US"); } }, "+=0.2");
+
+      /* Flow runs: the hours fill in and the counts add up, then a failed
+         child run comes forward and points at the parent run that started it. */
+      var runCounts = gsap.utils.toArray("[data-run-count]");
+      var runTl = gsap.timeline({ scrollTrigger: { trigger: "#runs-demo", start: "top 72%", once: true } })
+        .from("#run-bars .b", { scaleY: 0, duration: 0.6, stagger: 0.025, ease: EASE });
+      runCounts.forEach(function (n) {
+        var end = +n.dataset.runCount, o = { v: 0 };
+        runTl.fromTo(o, { v: 0 }, { v: end, duration: 1.2, ease: "power2.out",
+          onUpdate: function () { n.textContent = Math.round(o.v).toLocaleString("en-US"); } }, 0);
+      });
+      runTl.from("[data-mon-row]", { opacity: 0, y: 8, duration: 0.4, stagger: 0.07, ease: EASE }, 0.5)
+        .from("#run-chain", { opacity: 0, x: 28, duration: 0.8, ease: EASE }, "+=0.15")
+        .from("#run-parent", { opacity: 0, y: 10, duration: 0.5, ease: EASE }, "+=0.25")
+        .to("#run-go", { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.2");
 
       /* Projects: the tenants in the sentence sign in one after another. */
       var sign = gsap.timeline({ scrollTrigger: { trigger: "#t-title", start: "top 75%", once: true } });
