@@ -366,6 +366,49 @@
     .go { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 7px 10px; border-radius: 7px; background: var(--brand-solid); color: var(--on-brand); font: 600 12px/1 var(--sans); }
     .go svg { width: 13px; height: 13px; }
 
+    /* Flow tasks: the task folder beside the review window */
+    .tasks-stage { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+    .taskdir { grid-column: 1 / 5; margin-top: 56px; background: var(--s1); border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); overflow: hidden; font-size: 13px; }
+    .tcompare { grid-column: 5 / 13; }
+    .tdir-h { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font: 12px/1.3 var(--mono); color: var(--subtle); }
+    .tdir-h svg, .tree svg { width: 15px; height: 15px; flex: none; }
+    .tree { list-style: none; margin: 0; padding: 8px; }
+    .tree li { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 6px 8px; border-radius: 7px; color: var(--muted); }
+    .tree li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tree li small { margin-left: auto; padding-left: 8px; color: var(--subtle); font-size: 11.5px; white-space: nowrap; }
+    .tree .d2 { padding-left: 30px; font-family: var(--mono); font-size: 12px; }
+    .tree .dir svg { color: var(--brand); }
+    .tree .md svg { color: var(--info); }
+    .tree li.on { background: color-mix(in oklab, var(--warning) 10%, transparent); color: var(--fg); }
+    .tree .saved { margin-left: auto; padding: 3px 6px; border-radius: 5px; background: color-mix(in oklab, var(--warning) 16%, transparent); color: var(--warning); font: 600 10.5px/1 var(--sans); overflow: visible; }
+    .tree .mut { color: var(--subtle); }
+    .term { margin: 0 8px 8px; padding: 10px 12px; border-radius: var(--r-md); background: var(--code); border: 1px solid var(--line); font: 12px/1.6 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+    .term .pr { color: var(--subtle); }
+    .term .cm { color: var(--fg); }
+    .revbtn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 7px; background: var(--brand-solid); color: var(--on-brand); font: 600 12px/1 var(--sans); white-space: nowrap; }
+    .revbtn svg { width: 13px; height: 13px; }
+    .revbtn.done { background: color-mix(in oklab, var(--success) 16%, transparent); color: var(--success); }
+    .t-headr { display: flex; align-items: center; gap: 10px; }
+    .tc-labels, .tc-canvases { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .tc-labels span { padding: 7px 14px; border-bottom: 1px solid var(--line); background: var(--s2); font-size: 11.5px; color: var(--subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tc-labels span + span, .tc-canvases .canvas + .canvas { border-left: 1px solid var(--line); }
+    .tc-canvases .canvas { padding: 6px 4px 0; }
+    .dg .mk-t { font-size: 10px; font-weight: 650; dominant-baseline: central; fill: var(--bg); }
+    .tc-foot { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); border-top: 1px solid var(--line); }
+    .tc-what { padding: 12px 14px; border-right: 1px solid var(--line); min-width: 0; }
+    .tc-what h4, .tc-checks h4 { margin: 0 0 8px; font: 600 11px/1 var(--sans); color: var(--subtle); }
+    .tc-what .path { font: 11.5px/1.4 var(--mono); color: var(--muted); margin-bottom: 6px; }
+    .tc-what .diff { margin-top: 0; }
+    .tc-what .diff .l { white-space: pre-wrap; overflow-wrap: anywhere; padding-left: 2.2ch; text-indent: -1.4ch; }
+    .tcompare .ed-head > .mono { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
+    .tc-checks { padding: 12px 14px; font-size: 12.5px; }
+    .chk { display: flex; gap: 8px; align-items: flex-start; line-height: 1.45; }
+    .chk svg { width: 15px; height: 15px; flex: none; margin-top: 1px; }
+    .chk.bad { color: var(--fg); } .chk.bad svg { color: var(--danger); }
+    .chk.ok { color: var(--muted); } .chk.ok svg { color: var(--success); }
+    .chk.warn svg { color: var(--warning); } .chk.warn { color: var(--muted); margin-top: 8px; }
+    .chk code { font: 11.5px var(--mono); color: var(--fg); }
+
     /* Other tools: sticky heading, the tools grouped beside it */
     .tools-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
     .tools-head { position: sticky; top: calc(var(--nav-h) + 40px); }
@@ -412,6 +455,8 @@
       .mon-list { padding-right: 0; }
       .tools-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
       .tools-head { position: static; }
+      .taskdir, .tcompare { grid-column: 1 / -1; }
+      .taskdir { margin-top: 0; grid-row: 2; }
     }
     @media (max-width: 767px) {
       /* Menu: the same links and Download button, folded under a toggle (only with JS). */
@@ -452,6 +497,13 @@
       .seg-mock span:not(.on) { display: none; }
       .chain { padding: 14px; }
       .tools { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+      /* One side, as in the app: the edited version with its changes marked. */
+      .tc-labels, .tc-canvases { grid-template-columns: minmax(0, 1fr); }
+      .tc-labels span:first-child, .tc-canvases .canvas:first-child { display: none; }
+      .tc-labels span + span, .tc-canvases .canvas + .canvas { border-left: 0; }
+      .tc-foot { grid-template-columns: minmax(0, 1fr); }
+      .tc-what { border-right: 0; border-bottom: 1px solid var(--line); }
+      .t-headr .seg-mock { display: none; }
     }
   </style>
 </head>
@@ -474,6 +526,7 @@
         <a href="#fetchxml">FetchXML</a>
         <a href="#flows">Flows</a>
         <a href="#runs">Runs</a>
+        <a href="#tasks">Tasks</a>
         <a href="#install">Install</a>
         <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
       </nav>
@@ -491,7 +544,7 @@
       <div class="wrap hero-grid">
         <div>
           <h1 id="hero-title" data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
-          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually, read every flow and see which runs failed.</p>
+          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually, read every flow, review flow edits before they ship and see which runs failed.</p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="https://github.com/datbe2002/MSDataverseTool/releases/latest">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
@@ -717,6 +770,71 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= Flow tasks ================= -->
+    <section class="sec" id="tasks" aria-labelledby="tasks-title" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <h2 id="tasks-title" data-rise>Hand a flow to Claude. See every change before it ships.</h2>
+          <p class="sub" data-rise>Check the flows of one task out into a folder of their own. Whoever edits them, you, a teammate or Claude Code, each save is compared with the original and with the cloud.</p>
+        </div>
+        <!-- mock: task, flow names, folder and expressions are sample data -->
+        <div class="tasks-stage" id="tasks-demo">
+          <div class="taskdir" role="img" aria-label="The task folder: CLAUDE.md with the task, task.json, the flows folder with one definition.json per flow, the first one just saved, and .hexa/baseline with the originals. Claude Code runs in the folder.">
+            <div aria-hidden="true">
+              <div class="tdir-h"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"/></svg><span>HexaTasks › TASK-482</span></div>
+              <ul class="tree">
+                <li class="md"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg><span>CLAUDE.md</span><small>the task, the rules</small></li>
+                <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg><span>task.json</span></li>
+                <li class="dir"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"/></svg><span>flows</span></li>
+                <li class="d2 on" id="td-file"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg><span>Invoice-Sync__3f2a9c1e/definition.json</span><span class="saved" id="td-saved">saved</span></li>
+                <li class="d2"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg><span>Notify-approvers__81bd04aa/definition.json</span></li>
+                <li class="mut"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"/></svg><span>.hexa/baseline</span><small>the originals</small></li>
+              </ul>
+              <div class="term"><span class="pr">PS TASK-482&gt;</span> <span class="cm">claude</span><br /><span id="td-term">Editing Invoice-Sync__3f2a9c1e/definition.json…</span></div>
+            </div>
+          </div>
+
+          <div class="panel tcompare" role="img" aria-label="The task's review window in Visual mode. The original flow and the edited one side by side: List invoice lines is marked Changed, Update invoice total Renamed and Send summary Added. Below, the filter that changed, old and new, and the checks: nothing looks broken. The flow is marked Reviewed.">
+            <div class="ed-head" aria-hidden="true">
+              <span class="mono">Tasks › TASK-482 Fix invoice sync</span>
+              <span class="t-headr">
+                <span class="seg-mock"><span>JSON</span><span class="on">Visual</span></span>
+                <span class="revbtn done" id="tc-rev"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span id="tc-rev-t">Reviewed</span></span>
+              </span>
+            </div>
+            <div aria-hidden="true">
+              <div class="tc-labels"><span>Baseline, DEV when added</span><span>Working copy, saved just now</span></div>
+              <div class="tc-canvases">
+                <div class="canvas"><svg class="dg" id="tc-left" viewBox="0 0 280 388"></svg></div>
+                <div class="canvas"><svg class="dg" id="tc-right" viewBox="0 0 280 388"></svg></div>
+              </div>
+              <div class="tc-foot">
+                <div class="tc-what">
+                  <h4>What changed · List invoice lines</h4>
+                  <div class="path">inputs › parameters › $filter</div>
+                  <div class="diff">
+                    <span class="l del">- _invoiceid_value eq @{…invoiceid}</span>
+                    <span class="l add">+ _invoiceid_value eq @{…invoiceid} and statecode eq 0</span>
+                  </div>
+                </div>
+                <div class="tc-checks">
+                  <h4>Checks</h4>
+                  <div class="chk bad" id="tc-bad" style="display:none"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"/></svg><span>“Send summary” uses <code>body('Get_owner')</code>, but there's no action named “Get_owner”.</span></div>
+                  <div class="chk ok" id="tc-ok"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>Nothing looks broken.</span></div>
+                  <div class="chk warn"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg><span>New connection reference <code>shared_office365</code>, it has to exist in DEV.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <dl class="points">
+          <div data-rise><dt>Only the flows you were given</dt><dd>Add them from the task or with Add to task in Flows. Each one is read from the environment as its baseline.</dd></div>
+          <div data-rise><dt>Any two versions, side by side</dt><dd>The original, the edited file, the cloud now and every earlier version, as JSON or drawn like the designer.</dd></div>
+          <div data-rise><dt>Checks before you trust it</dt><dd>Missing actions and variables, broken runAfter, connection references. And a warning when someone changed the flow in the cloud meanwhile.</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -960,6 +1078,35 @@
       barsBox.appendChild(b);
     });
 
+    // Flow tasks (mock): the original flow and the edited one, the edits marked
+    // the way the app's Visual compare does. Final state is the default.
+    var MARK = { changed: ["Changed", "var(--warning)", 54], renamed: ["Renamed", "var(--info)", 60], added: ["Added", "var(--success)", 46] };
+    function marked(g, kind) {
+      var m = MARK[kind];
+      g.querySelector(".box").setAttribute("style", "stroke:" + m[1] + ";stroke-width:1.5;fill:color-mix(in oklab, " + m[1] + " 8%, var(--s1))");
+      var t = el("g", { class: "mk" }, g);
+      el("rect", { x: 10, y: -9, width: m[2], height: 17, rx: 4, fill: m[1] }, t);
+      el("text", { class: "mk-t", x: 16, y: 0 }, t, m[0]);
+      return t;
+    }
+    function taskFlow(svg, edited) {
+      arrowDef(svg);
+      var rows = edited
+        ? [["DV", "brand", "When an invoice is added", "Dataverse · invoice"], ["DV", "brand", "List invoice lines", "Dataverse · invoicedetail", "changed"], ["repeat", "info", "Apply to each line", "Apply to each"], ["DV", "brand", "Update invoice total", "Dataverse · invoice", "renamed"], ["OL", "ok", "Send summary", "Office 365 Outlook", "added"]]
+        : [["DV", "brand", "When an invoice is added", "Dataverse · invoice"], ["DV", "brand", "List invoice lines", "Dataverse · invoicedetail"], ["repeat", "info", "Apply to each line", "Apply to each"], ["DV", "brand", "Update invoice", "Dataverse · invoice"]];
+      var out = { cards: [], marks: [] };
+      rows.forEach(function (r, i) {
+        var y = 24 + i * 74;
+        if (i) edge(svg, 140, y - 28, y);
+        var g = card(svg, { id: svg.id + i, x: 20, y: y, w: 240, tone: r[1], icon: r[0], title: r[2], sub: r[3] });
+        out.cards.push(g);
+        if (r[4]) out.marks.push({ g: g, tag: marked(g, r[4]), kind: r[4] });
+      });
+      return out;
+    }
+    taskFlow(document.getElementById("tc-left"), false);
+    var tcRight = taskFlow(document.getElementById("tc-right"), true);
+
     /* ---------------- Motion ---------------- */
     if (!window.gsap) return; // CDN blocked: the page stays complete, just still.
     gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -1081,6 +1228,43 @@
         .to("#run-go", { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.2");
 
       /* Projects: the tenants in the sentence sign in one after another. */
+      /* Flow tasks: the file is saved in the folder, the edits light up step
+         by step, a broken reference is caught and fixed, then it's reviewed. */
+      var tcBad = document.getElementById("tc-bad"), tcOk = document.getElementById("tc-ok");
+      var tcRev = document.getElementById("tc-rev"), tcRevT = document.getElementById("tc-rev-t");
+      function tcState(fixed) {
+        tcBad.style.display = fixed ? "none" : "";
+        tcOk.style.display = fixed ? "" : "none";
+      }
+      function tcReview(done) {
+        tcRev.classList.toggle("done", done);
+        tcRevT.textContent = done ? "Reviewed" : "Mark reviewed";
+      }
+      // Start: nothing saved, no marks, a broken reference, not reviewed.
+      var tdFile = document.getElementById("td-file");
+      var tcBoxes = tcRight.marks.map(function (m) { var b = m.g.querySelector(".box"); return [b, b.getAttribute("style")]; });
+      tdFile.classList.remove("on");
+      tcBoxes.forEach(function (b) { b[0].removeAttribute("style"); });
+      tcState(false);
+      tcReview(false);
+      var tcTl = gsap.timeline({ scrollTrigger: { trigger: "#tasks-demo", start: "top 70%", once: true } })
+        .call(function () { tdFile.classList.add("on"); }, null, 0.3)
+        .from("#td-saved", { opacity: 0, scale: 0.8, duration: 0.35, ease: EASE }, 0.3);
+      tcRight.marks.forEach(function (m, i) {
+        tcTl.call(function () { tcBoxes[i][0].setAttribute("style", tcBoxes[i][1]); }, null, 0.9 + i * 0.35)
+          .from(m.tag, { opacity: 0, y: 6, duration: 0.45, ease: EASE }, 0.9 + i * 0.35);
+      });
+      tcTl.call(function () { tcState(true); }, null, "+=0.9")
+        .from("#tc-ok", { opacity: 0, x: -6, duration: 0.4, ease: EASE })
+        .to("#tc-rev", { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.35")
+        .call(function () { tcReview(true); });
+      reverts.push(function () {
+        tdFile.classList.add("on");
+        tcBoxes.forEach(function (b) { b[0].setAttribute("style", b[1]); });
+        tcState(true);
+        tcReview(true);
+      });
+
       var sign = gsap.timeline({ scrollTrigger: { trigger: "#t-title", start: "top 75%", once: true } });
       gsap.utils.toArray("[data-state]").forEach(function (s, i) {
         sign.set(s, { className: "tn wait" }, 0)
