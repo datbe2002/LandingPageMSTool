@@ -138,6 +138,20 @@
 
     /* ---------- Hero ---------- */
     .hero { padding: calc(var(--nav-h) + 64px) 0 96px; }
+    /* Launch film: the first thing on the page, framed like the app window. */
+    .reel { padding: calc(var(--nav-h) + 40px) 0 0; }
+    .reel + .hero { padding-top: 88px; }
+    .reel-frame { position: relative; margin: 0; border-radius: var(--r-lg); background: oklch(0.13 0.02 278); border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg); overflow: hidden; }
+    .reel-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: oklch(0.13 0.02 278); }
+    .reel-sound { position: absolute; left: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid oklch(1 0 0 / .16); background: oklch(0.16 0.02 278 / .78); color: oklch(0.96 0.005 278); font: 550 14px/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background-color .2s var(--ease), transform .2s var(--ease); }
+    .reel-sound[hidden] { display: none; }
+    .reel-sound:hover { background: oklch(0.22 0.03 278 / .9); transform: translateY(-1px); }
+    .reel-sound:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .reel-sound .ico { width: 18px; height: 18px; }
+    .reel-cap { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; margin-top: 14px; color: var(--subtle); font: 13px var(--mono); }
+    .contact-line { margin: 28px auto 0; color: var(--muted); font-size: 15px; }
+    .contact-line a { color: var(--brand); font-family: var(--mono); text-underline-offset: 3px; }
+    .contact-line a.li { font-family: var(--sans); }
     .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
     h1 { margin: 0; font-size: clamp(40px, 4.4vw, 60px); line-height: 1.04; letter-spacing: -.042em; font-weight: 620; }
     h1 .dim { color: var(--subtle); }
@@ -470,6 +484,9 @@
       .top nav a { min-height: 48px; display: flex; align-items: center; font-size: 16px; }
       .top .btn-sm { min-height: 48px; font-size: 15px; }
       .hero { padding: calc(var(--nav-h) + 40px) 0 72px; }
+      .reel { padding-top: calc(var(--nav-h) + 20px); }
+      .reel + .hero { padding-top: 56px; }
+      .reel-sound { left: 12px; bottom: 12px; min-height: 36px; padding: 0 12px; font-size: 13px; }
       .sec { padding: 80px 0; }
       .sec-head { margin-bottom: 32px; }
       .cta .btn { width: 100%; }
@@ -539,6 +556,20 @@
   </header>
 
   <main id="main">
+    <!-- ================= Launch film ================= -->
+    <section class="reel" aria-label="Hexa Studio launch video">
+      <div class="wrap">
+        <figure class="reel-frame">
+          <video id="reel" src="media/hexa-studio-promo.mp4" poster="media/hexa-studio-promo.jpg" muted playsinline loop preload="metadata" aria-label="Hexa Studio in under a minute: reading and grading cloud flows, reviewing flow and web resource changes as a diff, and building Dataverse Web API requests."></video>
+          <button class="reel-sound" id="reel-sound" type="button">
+            <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM144,207.64,84.91,161.69A7.94,7.94,0,0,0,80,160H32V96H80a7.94,7.94,0,0,0,4.91-1.69L144,48.36ZM200,104v48a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm32-16v80a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Z"/></svg>
+            <span id="reel-sound-t">Play with sound</span>
+          </button>
+        </figure>
+        <div class="reel-cap"><span>Hexa Studio in 59 seconds</span><span>Flows · Flow tasks · Web resources · REST builder</span></div>
+      </div>
+    </section>
+
     <!-- ================= Hero ================= -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-grid">
@@ -913,6 +944,7 @@
           </a>
         </div>
         <div class="meta" data-meta data-rise>Latest release on GitHub</div>
+        <p class="contact-line" data-rise>Questions, pilots or partnerships: write to the founder at <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a> or connect on <a class="li" href="https://www.linkedin.com/in/truongtandat" rel="noopener">LinkedIn</a></p>
 
         <ol class="isteps" id="isteps">
           <li class="rail" aria-hidden="true"><i></i></li>
@@ -932,6 +964,8 @@
       <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
       <a href="https://github.com/datbe2002/MSDataverseTool/releases">Releases</a>
       <a href="https://github.com/datbe2002/MSDataverseTool/issues">Report an issue</a>
+      <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a>
+      <a href="https://www.linkedin.com/in/truongtandat" rel="noopener">LinkedIn</a>
     </div>
   </footer>
 
@@ -941,6 +975,23 @@
   <script>
   (function () {
     "use strict";
+
+    /* ---------------- Launch film: muted autoplay, one button for sound ---------------- */
+    (function () {
+      var v = document.getElementById("reel"), b = document.getElementById("reel-sound"), t = document.getElementById("reel-sound-t");
+      if (!v || !b) return;
+      var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!still) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+      b.addEventListener("click", function () {
+        if (v.muted || v.paused) {
+          v.muted = false; v.loop = false; v.controls = true;
+          if (t.textContent === "Play with sound") v.currentTime = 0;
+          v.play();
+          b.hidden = true;
+        }
+      });
+      v.addEventListener("ended", function () { b.hidden = false; t.textContent = "Watch again"; v.muted = false; });
+    })();
 
     /* ---------------- Latest release: download links, size, version ---------------- */
     fetch("https://api.github.com/repos/datbe2002/MSDataverseTool/releases/latest", { headers: { Accept: "application/vnd.github+json" } })

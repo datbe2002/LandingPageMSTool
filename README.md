@@ -5,6 +5,7 @@ a Windows desktop toolkit for Power Platform / Dataverse.
 
 - `index.html` — the whole page (inline CSS/JS; Geist and Geist Mono from jsDelivr; GSAP for motion). Follows light/dark system theme and `prefers-reduced-motion`.
 - `favicon.svg` — the app icon
+- `media/hexa-studio-promo.mp4` + `.jpg` — the 59-second launch film shown first on the page (H.264, ~5 MB) and its poster frame
 
 The download buttons ask the GitHub API for the latest release of
 `datbe2002/MSDataverseTool` and link its `*setup.exe`, so a new app release
