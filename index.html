@@ -152,6 +152,17 @@
     .contact-line { margin: 28px auto 0; color: var(--muted); font-size: 15px; }
     .contact-line a { color: var(--brand); font-family: var(--mono); text-underline-offset: 3px; }
     .contact-line a.li { font-family: var(--sans); }
+    /* About / company */
+    .about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: start; }
+    .about-grid .sub { margin-top: 20px; }
+    .facts { margin: 0; border: 1px solid var(--line-strong); border-radius: var(--r-lg); background: var(--s1); box-shadow: var(--shadow-md); overflow: hidden; }
+    .facts > div { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 16px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+    .facts > div:last-child { border-bottom: 0; }
+    .facts dt { color: var(--subtle); font: 500 12px/1.9 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .facts dd { margin: 0; color: var(--fg); }
+    .facts dd small { display: block; color: var(--muted); font-size: 14px; }
+    .facts a { color: var(--brand); text-underline-offset: 3px; }
+    .facts .links { display: flex; flex-wrap: wrap; gap: 4px 16px; }
     .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; }
     h1 { margin: 0; font-size: clamp(40px, 4.4vw, 60px); line-height: 1.04; letter-spacing: -.042em; font-weight: 620; }
     h1 .dim { color: var(--subtle); }
@@ -486,6 +497,8 @@
       .hero { padding: calc(var(--nav-h) + 40px) 0 72px; }
       .reel { padding-top: calc(var(--nav-h) + 20px); }
       .reel + .hero { padding-top: 56px; }
+      .about-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+      .facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 14px 18px; }
       .reel-sound { left: 12px; bottom: 12px; min-height: 36px; padding: 0 12px; font-size: 13px; }
       .sec { padding: 80px 0; }
       .sec-head { margin-bottom: 32px; }
@@ -544,6 +557,7 @@
         <a href="#flows">Flows</a>
         <a href="#runs">Runs</a>
         <a href="#tasks">Tasks</a>
+        <a href="#about">About</a>
         <a href="#install">Install</a>
         <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
       </nav>
@@ -931,6 +945,23 @@
       </div>
     </section>
 
+    <!-- ================= About ================= -->
+    <section class="sec" id="about" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <div>
+          <h2 id="about-title" data-rise>About Hexa Studio</h2>
+          <p class="sub" data-rise>Hexa Studio is founded and developed by Truong Tan Dat, a Power Platform and Dataverse developer based in Ho Chi Minh City, Vietnam. It brings flows, web resources and the Dataverse Web API together in one fast desktop app, so makers and developers can review every change before it reaches their environments.</p>
+        </div>
+        <dl class="facts" data-rise>
+          <div><dt>Company</dt><dd>Hexa Studio<small>Operated by Truong Tan Dat as sole founder. Not yet incorporated.</small></dd></div>
+          <div><dt>Location</dt><dd>Ho Chi Minh City, Vietnam</dd></div>
+          <div><dt>Team</dt><dd>Truong Tan Dat, Founder<small>Product, engineering and support · <a href="https://www.linkedin.com/in/truongtandat" rel="noopener">LinkedIn</a></small></dd></div>
+          <div><dt>Contact</dt><dd><a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a></dd></div>
+          <div><dt>Policies</dt><dd class="links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="security.html">Security &amp; data</a></dd></div>
+        </dl>
+      </div>
+    </section>
+
     <!-- ================= Install ================= -->
     <section class="sec final" id="install" aria-labelledby="install-title">
       <div class="wrap">
@@ -966,6 +997,9 @@
       <a href="https://github.com/datbe2002/MSDataverseTool/issues">Report an issue</a>
       <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a>
       <a href="https://www.linkedin.com/in/truongtandat" rel="noopener">LinkedIn</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html">Security</a>
     </div>
   </footer>
 

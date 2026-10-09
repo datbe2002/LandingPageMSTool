@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security · Hexa Studio</title>
+  <meta name="description" content="How Hexa Studio signs in, where it keeps data, how it guards writes to your environments, and how to report a vulnerability." />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="legal.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="Hexa Studio home">
+        <img src="favicon.svg" width="26" height="26" alt="" />
+        Hexa Studio
+      </a>
+      <div class="navset">
+        <a class="back" href="/">Back to the product</a>
+        <a class="btn btn-primary btn-sm" href="https://github.com/datbe2002/MSDataverseTool/releases/latest">Download for Windows</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="doc">
+    <div class="wrap doc-grid">
+      <nav class="toc" aria-label="Policies">
+        <span class="label">Policies</span>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="security.html" aria-current="page">Security &amp; data handling</a>
+        <hr />
+        <span class="label">On this page</span>
+        <a href="#architecture">Architecture</a>
+        <a href="#signin">Sign-in and permissions</a>
+        <a href="#data">Data on your PC</a>
+        <a href="#writes">Guarded writes</a>
+        <a href="#updates">Updates</a>
+        <a href="#limits">Current limits</a>
+        <a href="#report">Report a vulnerability</a>
+      </nav>
+
+      <article>
+        <span class="kicker">Security</span>
+        <h1>Security &amp; data handling</h1>
+        <p class="updated">Last reviewed 9 October 2026 · Hexa Studio 0.8.0</p>
+
+        <div class="short">
+          <h2>In short</h2>
+          <ul>
+            <li>Your PC talks to Microsoft directly. There is no Hexa Studio server between you and your data.</li>
+            <li>Microsoft sign-in with OAuth 2.0 and PKCE; no passwords are stored, and the app can only do what your own account can do.</li>
+            <li>Every write to an environment is shown as a diff or a row count and needs your confirmation first.</li>
+          </ul>
+        </div>
+
+        <section id="architecture">
+          <h2>Architecture</h2>
+          <p>Hexa Studio is a native Windows app built with Tauri: a Rust core and a WebView2 window. All requests to Microsoft are made from your PC. We run no backend, store no customer data and collect no telemetry, so there is nothing of yours on our side to leak.</p>
+          <p>The app window has no direct file-system access. Reading and writing files (exports, Flow task folders) goes through the Rust core, using locations you pick in a Windows dialog.</p>
+        </section>
+
+        <section id="signin">
+          <h2>Sign-in and permissions</h2>
+          <ul>
+            <li>Sign-in uses the <strong>OAuth 2.0 authorization code flow with PKCE</strong> in your normal browser, returning to a local loopback address on your PC. You type your password only on Microsoft's own sign-in page, and your organisation's MFA and Conditional Access policies apply as usual.</li>
+            <li>The app uses <strong>delegated permissions</strong>: it acts as you, inside the environments and roles your account already has. It cannot see or change anything you can't.</li>
+            <li>The refresh token is stored in <strong>Windows Credential Manager</strong>, protected by your Windows account. Access tokens live in memory only. Signing out deletes the stored token.</li>
+            <li>Each project (one per tenant or customer) keeps its own sign-in, so accounts from different customers stay separate.</li>
+          </ul>
+        </section>
+
+        <section id="data">
+          <h2>Data on your PC</h2>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th scope="col">Data</th><th scope="col">Stored</th><th scope="col">Leaves your PC</th></tr></thead>
+              <tbody>
+                <tr><td>Refresh token</td><td>Windows Credential Manager</td><td>Only to Microsoft, to renew access</td></tr>
+                <tr><td>Projects, environments, settings</td><td><code>%APPDATA%\CdsSqlStudio</code></td><td><span class="tag no">No</span></td></tr>
+                <tr><td>Query history and UI preferences</td><td>App window local storage</td><td><span class="tag no">No</span></td></tr>
+                <tr><td>Records, flows, web resources you open</td><td>Memory while shown; files only when you export</td><td><span class="tag no">No</span></td></tr>
+                <tr><td>Flow task check-outs</td><td>A folder you choose (optionally a git repository)</td><td>Only if you share that folder</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The app connects to Microsoft sign-in, the Power Platform Global Discovery Service, the environments you open, and GitHub Releases for updates. Nothing else. See the <a href="privacy.html">Privacy Policy</a> for details.</p>
+        </section>
+
+        <section id="writes">
+          <h2>Guarded writes</h2>
+          <p>Most of Hexa Studio only reads. Where it writes, it shows you exactly what will change first:</p>
+          <ul>
+            <li><strong>Web resources</strong>: nothing is written until you have reviewed a side-by-side diff of the change. Before saving, the app checks a fingerprint of the current version; if someone else changed the file in the meantime, it stops and shows you the conflict instead of overwriting their work.</li>
+            <li><strong>Flow tasks</strong>: edited flows are compared step by step with the original and with the live cloud version, and checked for broken references (missing steps, uninitialised variables, unknown connections). A flow is deployed only after you mark it reviewed, and only to an environment you have tagged DEV.</li>
+            <li><strong>SQL</strong>: <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code> statements first show how many rows will change and wait for your confirmation.</li>
+            <li><strong>REST builder</strong>: read requests run in the app; create, update and delete requests are generated as code only, for you to run in your own tools.</li>
+          </ul>
+        </section>
+
+        <section id="updates">
+          <h2>Updates</h2>
+          <p>Installers and updates are published on <a href="https://github.com/datbe2002/MSDataverseTool/releases">GitHub Releases</a> and built by GitHub Actions from the public source. The built-in updater checks the signature of each update against a public key compiled into the app and refuses an update that doesn't match.</p>
+        </section>
+
+        <section id="limits">
+          <h2>Current limits</h2>
+          <p>We'd rather be clear about what isn't there yet:</p>
+          <ul>
+            <li>The Windows installer is <strong>not code-signed</strong> yet, so Windows SmartScreen may warn you on first install. Updates are signed, as described above.</li>
+            <li>Hexa Studio is built by one person and has not had a third-party security audit or certification such as SOC 2.</li>
+            <li>Data the app stores on your PC is protected by your Windows account and disk encryption, not by an extra app-level password.</li>
+          </ul>
+        </section>
+
+        <section id="report">
+          <h2>Report a vulnerability</h2>
+          <p>If you find a security problem, please email <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a> with the steps to reproduce it and the version you tested (shown in <strong>Settings</strong>). Please don't open a public GitHub issue for it. We'll confirm we received it, keep you updated while we fix it, and credit you in the release notes if you'd like.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span class="brand"><img src="favicon.svg" width="18" height="18" alt="" />Hexa Studio</span>
+      <span class="sp"></span>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html">Security</a>
+      <a href="https://github.com/datbe2002/MSDataverseTool">GitHub</a>
+      <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a>
+    </div>
+  </footer>
+</body>
+</html>
