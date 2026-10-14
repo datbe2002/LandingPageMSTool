@@ -1,6 +1,6 @@
 # Hexa Studio — landing page
 
-Static landing page for [Hexa Studio](https://github.com/datbe2002/MSDataverseTool),
+Static landing page for [Hexa Studio](https://github.com/datbe2002/hexa-studio-releases/releases),
 a Windows desktop toolkit for Power Platform / Dataverse.
 
 - `index.html` — the whole page (inline CSS/JS; Geist and Geist Mono from jsDelivr; GSAP for motion). Follows light/dark system theme and `prefers-reduced-motion`.
@@ -8,7 +8,7 @@ a Windows desktop toolkit for Power Platform / Dataverse.
 - `media/hexa-studio-promo.mp4` + `.jpg` — the 77-second launch film shown first on the page (H.264, ~5 MB) and its poster frame
 
 The download buttons ask the GitHub API for the latest release of
-`datbe2002/MSDataverseTool` and link its `*setup.exe`, so a new app release
+`datbe2002/hexa-studio-releases` and link its `*setup.exe`, so a new app release
 needs no change here. If the API can't be reached, they link to the Releases page.
 
 ## Deploy on Vercel
