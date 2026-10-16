@@ -4,32 +4,32 @@
 @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 100 900; font-display: swap;
   src: url("fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations"); }
 :root {
-  color-scheme: light;
-  --bg: oklch(0.985 0.002 278);
-  --s1: oklch(0.995 0.001 278);
-  --s2: oklch(0.97 0.004 278);
-  --s3: oklch(0.935 0.006 278);
-  --code: oklch(0.975 0.003 278);
-  --fg: oklch(0.21 0.012 278);
-  --muted: oklch(0.42 0.012 278);
-  --subtle: oklch(0.52 0.012 278);
-  --line: oklch(0.91 0.004 278);
-  --line-strong: oklch(0.84 0.007 278);
-  --dot: oklch(0.21 0.01 278 / 0.09);
-  --brand: oklch(0.5 0.18 278);
-  --brand-solid: oklch(0.5 0.18 278);
-  --brand-solid-hover: oklch(0.44 0.17 278);
+  color-scheme: dark;
+  --bg: oklch(0.165 0.005 278);
+  --s1: oklch(0.195 0.006 278);
+  --s2: oklch(0.225 0.007 278);
+  --s3: oklch(0.265 0.009 278);
+  --code: oklch(0.175 0.005 278);
+  --fg: oklch(0.95 0.003 278);
+  --muted: oklch(0.79 0.007 278);
+  --subtle: oklch(0.66 0.009 278);
+  --line: oklch(0.275 0.007 278);
+  --line-strong: oklch(0.355 0.009 278);
+  --dot: oklch(1 0 0 / 0.065);
+  --brand: oklch(0.76 0.12 278);
+  --brand-solid: oklch(0.54 0.18 278);
+  --brand-solid-hover: oklch(0.6 0.17 278);
   --on-brand: oklch(0.99 0.004 278);
-  --success: oklch(0.52 0.13 160);
-  --warning: oklch(0.56 0.14 60);
-  --danger: oklch(0.54 0.19 25);
-  --info: oklch(0.52 0.12 235);
-  --num: oklch(0.5 0.13 235);
-  --syn-kw: oklch(0.48 0.17 292);
-  --syn-at: oklch(0.52 0.13 55);
-  --syn-vl: oklch(0.48 0.12 152);
-  --shadow-lg: 0 28px 60px -28px oklch(0.3 0.05 278 / 0.28), 0 0 0 1px oklch(0.3 0.03 278 / 0.03);
-  --shadow-md: 0 14px 30px -14px oklch(0.3 0.05 278 / 0.25);
+  --success: oklch(0.77 0.13 160);
+  --warning: oklch(0.82 0.13 80);
+  --danger: oklch(0.71 0.16 22);
+  --info: oklch(0.77 0.1 230);
+  --num: oklch(0.8 0.1 220);
+  --syn-kw: oklch(0.78 0.13 292);
+  --syn-at: oklch(0.8 0.11 62);
+  --syn-vl: oklch(0.8 0.12 152);
+  --shadow-lg: 0 36px 70px -30px oklch(0.05 0.01 278 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.03);
+  --shadow-md: 0 16px 30px -12px oklch(0.05 0.01 278 / 0.7);
   --sans: "Geist", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --mono: "Geist Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
   --r-lg: 14px;
@@ -37,35 +37,6 @@
   --r-sm: 6px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-h: 64px;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --bg: oklch(0.165 0.005 278);
-    --s1: oklch(0.195 0.006 278);
-    --s2: oklch(0.225 0.007 278);
-    --s3: oklch(0.265 0.009 278);
-    --code: oklch(0.175 0.005 278);
-    --fg: oklch(0.95 0.003 278);
-    --muted: oklch(0.79 0.007 278);
-    --subtle: oklch(0.66 0.009 278);
-    --line: oklch(0.275 0.007 278);
-    --line-strong: oklch(0.355 0.009 278);
-    --dot: oklch(1 0 0 / 0.065);
-    --brand: oklch(0.76 0.12 278);
-    --brand-solid: oklch(0.54 0.18 278);
-    --brand-solid-hover: oklch(0.6 0.17 278);
-    --success: oklch(0.77 0.13 160);
-    --warning: oklch(0.82 0.13 80);
-    --danger: oklch(0.71 0.16 22);
-    --info: oklch(0.77 0.1 230);
-    --num: oklch(0.8 0.1 220);
-    --syn-kw: oklch(0.78 0.13 292);
-    --syn-at: oklch(0.8 0.11 62);
-    --syn-vl: oklch(0.8 0.12 152);
-    --shadow-lg: 0 36px 70px -30px oklch(0.05 0.01 278 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.03);
-    --shadow-md: 0 16px 30px -12px oklch(0.05 0.01 278 / 0.7);
-  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }

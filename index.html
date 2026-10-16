@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hexa Studio: SQL, FetchXML and Flows for Dataverse</title>
-  <meta name="description" content="A free Windows app for Power Platform people: query any Dataverse table with SQL, build FetchXML visually, read Power Automate flows as a diagram and see which flow runs failed." />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f9fb" />
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131316" />
+  <title>Hexa Studio: a desktop studio for Power Automate cloud flows</title>
+  <meta name="description" content="A free Windows app for Power Automate cloud flows: read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in your runs and review every change before it ships." />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#131316" />
   <meta property="og:title" content="Hexa Studio" />
-  <meta property="og:description" content="SQL, FetchXML and Flows for Dataverse, in a small native Windows app." />
+  <meta property="og:description" content="Read, edit, grade and debug Power Automate cloud flows, in a small native Windows app." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/geist-latin-wght-normal.woff2" />
@@ -30,32 +29,32 @@
        reproduce the app's own control radii (5-11px) inside their frames.
        ============================================================ */
     :root {
-      color-scheme: light;
-      --bg: oklch(0.985 0.002 278);
-      --s1: oklch(0.995 0.001 278);
-      --s2: oklch(0.97 0.004 278);
-      --s3: oklch(0.935 0.006 278);
-      --code: oklch(0.975 0.003 278);
-      --fg: oklch(0.21 0.012 278);
-      --muted: oklch(0.42 0.012 278);
-      --subtle: oklch(0.52 0.012 278);
-      --line: oklch(0.91 0.004 278);
-      --line-strong: oklch(0.84 0.007 278);
-      --dot: oklch(0.21 0.01 278 / 0.09);
-      --brand: oklch(0.5 0.18 278);
-      --brand-solid: oklch(0.5 0.18 278);
-      --brand-solid-hover: oklch(0.44 0.17 278);
+      color-scheme: dark;
+      --bg: oklch(0.165 0.005 278);
+      --s1: oklch(0.195 0.006 278);
+      --s2: oklch(0.225 0.007 278);
+      --s3: oklch(0.265 0.009 278);
+      --code: oklch(0.175 0.005 278);
+      --fg: oklch(0.95 0.003 278);
+      --muted: oklch(0.79 0.007 278);
+      --subtle: oklch(0.66 0.009 278);
+      --line: oklch(0.275 0.007 278);
+      --line-strong: oklch(0.355 0.009 278);
+      --dot: oklch(1 0 0 / 0.065);
+      --brand: oklch(0.76 0.12 278);
+      --brand-solid: oklch(0.54 0.18 278);
+      --brand-solid-hover: oklch(0.6 0.17 278);
       --on-brand: oklch(0.99 0.004 278);
-      --success: oklch(0.52 0.13 160);
-      --warning: oklch(0.56 0.14 60);
-      --danger: oklch(0.54 0.19 25);
-      --info: oklch(0.52 0.12 235);
-      --num: oklch(0.5 0.13 235);
-      --syn-kw: oklch(0.48 0.17 292);
-      --syn-at: oklch(0.52 0.13 55);
-      --syn-vl: oklch(0.48 0.12 152);
-      --shadow-lg: 0 28px 60px -28px oklch(0.3 0.05 278 / 0.28), 0 0 0 1px oklch(0.3 0.03 278 / 0.03);
-      --shadow-md: 0 14px 30px -14px oklch(0.3 0.05 278 / 0.25);
+      --success: oklch(0.77 0.13 160);
+      --warning: oklch(0.82 0.13 80);
+      --danger: oklch(0.71 0.16 22);
+      --info: oklch(0.77 0.1 230);
+      --num: oklch(0.8 0.1 220);
+      --syn-kw: oklch(0.78 0.13 292);
+      --syn-at: oklch(0.8 0.11 62);
+      --syn-vl: oklch(0.8 0.12 152);
+      --shadow-lg: 0 36px 70px -30px oklch(0.05 0.01 278 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.03);
+      --shadow-md: 0 16px 30px -12px oklch(0.05 0.01 278 / 0.7);
       --sans: "Geist", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
       --mono: "Geist Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
       --r-lg: 14px;
@@ -63,35 +62,6 @@
       --r-sm: 6px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       --nav-h: 64px;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        color-scheme: dark;
-        --bg: oklch(0.165 0.005 278);
-        --s1: oklch(0.195 0.006 278);
-        --s2: oklch(0.225 0.007 278);
-        --s3: oklch(0.265 0.009 278);
-        --code: oklch(0.175 0.005 278);
-        --fg: oklch(0.95 0.003 278);
-        --muted: oklch(0.79 0.007 278);
-        --subtle: oklch(0.66 0.009 278);
-        --line: oklch(0.275 0.007 278);
-        --line-strong: oklch(0.355 0.009 278);
-        --dot: oklch(1 0 0 / 0.065);
-        --brand: oklch(0.76 0.12 278);
-        --brand-solid: oklch(0.54 0.18 278);
-        --brand-solid-hover: oklch(0.6 0.17 278);
-        --success: oklch(0.77 0.13 160);
-        --warning: oklch(0.82 0.13 80);
-        --danger: oklch(0.71 0.16 22);
-        --info: oklch(0.77 0.1 230);
-        --num: oklch(0.8 0.1 220);
-        --syn-kw: oklch(0.78 0.13 292);
-        --syn-at: oklch(0.8 0.11 62);
-        --syn-vl: oklch(0.8 0.12 152);
-        --shadow-lg: 0 36px 70px -30px oklch(0.05 0.01 278 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.03);
-        --shadow-md: 0 16px 30px -12px oklch(0.05 0.01 278 / 0.7);
-      }
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -137,8 +107,7 @@
     /* ---------- Hero ---------- */
     .hero { padding: calc(var(--nav-h) + 64px) 0 96px; }
     /* Launch film: the first thing on the page, framed like the app window. */
-    .reel { padding: calc(var(--nav-h) + 40px) 0 0; }
-    .reel + .hero { padding-top: 88px; }
+    .reel { padding: 96px 0 0; }
     .reel-frame { position: relative; margin: 0; border-radius: var(--r-lg); background: oklch(0.13 0.02 278); border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg); overflow: hidden; }
     .reel-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: oklch(0.13 0.02 278); }
     .reel-sound { position: absolute; left: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid oklch(1 0 0 / .16); background: oklch(0.16 0.02 278 / .78); color: oklch(0.96 0.005 278); font: 550 14px/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background-color .2s var(--ease), transform .2s var(--ease); }
@@ -208,24 +177,6 @@
     .dg .lineage { fill: none; stroke-width: 1.5; }
     .dg .tag-t { font-family: var(--mono); font-size: 10px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
 
-    /* ---------- Numbers (asymmetric strip, dividers only) ---------- */
-    .proof { border-block: 1px solid var(--line); }
-    .proof-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); }
-    .stat { padding: 40px 32px; }
-    .stat:first-child { padding-left: 0; }
-    .stat + .stat { border-left: 1px solid var(--line); }
-    .stat:last-child { padding-right: 0; }
-    .big { font: 600 clamp(36px, 4vw, 52px)/1 var(--sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-    .big small { font-size: .5em; letter-spacing: -.02em; color: var(--muted); font-weight: 550; }
-    .stat p { margin: 12px 0 0; color: var(--muted); font-size: 15px; max-width: 34ch; }
-    .race { margin-top: 26px; display: grid; gap: 10px; max-width: 520px; }
-    .lane { display: grid; grid-template-columns: 150px minmax(0, 1fr) 60px; align-items: center; gap: 14px; font-size: 13.5px; color: var(--muted); }
-    .lane .bar { display: block; height: 8px; }
-    .lane .bar i { display: block; height: 100%; border-radius: 99px; transform-origin: left center; }
-    .lane.seq .bar i { width: 100%; background: var(--line-strong); }
-    .lane.par .bar i { width: 32.65%; background: var(--brand); }
-    .lane .t { font-family: var(--mono); text-align: right; font-size: 13px; font-variant-numeric: tabular-nums; }
-    .lane.par { color: var(--fg); }
 
     /* ---------- Sections ---------- */
     .sec { padding: 112px 0; }
@@ -241,57 +192,14 @@
     .code { margin: 0; padding: 18px 20px; font: 13px/1.8 var(--mono); background: var(--code); color: var(--fg); white-space: pre; overflow-x: auto; }
     .code .k, .code .tg { color: var(--syn-kw); } .code .n { color: var(--num); } .code .at { color: var(--syn-at); } .code .vl { color: var(--syn-vl); }
 
-    /* SQL: one wide editor, query beside the rows it returns */
-    .sql-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
-    .sql-body .code { border-right: 1px solid var(--line); min-height: 100%; }
-    .results { display: flex; flex-direction: column; }
-    table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .grid th, .grid td { text-align: left; padding: 10px 14px; white-space: nowrap; }
-    .grid td { border-top: 1px solid var(--line); }
-    .grid th { color: var(--subtle); font-weight: 500; font-size: 12px; background: var(--s2); }
-    .grid td.n { font-family: var(--mono); color: var(--num); font-variant-numeric: tabular-nums; }
-    .streambar { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); font: 12px/1.4 var(--mono); color: var(--subtle); }
-    .streambar .count { color: var(--fg); font-variant-numeric: tabular-nums; }
-    .page { padding: 3px 7px; border-radius: 5px; background: var(--s3); color: var(--muted); font-size: 11px; }
     .points { margin: 40px 0 0; padding-top: 28px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; }
     .points dt { font-weight: 600; font-size: 16px; }
     .points dd { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
 
-    /* FetchXML bento: builder + check on top, the XML it writes across the bottom */
-    .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
-    .cell-builder { grid-column: 1 / 8; }
-    .cell-check { grid-column: 8 / 13; }
-    .cell-xml { grid-column: 1 / 13; }
-    .fx-body { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); }
-    .fx-tree { padding: 8px 0; border-right: 1px solid var(--line); font: 12.5px/1 var(--mono); }
-    .fx-row { display: flex; align-items: center; gap: 7px; height: 28px; padding-right: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; }
-    .fx-row .kd { width: 30px; flex: none; font-size: 10.5px; }
-    .fx-row .nm { overflow: hidden; text-overflow: ellipsis; }
-    .fx-row .dt { color: var(--subtle); font-size: 11px; }
-    .fx-row.b .nm { color: var(--fg); font-weight: 600; }
-    .fx-row.sel { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
-    .kd.tb { color: var(--info); } .kd.cl { color: var(--success); } .kd.so { color: var(--warning); } .kd.fl, .kd.fx { color: var(--brand); }
-    .fx-props { padding: 14px 16px; display: grid; gap: 12px; align-content: start; font-size: 12.5px; }
-    .fx-props h4 { margin: 0; font: 600 11px/1 var(--sans); color: var(--subtle); }
     .fx-field span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 500; }
     .fx-input { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 32px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line-strong); background: var(--s2); font: 12.5px var(--mono); color: var(--fg); }
     .fx-input.on { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 18%, transparent); }
     .fx-input small { color: var(--subtle); font: 11px var(--sans); }
-    .fx-menu { margin-top: 4px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--s1); padding: 4px; box-shadow: var(--shadow-md); }
-    .fx-menu div { display: flex; align-items: baseline; gap: 10px; padding: 6px 8px; border-radius: 6px; font: 12px var(--mono); color: var(--muted); }
-    .fx-menu div.on { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
-    .fx-menu small { color: var(--subtle); font: 11px var(--sans); }
-    .cell-check { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 28px; border-radius: var(--r-lg); border: 1px solid color-mix(in oklab, var(--brand) 30%, var(--line)); background:
-        radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--brand) 24%, transparent), transparent 62%),
-        color-mix(in oklab, var(--brand) 9%, var(--s1)); }
-    .fx-ok { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--mono); color: var(--brand); }
-    .fx-ok svg { width: 16px; height: 16px; }
-    .cell-check .big { color: var(--fg); }
-    .cell-check .big + p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
-    .cell-check .more { margin: 0; padding-top: 18px; border-top: 1px solid color-mix(in oklab, var(--brand) 18%, var(--line)); color: var(--muted); font-size: 14.5px; }
-    .fx-xml { font-size: 12.5px; line-height: 1.75; padding: 16px 20px; }
-    .fx-xml .ln { display: block; margin: 0 -20px; padding: 0 20px; border-left: 2px solid transparent; }
-    .fx-xml .ln.hl { background: color-mix(in oklab, var(--brand) 9%, transparent); border-left-color: var(--brand); }
 
     /* Flows: pinned scroll story on wide screens */
     .story { padding: 0; }
@@ -311,7 +219,6 @@
     .search .hits { color: var(--subtle); font: 11.5px var(--mono); white-space: nowrap; }
 
     /* Projects: the tenants sit inside the sentence */
-    .statement { font-size: clamp(34px, 4.4vw, 56px); line-height: 1.18; letter-spacing: -.04em; max-width: 17em; }
     .tn { display: inline-flex; align-items: center; gap: .2em; padding: .04em .26em .04em .12em; margin: .04em 0; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-md); vertical-align: .04em; line-height: 1.1; white-space: nowrap; }
     .tn .sq { width: .78em; height: .78em; border-radius: var(--r-sm); display: grid; place-items: center; background: color-mix(in oklab, var(--brand) 16%, var(--s2)); color: var(--brand); transition: background-color .3s, color .3s; }
     .tn .sq b { font-size: .42em; font-weight: 650; letter-spacing: 0; }
@@ -338,7 +245,8 @@
     .req a { color: var(--brand); text-underline-offset: 3px; }
 
     /* Flow runs: a wide monitor window, the run detail overlapping its lower corner */
-    .runs-sec { padding-bottom: 224px; }
+    .runs-sec { padding-bottom: 112px; }
+    .runs-points { margin-top: 152px; }
     .runs-stage { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end; isolation: isolate; }
     .monitor { grid-column: 1 / 10; grid-row: 1; }
     .chain { grid-column: 9 / 13; grid-row: 1; position: relative; top: 112px; z-index: 1; }
@@ -460,18 +368,104 @@
     footer a:hover { color: var(--fg); }
     footer .sp { flex: 1; }
 
+    /* Eyebrow and section kickers: the mono step number in the flow's life */
+    .eyebrow, .kicker { margin: 0 0 16px; color: var(--brand); font-size: 13px; font-weight: 500; letter-spacing: .02em; }
+
+    /* The flow, end to end: five linked steps on one rail */
+    .flowline { border-block: 1px solid var(--line); padding: 36px 0 40px; }
+    .fl-title { margin: 0 0 24px; font-size: 13px; font-weight: 500; letter-spacing: .02em; color: var(--subtle); }
+    .fl-steps { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px 32px; }
+    .fl-rail { position: absolute; left: 6px; right: 6px; top: 5px; height: 2px; background: var(--line); }
+    .fl-rail i { position: absolute; inset: 0; background: var(--brand); transform-origin: left; }
+    .fl-steps a { position: relative; display: block; height: 100%; padding-top: 30px; text-decoration: none; color: inherit; }
+    .fl-steps a::before { content: ""; position: absolute; left: 0; top: 0; width: 12px; height: 12px; border-radius: 99px; background: var(--brand); box-shadow: 0 0 0 4px var(--bg); }
+    .fl-steps .n { display: block; color: var(--brand); font-size: 12px; }
+    .fl-steps b { display: block; margin-top: 6px; font-size: 20px; font-weight: 600; letter-spacing: -.02em; transition: color .2s var(--ease); }
+    .fl-steps a > span:last-child { display: block; margin-top: 6px; color: var(--muted); font-size: 14.5px; line-height: 1.5; }
+    .fl-steps a:hover b { color: var(--brand); }
+
+    /* Edit: the designer in edit mode, the step's form beside it */
+    .tag-dev { background: color-mix(in oklab, var(--success) 16%, transparent); color: var(--success); }
+    .ed-tools { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+    .unsaved { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--warning); font: 500 11.5px/1 var(--sans); white-space: nowrap; }
+    .unsaved::before { content: ""; width: 7px; height: 7px; border-radius: 99px; background: currentColor; }
+    .qbtn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 7px; border: 1px solid var(--line-strong); background: var(--s1); color: var(--fg); font: 600 12px/1 var(--sans); white-space: nowrap; }
+    .qbtn svg { width: 13px; height: 13px; color: var(--success); }
+    .ed-tools .runkey { white-space: nowrap; }
+    .edit-body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+    .edit-canvas { position: relative; padding: 12px 0; }
+    .edit-canvas > svg { max-width: 480px; margin-inline: auto; }
+    .dg .plus circle { fill: var(--s1); stroke: var(--line-strong); }
+    .dg .plus path { stroke: var(--subtle); stroke-width: 1.5; stroke-linecap: round; }
+    .dg .plus.on circle { fill: var(--brand-solid); stroke: var(--brand-solid); }
+    .dg .plus.on path { stroke: var(--on-brand); }
+    .ins-menu { position: absolute; top: 31%; left: calc(50% + 26px); width: min(268px, 58%); padding: 6px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-lg); font-size: 12.5px; opacity: 0; visibility: hidden; }
+    .ins-q { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; margin-bottom: 2px; border-radius: 7px; border: 1px solid var(--brand); }
+    .ins-q svg { width: 14px; height: 14px; color: var(--subtle); flex: none; }
+    .ins-q .caret { width: 1.5px; height: 15px; background: var(--brand); }
+    .ins-g { padding: 8px 8px 4px; font: 600 10.5px/1 var(--sans); color: var(--subtle); }
+    .ins-i { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 7px; min-width: 0; }
+    .ins-i > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ins-i small { display: block; font-size: 11px; color: var(--subtle); }
+    .ins-i.on { background: color-mix(in oklab, var(--brand) 12%, transparent); }
+    .ins-i .chip-ico { width: 24px; height: 24px; border-radius: 6px; font-size: 9.5px; }
+    .t-brand { background: color-mix(in oklab, var(--brand) 16%, transparent); color: var(--brand); }
+    .t-ok { background: color-mix(in oklab, var(--success) 16%, transparent); color: var(--success); }
+    .form { position: relative; display: grid; gap: 12px; align-content: start; padding: 14px 16px 16px; border-left: 1px solid var(--line); font-size: 12.5px; }
+    .form .step { display: flex; align-items: center; gap: 9px; }
+    .form .step b { display: block; font-weight: 600; font-size: 13px; }
+    .form .step small { color: var(--subtle); font-size: 11px; }
+    .ftabs { display: flex; gap: 16px; border-bottom: 1px solid var(--line); }
+    .ftabs span { padding: 2px 0 8px; margin-bottom: -1px; border-bottom: 2px solid transparent; color: var(--subtle); font-size: 12px; font-weight: 500; }
+    .ftabs span.on { color: var(--fg); border-color: var(--brand); }
+    .form .fx-field { position: relative; }
+    .fx-input.tokens { justify-content: flex-start; flex-wrap: wrap; height: auto; min-height: 32px; padding: 5px 8px; gap: 6px; }
+    .tok { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px 3px 3px; border-radius: 6px; background: color-mix(in oklab, var(--brand) 14%, transparent); color: var(--fg); font: 500 11.5px/1 var(--sans); }
+    .tok i { padding: 3px; border-radius: 4px; background: var(--brand-solid); color: var(--on-brand); font: 600 8.5px/1 var(--mono); font-style: normal; }
+    .dyn { position: absolute; top: 100%; left: 0; right: 0; z-index: 2; margin-top: 4px; padding: 4px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--s1); box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; }
+    .dyn-h { padding: 6px 8px 4px; font: 600 10.5px/1.3 var(--sans); color: var(--subtle); }
+    .dyn > div:not(.dyn-h) { display: flex; justify-content: space-between; gap: 10px; padding: 6px 8px; border-radius: 6px; color: var(--muted); }
+    .dyn > div.on { background: color-mix(in oklab, var(--brand) 12%, transparent); color: var(--fg); }
+    .dyn small { font: 11px var(--mono); color: var(--subtle); }
+    .runafter { padding-top: 12px; border-top: 1px solid var(--line); color: var(--subtle); font-size: 12px; }
+    .runafter b { color: var(--fg); font-weight: 550; }
+    .vbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); font-size: 12.5px; }
+    .vbar .chk { align-items: center; }
+    .vbar-r { color: var(--subtle); font-size: 11.5px; white-space: nowrap; }
+
+    /* Analysis: the grade beside its findings */
+    .ana-stage { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: start; }
+    .grade-body { padding: 22px; }
+    .grade-top { display: flex; align-items: center; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .letter { flex: none; width: 84px; height: 84px; border-radius: 18px; display: grid; place-items: center; font: 650 48px/1 var(--sans); letter-spacing: -.04em; background: color-mix(in oklab, currentColor 12%, transparent); border: 1px solid color-mix(in oklab, currentColor 35%, transparent); }
+    .grade-top b { display: block; font-size: 22px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+    .grade-top small { display: block; margin-top: 2px; color: var(--subtle); font-size: 13px; }
+    .cats { display: grid; gap: 14px; margin-top: 20px; }
+    .cat { display: grid; grid-template-columns: 92px minmax(0, 1fr) 20px; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); }
+    .cbar { height: 6px; border-radius: 99px; background: var(--s3); overflow: hidden; }
+    .cbar i { display: block; height: 100%; border-radius: 99px; background: currentColor; transform-origin: left center; }
+    .cat b { text-align: right; font-weight: 650; }
+    .g-b { color: var(--success); } .g-c { color: var(--warning); } .g-d { color: var(--danger); }
+    .finds .ed-head span:first-child { color: var(--fg); font-weight: 600; font-size: 13px; }
+    .finds ul { list-style: none; margin: 0; padding: 0; }
+    .finds li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; padding: 14px 18px; }
+    .finds li + li { border-top: 1px solid var(--line); }
+    .finds b { font-weight: 600; font-size: 14.5px; }
+    .finds p { margin: 3px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+    .sev { justify-self: start; align-self: start; margin-top: 1px; padding: 5px 7px; border-radius: 5px; font: 600 11px/1 var(--sans); }
+    .s-high { background: color-mix(in oklab, var(--danger) 14%, transparent); color: var(--danger); }
+    .s-med { background: color-mix(in oklab, var(--warning) 16%, transparent); color: var(--warning); }
+    .s-low { background: var(--s3); color: var(--muted); }
+    .on-step { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 8px; font: 11.5px var(--mono); color: var(--subtle); }
+    .on-step em { font: 600 12px var(--sans); font-style: normal; color: var(--brand); }
+    .credit { margin: 18px 0 0; color: var(--subtle); font-size: 13px; }
+
     /* ---------- Responsive: every multi-column block collapses to one column below 768px ---------- */
     @media (max-width: 1023px) {
       .hero-grid, .story .wrap { grid-template-columns: minmax(0, 1fr); gap: 48px; }
       .story .wrap { min-height: 0; padding-block: 96px 24px; }
       .app { grid-template-columns: minmax(0, 1fr); }
       .side { display: none; }
-      .sql-body { grid-template-columns: minmax(0, 1fr); }
-      .sql-body .code { border-right: 0; border-bottom: 1px solid var(--line); }
-      .cell-builder, .cell-check, .cell-xml { grid-column: 1 / -1; }
-      .proof-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-      .stat:first-child { grid-column: 1 / -1; padding-right: 0; border-bottom: 1px solid var(--line); }
-      .stat:nth-child(2) { padding-left: 0; border-left: 0; }
       .runs-sec { padding-bottom: 112px; }
       .monitor, .chain { grid-column: 1 / -1; }
       .chain { grid-row: 2; top: 0; margin-top: 16px; }
@@ -480,6 +474,11 @@
       .tools-head { position: static; }
       .taskdir, .tcompare { grid-column: 1 / -1; }
       .taskdir { margin-top: 0; grid-row: 2; }
+      .runs-points { margin-top: 40px; }
+      .fl-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .fl-rail { display: none; }
+      .edit-body, .ana-stage { grid-template-columns: minmax(0, 1fr); }
+      .form { border-left: 0; border-top: 1px solid var(--line); }
     }
     @media (max-width: 767px) {
       /* Menu: the same links and Download button, folded under a toggle (only with JS). */
@@ -493,24 +492,14 @@
       .top nav a { min-height: 48px; display: flex; align-items: center; font-size: 16px; }
       .top .btn-sm { min-height: 48px; font-size: 15px; }
       .hero { padding: calc(var(--nav-h) + 40px) 0 72px; }
-      .reel { padding-top: calc(var(--nav-h) + 20px); }
-      .reel + .hero { padding-top: 56px; }
+      .reel { padding-top: 64px; }
       .about-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
       .facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 14px 18px; }
       .reel-sound { left: 12px; bottom: 12px; min-height: 36px; padding: 0 12px; font-size: 13px; }
       .sec { padding: 80px 0; }
       .sec-head { margin-bottom: 32px; }
       .cta .btn { width: 100%; }
-      .proof-grid { grid-template-columns: minmax(0, 1fr); }
-      .stat, .stat + .stat { padding: 28px 0; border-left: 0; }
-      .stat + .stat { border-top: 1px solid var(--line); }
-      .stat:first-child { border-bottom: 0; }
-      .lane { grid-template-columns: minmax(0, 1fr) 56px; gap: 6px 12px; }
-      .lane .name { grid-column: 1 / -1; }
       .points { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-      .fx-body { grid-template-columns: minmax(0, 1fr); }
-      .fx-tree { border-right: 0; border-bottom: 1px solid var(--line); }
-      .cell-check { padding: 22px; }
       .titlebar .path { display: none; }
       .search { top: 10px; right: 10px; }
       .isteps { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 56px; }
@@ -532,6 +521,18 @@
       .tc-foot { grid-template-columns: minmax(0, 1fr); }
       .tc-what { border-right: 0; border-bottom: 1px solid var(--line); }
       .t-headr .seg-mock { display: none; }
+      .flowline { padding: 28px 0 32px; }
+      .fl-steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+      .fl-steps a { padding: 0 0 0 28px; min-height: 44px; }
+      .fl-steps a::before { top: 6px; }
+      .fl-steps b { margin-top: 2px; font-size: 18px; }
+      .unsaved, .vbar-r, .ed-tools .runkey kbd { display: none; }
+      .qbtn { margin-left: auto; }
+      .ins-menu { left: auto; right: 8px; width: min(250px, calc(100% - 16px)); }
+      .grade-body { padding: 18px; }
+      .letter { width: 68px; height: 68px; font-size: 38px; border-radius: 15px; }
+      .cat { grid-template-columns: 84px minmax(0, 1fr) 18px; gap: 10px; }
+      .finds li { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 14px; }
     }
   </style>
 </head>
@@ -550,12 +551,12 @@
       </button>
       <div class="navset" id="site-nav">
       <nav aria-label="Page">
-        <a href="#sql">SQL</a>
-        <a href="#fetchxml">FetchXML</a>
-        <a href="#flows">Flows</a>
+        <a href="#flows">Read</a>
+        <a href="#edit">Edit</a>
+        <a href="#analysis">Analysis</a>
         <a href="#runs">Runs</a>
         <a href="#tasks">Tasks</a>
-        <a href="#about">About</a>
+        <a href="#tools">More tools</a>
         <a href="#install">Install</a>
       </nav>
       <a class="btn btn-primary btn-sm" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
@@ -567,26 +568,13 @@
   </header>
 
   <main id="main">
-    <!-- ================= Launch film ================= -->
-    <section class="reel" aria-label="Hexa Studio launch video">
-      <div class="wrap">
-        <figure class="reel-frame">
-          <video id="reel" src="media/hexa-studio-promo.mp4" poster="media/hexa-studio-promo.jpg" muted playsinline loop preload="metadata" aria-label="Hexa Studio in 77 seconds: querying Dataverse in SQL with a preview before every write, reading and grading cloud flows, finding the failures hidden in Succeeded runs (a Catch that ran, a child flow that failed), reviewing flow and web resource changes as a diff, and building Dataverse Web API requests."></video>
-          <button class="reel-sound" id="reel-sound" type="button">
-            <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM144,207.64,84.91,161.69A7.94,7.94,0,0,0,80,160H32V96H80a7.94,7.94,0,0,0,4.91-1.69L144,48.36ZM200,104v48a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm32-16v80a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Z"/></svg>
-            <span id="reel-sound-t">Play with sound</span>
-          </button>
-        </figure>
-        <div class="reel-cap"><span>Hexa Studio in 77 seconds</span><span>SQL · Flows · Flow runs · Flow tasks · REST builder · Web resources</span></div>
-      </div>
-    </section>
-
     <!-- ================= Hero ================= -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-grid">
         <div>
-          <h1 id="hero-title" data-split>SQL, FetchXML and Flows <span class="dim">for Dataverse.</span></h1>
-          <p class="lead" data-hero-in>A free Windows app to query any table, build FetchXML visually, read every flow, review flow edits before they ship and see which runs failed.</p>
+          <p class="eyebrow mono" data-hero-in>For Power Automate cloud flows</p>
+          <h1 id="hero-title" data-split>Read, fix and ship every flow <span class="dim">without the guesswork.</span></h1>
+          <p class="lead" data-hero-in>A free Windows app to read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in Succeeded runs and review every change before it reaches your environment.</p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
@@ -623,118 +611,32 @@
       </div>
     </section>
 
-    <!-- ================= Numbers ================= -->
-    <section class="proof" aria-label="Hexa Studio in numbers">
-      <div class="wrap proof-grid">
-        <div class="stat">
-          <!-- measured: 15,779 wide rows, same query and environment, 78.4 s vs 25.6 s -->
-          <div class="big"><span data-count="3.1" data-dec="1">3.1</span>× <small>faster SELECT</small></div>
-          <p>On a 15,779-row table, Hexa reads key ranges side by side instead of one page at a time.</p>
-          <div class="race" id="race" role="img" aria-label="Reading 15,779 rows: 78.4 seconds one request at a time, 25.6 seconds with Hexa reading 4 in parallel.">
-            <div class="lane seq" aria-hidden="true"><span class="name">One request at a time</span><span class="bar"><i></i></span><span class="t" data-t="78.4">78.4 s</span></div>
-            <div class="lane par" aria-hidden="true"><span class="name">Hexa, 4 in parallel</span><span class="bar"><i></i></span><span class="t" data-t="25.6">25.6 s</span></div>
-          </div>
-        </div>
-        <div class="stat">
-          <div class="big"><span data-size-num>16</span> <small>MB</small></div>
-          <p>A native app built with Tauri and Rust. It installs for your user, no admin rights.</p>
-        </div>
-        <div class="stat">
-          <div class="big">0</div>
-          <p>Passwords stored. You sign in with Microsoft and the token stays in Windows Credential Manager.</p>
-        </div>
+    <!-- ================= The flow, end to end ================= -->
+    <section class="flowline" aria-labelledby="fl-title">
+      <div class="wrap">
+        <h2 id="fl-title" class="fl-title mono">One window for the whole life of a flow</h2>
+        <ol class="fl-steps" id="fl-steps">
+          <li class="fl-rail" aria-hidden="true"><i></i></li>
+          <li><a href="#flows"><span class="n mono">01</span><b>Read</b><span>Any flow as a diagram, with its variables and a search across every step.</span></a></li>
+          <li><a href="#edit"><span class="n mono">02</span><b>Edit</b><span>Steps from a catalog, forms and dynamic content. Saved only to DEV.</span></a></li>
+          <li><a href="#analysis"><span class="n mono">03</span><b>Grade</b><span>A to F on speed, resources, reliability and security, with the fix.</span></a></li>
+          <li><a href="#runs"><span class="n mono">04</span><b>Debug</b><span>The failed runs, the steps that broke and the parent that called them.</span></a></li>
+          <li><a href="#tasks"><span class="n mono">05</span><b>Review</b><span>Every edit as a diff, checked, then deployed back. Or reverted.</span></a></li>
+        </ol>
       </div>
     </section>
 
-    <!-- ================= SQL ================= -->
-    <section class="sec" id="sql" aria-labelledby="sql-title">
+    <!-- ================= Launch film ================= -->
+    <section class="reel" aria-label="Hexa Studio launch video">
       <div class="wrap">
-        <div class="sec-head">
-          <h2 id="sql-title" data-rise>Query any table with SQL. Even the big ones.</h2>
-          <p class="sub" data-rise>Write T-SQL and press F5. Hexa plans it into FetchXML and streams rows into the grid as they land.</p>
-        </div>
-        <div class="panel" id="sql-demo" role="img" aria-label="A SQL query runs; rows stream into the grid page by page until 15,779 rows have arrived.">
-          <div class="ed-head" aria-hidden="true"><span class="mono">orders.sql</span><span class="runkey" id="runkey">Run <kbd>F5</kbd></span></div>
-          <div class="sql-body" aria-hidden="true">
-            <pre class="code" id="sql-code"><span class="k">SELECT</span> o.name, o.totalamount, a.name <span class="k">AS</span> customer
-<span class="k">FROM</span>   salesorder o
-<span class="k">JOIN</span>   account a <span class="k">ON</span> a.accountid = o.customerid
-<span class="k">WHERE</span>  o.statecode = <span class="n">0</span>
-<span class="k">ORDER BY</span> o.totalamount <span class="k">DESC</span></pre>
-            <!-- mock: sample rows and amounts. 15,779 rows is the measured test table. -->
-            <div class="results">
-              <table class="grid">
-                <thead><tr><th>name</th><th>totalamount</th><th>customer</th></tr></thead>
-                <tbody>
-                  <tr data-row><td>SO-10482</td><td class="n">48,200.00</td><td>Contoso Ltd</td></tr>
-                  <tr data-row><td>SO-10477</td><td class="n">31,505.50</td><td>Fabrikam Inc</td></tr>
-                  <tr data-row><td>SO-10469</td><td class="n">29,040.00</td><td>Adventure Works</td></tr>
-                  <tr data-row><td>SO-10455</td><td class="n">17,602.25</td><td>Northwind Traders</td></tr>
-                </tbody>
-              </table>
-              <div class="streambar">
-                <span><span class="count" id="rows">15,779</span> rows</span>
-                <span class="page" data-page>page 1</span><span class="page" data-page>page 2</span><span class="page" data-page>page 3</span><span class="page" data-page>page 4</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <dl class="points">
-          <div data-rise><dt>Reads every table</dt><dd>Virtual tables included. The TDS endpoint takes over for what FetchXML can't plan.</dd></div>
-          <div data-rise><dt>Writes ask first</dt><dd>INSERT, UPDATE and DELETE show how many records change and wait for your OK.</dd></div>
-          <div data-rise><dt>A real editor</dt><dd>Monaco with table and column completion, tabs per environment and full history.</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <!-- ================= FetchXML ================= -->
-    <section class="sec" id="fetchxml" aria-labelledby="fx-title" style="padding-top:0">
-      <div class="wrap">
-        <div class="sec-head">
-          <h2 id="fx-title" data-rise>Build FetchXML without typing it.</h2>
-          <p class="sub" data-rise>Pick a table, tick columns, join along real relationships and the XML writes itself. Prefer typing? Every table and column name completes.</p>
-        </div>
-        <div class="bento" id="fx-demo">
-          <div class="panel cell-builder" role="img" aria-label="The FetchXML builder: a tree of the query with a condition on statecode selected, and its properties with the value picked from the choice labels, 0 Active.">
-            <div class="ed-head" aria-hidden="true"><span class="mono">active-accounts.xml</span><span class="runkey">Execute <kbd>F5</kbd></span></div>
-            <div class="fx-body" aria-hidden="true">
-              <div class="fx-tree">
-                <div class="fx-row" data-fx-row style="padding-left:10px"><span class="kd fx">fx</span><span class="nm">fetch</span><span class="dt">top 50</span></div>
-                <div class="fx-row b" data-fx-row style="padding-left:22px"><span class="kd tb">tbl</span><span class="nm">account</span></div>
-                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">name</span></div>
-                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd cl">col</span><span class="nm">revenue</span></div>
-                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd so">sort</span><span class="nm">revenue ↓</span></div>
-                <div class="fx-row" data-fx-row style="padding-left:36px"><span class="kd fl">flt</span><span class="nm">AND</span></div>
-                <div class="fx-row sel" data-fx-row id="fx-cond" style="padding-left:50px"><span class="kd fl">if</span><span class="nm">statecode = 0</span></div>
-                <div class="fx-row b" data-fx-row style="padding-left:36px"><span class="kd tb">join</span><span class="nm">contact as c</span></div>
-                <div class="fx-row" data-fx-row style="padding-left:50px"><span class="kd cl">col</span><span class="nm">fullname</span></div>
-              </div>
-              <div class="fx-props" id="fx-props">
-                <h4>Condition</h4>
-                <div class="fx-field"><span>Column of account</span><div class="fx-input">statecode <small>Status</small></div></div>
-                <div class="fx-field"><span>Operator</span><div class="fx-input">eq, Equals <small>▾</small></div></div>
-                <div class="fx-field"><span>Value</span>
-                  <div class="fx-input on">0 · Active <small>▾</small></div>
-                  <div class="fx-menu" id="fx-menu"><div class="on">0 <small>Active</small></div><div>1 <small>Inactive</small></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- mock: 1,284 is a sample row count -->
-          <div class="cell-check">
-            <span class="fx-ok"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>No problems found</span>
-            <div>
-              <div class="big"><span id="fx-count">1,284</span></div>
-              <p>rows match, counted without reading them. Missing columns and wrong operators are flagged before you run.</p>
-            </div>
-            <p class="more">Page through or load everything, open system and personal views, export to CSV.</p>
-          </div>
-
-          <div class="panel cell-xml" role="img" aria-label="The XML the builder wrote, with the statecode condition highlighted.">
-            <pre class="code fx-xml" aria-hidden="true"><span class="ln" data-fx-ln><span class="tg">&lt;fetch</span> <span class="at">top</span>=<span class="vl">"50"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;entity</span> <span class="at">name</span>=<span class="vl">"account"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"name"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"revenue"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;order</span> <span class="at">attribute</span>=<span class="vl">"revenue"</span> <span class="at">descending</span>=<span class="vl">"true"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;filter&gt;</span></span><span class="ln hl" data-fx-ln id="fx-hl">      <span class="tg">&lt;condition</span> <span class="at">attribute</span>=<span class="vl">"statecode"</span> <span class="at">operator</span>=<span class="vl">"eq"</span> <span class="at">value</span>=<span class="vl">"0"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/filter&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;link-entity</span> <span class="at">name</span>=<span class="vl">"contact"</span> <span class="at">from</span>=<span class="vl">"contactid"</span> <span class="at">to</span>=<span class="vl">"primarycontactid"</span> <span class="at">alias</span>=<span class="vl">"c"</span><span class="tg">&gt;</span></span><span class="ln" data-fx-ln>      <span class="tg">&lt;attribute</span> <span class="at">name</span>=<span class="vl">"fullname"</span> <span class="tg">/&gt;</span></span><span class="ln" data-fx-ln>    <span class="tg">&lt;/link-entity&gt;</span></span><span class="ln" data-fx-ln>  <span class="tg">&lt;/entity&gt;</span></span><span class="ln" data-fx-ln><span class="tg">&lt;/fetch&gt;</span></span></pre>
-          </div>
-        </div>
+        <figure class="reel-frame">
+          <video id="reel" src="media/hexa-studio-promo.mp4" poster="media/hexa-studio-promo.jpg" muted playsinline loop preload="metadata" aria-label="Hexa Studio in 77 seconds: querying Dataverse in SQL with a preview before every write, reading and grading cloud flows, finding the failures hidden in Succeeded runs (a Catch that ran, a child flow that failed), reviewing flow and web resource changes as a diff, and building Dataverse Web API requests."></video>
+          <button class="reel-sound" id="reel-sound" type="button">
+            <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM144,207.64,84.91,161.69A7.94,7.94,0,0,0,80,160H32V96H80a7.94,7.94,0,0,0,4.91-1.69L144,48.36ZM200,104v48a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm32-16v80a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Z"/></svg>
+            <span id="reel-sound-t">Play with sound</span>
+          </button>
+        </figure>
+        <div class="reel-cap"><span>Hexa Studio in 77 seconds</span><span>SQL · Flows · Flow runs · Flow tasks · REST builder · Web resources</span></div>
       </div>
     </section>
 
@@ -742,6 +644,7 @@
     <section class="story" id="flows" aria-labelledby="flows-title">
       <div class="wrap">
         <div>
+          <p class="kicker mono" data-rise>01 · Read</p>
           <h2 id="flows-title" data-rise>Read a flow like the person who built it.</h2>
           <ol class="steps" id="story-steps">
             <li data-rise><span class="bar"></span><b>Designer</b><p>Steps in the order they run. Conditions and switches as columns, scopes and loops you can fold.</p></li>
@@ -759,12 +662,118 @@
       </div>
     </section>
 
+    <!-- ================= Edit in the Designer ================= -->
+    <section class="sec" id="edit" aria-labelledby="edit-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker mono" data-rise>02 · Edit</p>
+          <h2 id="edit-title" data-rise>Change a flow without opening the portal. Or breaking production.</h2>
+          <p class="sub" data-rise>Add steps from a catalog, fill them in with forms and dynamic content, and validate before anything is saved. Saving works only on connections tagged DEV, after you review the changes.</p>
+        </div>
+        <!-- mock: flow, steps and values are sample data -->
+        <div class="window edit-win" id="edit-demo" role="img" aria-label="Hexa Studio editing the flow Sync orders to ERP on a DEV connection. A step List rows - Order lines was just added from the catalog and is marked Added; its form shows the table, a filter that uses the trigger's Order id as dynamic content, and the columns to select. Validate found no problems and Save to DEV is ready.">
+          <div class="titlebar" aria-hidden="true">
+            <img src="favicon.svg" width="15" height="15" alt="" />
+            <span class="fg">Contoso</span><span class="sep">/</span><span class="fg">Sales</span><span class="tag tag-dev">DEV</span>
+            <span class="mono path">Flows › Sync orders to ERP</span>
+          </div>
+          <div class="ed-tools" aria-hidden="true">
+            <span class="seg-mock"><span>JSON</span><span>Split</span><span class="on">Designer</span></span>
+            <span class="unsaved" id="ed-unsaved">Unsaved changes</span>
+            <span class="qbtn" id="ed-validate"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>Validate</span>
+            <span class="runkey" id="ed-save">Save to DEV <kbd>Ctrl S</kbd></span>
+          </div>
+          <div class="edit-body" aria-hidden="true">
+            <div class="canvas edit-canvas">
+              <svg class="dg" id="edit-dg" viewBox="0 0 420 424"></svg>
+              <div class="ins-menu" id="ins-menu">
+                <div class="ins-q"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg><span class="mono" id="ins-q">list rows</span><span class="caret"></span></div>
+                <div class="ins-g">Dataverse</div>
+                <div class="ins-i on"><span class="chip-ico t-brand">DV</span><span>List rows<small>Dataverse</small></span></div>
+                <div class="ins-i"><span class="chip-ico t-brand">DV</span><span>Get a row by ID<small>Dataverse</small></span></div>
+                <div class="ins-g">Other connectors</div>
+                <div class="ins-i"><span class="chip-ico t-ok">XL</span><span>List rows present in a table<small>Excel Online (Business)</small></span></div>
+              </div>
+            </div>
+            <div class="form" id="ed-form">
+              <div class="step">
+                <span class="chip-ico t-brand">DV</span>
+                <div><b>List rows - Order lines</b><small>Dataverse · List rows</small></div>
+              </div>
+              <div class="ftabs"><span class="on">Parameters</span><span>Settings</span><span>Code</span></div>
+              <div class="fx-field"><span>Table name</span><div class="fx-input">Order lines <small>salesorderdetail</small></div></div>
+              <div class="fx-field"><span>Filter rows</span>
+                <div class="fx-input on tokens"><span class="mono">_salesorderid_value eq</span><span class="tok" id="ed-tok"><i>DV</i>Order</span></div>
+                <div class="dyn" id="ed-dyn">
+                  <div class="dyn-h">Dynamic content · When a row is added</div>
+                  <div class="on">Order <small>salesorderid</small></div>
+                  <div>Order number <small>ordernumber</small></div>
+                  <div>Customer <small>_customerid_value</small></div>
+                </div>
+              </div>
+              <div class="fx-field"><span>Select columns</span><div class="fx-input"><span class="mono">quantity,priceperunit</span></div></div>
+              <div class="runafter">Run after <b>Get a row - Account</b> is successful</div>
+            </div>
+          </div>
+          <div class="vbar" aria-hidden="true">
+            <span class="chk ok" id="ed-ok"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>Validate: no problems found in 6 steps</span></span>
+            <span class="mono vbar-r">Ctrl Z undo · F2 rename · Del delete</span>
+          </div>
+        </div>
+        <dl class="points">
+          <div data-rise><dt>Forms for the steps you use</dt><dd>Condition, Switch, loops, Scope, variables, Parse JSON, Select, HTTP, child flows and Dataverse rows, with Run after and secure inputs.</dd></div>
+          <div data-rise><dt>Dynamic content with <kbd class="k">/</kbd></dt><dd>Type a slash in any field for values from earlier steps, or open Insert expression with the function list and a syntax check.</dd></div>
+          <div data-rise><dt>Validate, then save to DEV</dt><dd>Missing settings, broken expressions and the wrong connection reference are caught first. Split view keeps the JSON in step.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ================= Analysis ================= -->
+    <section class="sec" id="analysis" aria-labelledby="ana-title" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker mono" data-rise>03 · Grade</p>
+          <h2 id="ana-title" data-rise>Know what a flow will cost you before it runs a thousand times.</h2>
+          <p class="sub" data-rise>Analysis grades every flow from A to F, estimates the actions it uses per run and lists each finding with the step it's on and how to fix it.</p>
+        </div>
+        <!-- mock: grades, counts and findings are sample data -->
+        <div class="ana-stage" id="ana-demo">
+          <div class="panel grade" role="img" aria-label="Analysis of Sync orders to ERP: overall grade C, about 46 actions per run. Speed B, resources B, reliability D, security C.">
+            <div class="ed-head" aria-hidden="true"><span class="mono">Flows › Sync orders to ERP › Analysis</span></div>
+            <div class="grade-body" aria-hidden="true">
+              <div class="grade-top">
+                <div class="letter g-c" id="ana-letter">C</div>
+                <div><b><span id="ana-actions">46</span> actions</b><small>estimated per run, for 20 order lines</small></div>
+              </div>
+              <div class="cats">
+                <div class="cat"><span>Speed</span><span class="cbar"><i class="g-b" style="width:78%"></i></span><b class="g-b">B</b></div>
+                <div class="cat"><span>Resources</span><span class="cbar"><i class="g-b" style="width:74%"></i></span><b class="g-b">B</b></div>
+                <div class="cat"><span>Reliability</span><span class="cbar"><i class="g-d" style="width:38%"></i></span><b class="g-d">D</b></div>
+                <div class="cat"><span>Security</span><span class="cbar"><i class="g-c" style="width:56%"></i></span><b class="g-c">C</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel finds" role="img" aria-label="Four findings: no error handling around HTTP - Post to ERP; an API key visible in run history; a loop that runs one item at a time; Get a row returning every column. Each one has its fix and opens its step in the Designer.">
+            <div class="ed-head" aria-hidden="true"><span>Findings</span><span class="mono">4</span></div>
+            <ul aria-hidden="true">
+              <li data-find><span class="sev s-high">High</span><div><b>No error handling</b><p>Nothing runs when the ERP call fails. Wrap the steps in a Scope and add a Catch that runs after it fails or times out.</p><span class="on-step">HTTP - Post to ERP <em>Open in Designer</em></span></div></li>
+              <li data-find><span class="sev s-med">Medium</span><div><b>A secret in plain inputs</b><p>The API key shows in run history to anyone who can open the run. Turn on Secure inputs.</p><span class="on-step">HTTP - Post to ERP <em>Open in Designer</em></span></div></li>
+              <li data-find><span class="sev s-med">Medium</span><div><b>Loop runs one item at a time</b><p>The iterations don't depend on each other. Turn on concurrency in Settings.</p><span class="on-step">Apply to each - line <em>Open in Designer</em></span></div></li>
+              <li data-find><span class="sev s-low">Low</span><div><b>Every column is returned</b><p>Select only the columns the flow reads.</p><span class="on-step">Get a row - Account <em>Open in Designer</em></span></div></li>
+            </ul>
+          </div>
+        </div>
+        <p class="credit" data-rise>Rules based on Cloud Flow Analyzer (MIT).</p>
+      </div>
+    </section>
+
     <!-- ================= Flow runs ================= -->
     <section class="sec runs-sec" id="runs" aria-labelledby="runs-title">
       <div class="wrap">
         <div class="sec-head">
-          <h2 id="runs-title" data-rise>See which flows failed, and what started them.</h2>
-          <p class="sub" data-rise>Run history for every flow in a solution, read from Dataverse. Count the failures, then follow a failed child flow up to the run that called it.</p>
+          <p class="kicker mono" data-rise>04 · Debug</p>
+          <h2 id="runs-title" data-rise>Find the failures. Even the ones inside a Succeeded run.</h2>
+          <p class="sub" data-rise>Run history for every flow in a solution. See which flows fail most, follow a failed child flow up to the run that called it, and open any run step by step.</p>
         </div>
         <!-- mock: run counts, flow names and the error are sample data -->
         <div class="runs-stage" id="runs-demo">
@@ -808,6 +817,11 @@
             </div>
           </div>
         </div>
+        <dl class="points runs-points">
+          <div data-rise><dt>Every step of a run</dt><dd>As a diagram or a list, with status, duration, the error and its inputs and outputs. Loops show each repetition.</dd></div>
+          <div data-rise><dt>Find runs by a value</dt><dd>A PO number or an email, searched in the run data over a time window.</dd></div>
+          <div data-rise><dt>Where a Catch ran</dt><dd>The runs that ended Succeeded only because an error handler caught the failure.</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -815,6 +829,7 @@
     <section class="sec" id="tasks" aria-labelledby="tasks-title" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
+          <p class="kicker mono" data-rise>05 · Review</p>
           <h2 id="tasks-title" data-rise>Hand a flow to Claude. See every change before it ships.</h2>
           <p class="sub" data-rise>Check the flows of one task out into a folder of their own. Whoever edits them, you, a teammate or Claude Code, each save is compared with the original and with the cloud.</p>
         </div>
@@ -871,7 +886,7 @@
         <dl class="points">
           <div data-rise><dt>Only the flows you were given</dt><dd>Add them from the task or with Add to task in Flows. Each one is read from the environment as its baseline.</dd></div>
           <div data-rise><dt>Any two versions, side by side</dt><dd>The original, the edited file, the cloud now and every earlier version, as JSON or drawn like the designer.</dd></div>
-          <div data-rise><dt>Checks before you trust it</dt><dd>Missing actions and variables, broken runAfter, connection references. And a warning when someone changed the flow in the cloud meanwhile.</dd></div>
+          <div data-rise><dt>Checks, then deploy</dt><dd>Missing actions, broken runAfter, connection references. Then deploy the reviewed version, or an earlier one to revert, back to DEV.</dd></div>
         </dl>
       </div>
     </section>
@@ -880,7 +895,8 @@
     <section class="sec" id="tools" aria-labelledby="tools-title" style="padding-top:0">
       <div class="wrap tools-grid">
         <div class="tools-head">
-          <h2 id="tools-title" data-rise>The rest of your admin toolbox, in the same window.</h2>
+          <p class="kicker mono" data-rise>And the rest</p>
+          <h2 id="tools-title" data-rise>Your Dataverse toolbox, in the same window as your flows.</h2>
           <p class="sub" data-rise>Each tool reads the environment you already have open. Nothing is written until you review it and say so.</p>
           <div class="palette" data-rise>
             <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M180,144H160V112h20a36,36,0,1,0-36-36V96H112V76a36,36,0,1,0-36,36H96v32H76a36,36,0,1,0,36,36V160h32v20a36,36,0,1,0,36-36ZM160,76a20,20,0,1,1,20,20H160ZM56,76a20,20,0,0,1,40,0V96H76A20,20,0,0,1,56,76ZM96,180a20,20,0,1,1-20-20H96Zm16-68h32v32H112Zm68,88a20,20,0,0,1-20-20V160h20a20,20,0,0,1,0,40Z"/></svg>
@@ -889,6 +905,21 @@
         </div>
 
         <div>
+          <div class="cluster" data-rise>
+            <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24C74.17,24,32,48.6,32,80v96c0,31.4,42.17,56,96,56s96-24.6,96-56V80C224,48.6,181.83,24,128,24Zm80,104c0,9.62-7.88,19.43-21.61,26.92C170.93,163.35,150.19,168,128,168s-42.93-4.65-58.39-13.08C55.88,147.43,48,137.62,48,128V111.36c17.06,15,46.23,24.64,80,24.64s62.94-9.68,80-24.64ZM69.61,53.08C85.07,44.65,105.81,40,128,40s42.93,4.65,58.39,13.08C200.12,60.57,208,70.38,208,80s-7.88,19.43-21.61,26.92C170.93,115.35,150.19,120,128,120s-42.93-4.65-58.39-13.08C55.88,99.43,48,89.62,48,80S55.88,60.57,69.61,53.08ZM186.39,202.92C170.93,211.35,150.19,216,128,216s-42.93-4.65-58.39-13.08C55.88,195.43,48,185.62,48,176V159.36c17.06,15,46.23,24.64,80,24.64s62.94-9.68,80-24.64V176C208,185.62,200.12,195.43,186.39,202.92Z"/></svg></span>Data</h3>
+            <dl class="tools">
+              <div><dt>SQL</dt><dd>Query any table in T-SQL, even the big ones: rows stream in as they land. Writes show how many records change and wait for your OK.</dd></div>
+              <div><dt>REST builder</dt><dd>Web API requests and FetchXML with pickers that know your tables, then copy them as Xrm.WebApi, fetch, C# or a flow action.</dd></div>
+            </dl>
+          </div>
+
+          <div class="cluster" data-rise>
+            <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A24,24,0,0,0,24,64V176a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V64a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8Zm-48,48a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,224Z"/></svg></span>Desktop flows</h3>
+            <dl class="tools">
+              <div class="wide"><dt>RPA, read only</dt><dd>The desktop flows of an environment with their inputs and outputs, their runs and errors, and the machines that run them.</dd></div>
+            </dl>
+          </div>
+
           <div class="cluster" data-rise>
             <h3><span class="tile"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M240,128a8,8,0,0,1-8,8H204.94l-37.78,75.58A8,8,0,0,1,160,216h-.4a8,8,0,0,1-7.08-5.14L95.35,60.76,63.28,131.31A8,8,0,0,1,56,136H24a8,8,0,0,1,0-16H50.85L88.72,36.69a8,8,0,0,1,14.76.46l57.51,151,31.85-63.71A8,8,0,0,1,200,120h32A8,8,0,0,1,240,128Z"/></svg></span>Monitoring</h3>
             <dl class="tools">
@@ -976,7 +1007,7 @@
           <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Install</h3><p>It installs for your user only. The app isn't code-signed yet, so if Windows warns you, choose <kbd class="k">More info</kbd> then <kbd class="k">Run anyway</kbd>.</p></li>
           <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Sign in</h3><p>Create a project, sign in with your Microsoft account and pick an environment.</p></li>
         </ol>
-        <p class="req" data-rise>WebView2 is installed for you if it's missing. The TDS endpoint and writes also need the <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a>.</p>
+        <p class="req" data-rise>About 16 MB, built with Tauri and Rust. You sign in with Microsoft and no password is stored: the token stays in Windows Credential Manager. WebView2 is installed for you if it's missing. SQL over the TDS endpoint and SQL writes also need the <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a>.</p>
       </div>
     </section>
   </main>
@@ -1017,6 +1048,16 @@
         }
       });
       v.addEventListener("ended", function () { b.hidden = false; t.textContent = "Watch again"; v.muted = false; });
+      // No playing in the background: pause off screen, resume the muted loop when it is back.
+      if ("IntersectionObserver" in window) {
+        var held = false;
+        new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting && !v.paused) { v.pause(); held = true; }
+            else if (e.isIntersecting && held) { held = false; var q = v.play(); if (q && q.catch) q.catch(function () {}); }
+          });
+        }, { threshold: 0.25 }).observe(v);
+      }
     })();
 
     /* ---------------- Latest release: download links, size, version ---------------- */
@@ -1184,6 +1225,32 @@
     taskFlow(document.getElementById("tc-left"), false);
     var tcRight = taskFlow(document.getElementById("tc-right"), true);
 
+    // Edit (mock): "List rows - Order lines" was just added between two steps.
+    // Final state (step added, its form open) is the default.
+    function plus(svg, cx, cy, on) {
+      var g = el("g", { class: "plus" + (on ? " on" : "") }, svg);
+      el("circle", { cx: cx, cy: cy, r: 9 }, g);
+      el("path", { d: "M" + (cx - 4) + " " + cy + " H" + (cx + 4) + " M" + cx + " " + (cy - 4) + " V" + (cy + 4) }, g);
+      return g;
+    }
+    function into(group, node) { group.appendChild(node); return node; }
+    var ed = document.getElementById("edit-dg");
+    arrowDef(ed);
+    var edAdd = el("g", {}, ed), edBelow = el("g", {}, ed);
+    edge(ed, 210, 66, 98); plus(ed, 210, 82);
+    card(ed, { id: "e1", x: 90, y: 20, w: 240, tone: "brand", icon: "DV", title: "When a row is added", sub: "Dataverse · salesorder" });
+    edge(ed, 210, 144, 176);
+    card(ed, { id: "e2", x: 90, y: 98, w: 240, tone: "brand", icon: "DV", title: "Get a row - Account", sub: "Dataverse · account" });
+    var edNew = card(ed, { id: "e3", x: 90, y: 176, w: 240, tone: "brand", icon: "DV", title: "List rows - Order lines", sub: "Dataverse · salesorderdetail", ring: true });
+    into(edAdd, edNew.parentNode);
+    marked(edNew, "added");
+    into(edAdd, edge(ed, 210, 222, 254)); into(edAdd, plus(ed, 210, 238));
+    into(edBelow, card(ed, { id: "e4", x: 90, y: 254, w: 240, tone: "info", icon: "repeat", title: "Apply to each - line", sub: "Apply to each" }).parentNode);
+    into(edBelow, edge(ed, 210, 300, 332)); into(edBelow, plus(ed, 210, 316));
+    into(edBelow, card(ed, { id: "e5", x: 90, y: 332, w: 240, tone: "warn", icon: "HT", title: "HTTP - Post to ERP", sub: "HTTP" }).parentNode);
+    into(edBelow, el("path", { class: "edge", d: "M210 378 L210 393" }, ed)); into(edBelow, plus(ed, 210, 402));
+    var edSlot = plus(ed, 210, 160); // where the step went in, drawn over the edge
+
     /* ---------------- Motion ---------------- */
     if (!window.gsap) return; // CDN blocked: the page stays complete, just still.
     gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -1231,63 +1298,50 @@
         gsap.from(x, { opacity: 0, y: 16, duration: 0.8, ease: EASE, scrollTrigger: { trigger: x, start: "top 88%", once: true } });
       });
 
-      /* Numbers count up to the measured values. */
-      gsap.utils.toArray("[data-count]").forEach(function (n) {
-        var end = parseFloat(n.dataset.count), dec = +n.dataset.dec, o = { v: 0 };
-        gsap.to(o, { v: end, duration: 1.4, ease: "power2.out", scrollTrigger: { trigger: n, start: "top 90%", once: true },
-          onStart: function () { o.v = 0; }, onUpdate: function () { n.textContent = o.v.toFixed(dec); } });
+      /* The flow's life: the rail fills, the five steps follow it. */
+      gsap.timeline({ scrollTrigger: { trigger: "#fl-steps", start: "top 85%", once: true } })
+        .from("#fl-steps .fl-rail i", { scaleX: 0, duration: 1.2, ease: "power2.inOut" })
+        .from("#fl-steps li:not(.fl-rail)", { opacity: 0, y: 12, duration: 0.6, stagger: 0.12, ease: EASE }, 0.1);
+
+      /* Edit: + on an edge opens the catalog, the step is picked and drops in,
+         its form opens, dynamic content fills the filter, Validate passes. */
+      var insQ = document.getElementById("ins-q"), insWord = insQ.textContent, insN = { n: 0 };
+      gsap.set(edBelow, { y: -78 });
+      gsap.set(edAdd, { opacity: 0 });
+      gsap.set(["#ed-form", "#ed-tok", "#ed-ok", "#ed-unsaved"], { opacity: 0 });
+      insQ.textContent = "";
+      gsap.timeline({ scrollTrigger: { trigger: "#edit-demo", start: "top 70%", once: true } })
+        .call(function () { edSlot.setAttribute("class", "plus on"); }, null, 0.3)
+        .from(edSlot, { scale: 0.6, transformOrigin: "50% 50%", duration: 0.35, ease: "back.out(3)" }, 0.3)
+        .fromTo("#ins-menu", { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: EASE }, "+=0.15")
+        .fromTo(insN, { n: 0 }, { n: insWord.length, duration: 0.6, ease: "none",
+          onUpdate: function () { insQ.textContent = insWord.slice(0, Math.round(insN.n)); } })
+        .to("#ins-menu", { autoAlpha: 0, y: -4, duration: 0.2, ease: "power2.in" }, "+=0.45")
+        .call(function () { edSlot.setAttribute("class", "plus"); })
+        .to(edBelow, { y: 0, duration: 0.6, ease: EASE })
+        .to(edAdd, { opacity: 1, duration: 0.45, ease: "power1.out" }, "<0.15")
+        .to("#ed-unsaved", { opacity: 1, duration: 0.3 }, "<")
+        .fromTo("#ed-form", { x: 16 }, { opacity: 1, x: 0, duration: 0.6, ease: EASE }, "-=0.1")
+        .fromTo("#ed-dyn", { autoAlpha: 0, y: -4 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: EASE }, "+=0.25")
+        .to("#ed-dyn", { autoAlpha: 0, duration: 0.2, ease: "power2.in" }, "+=0.6")
+        .fromTo("#ed-tok", { scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.5)" }, "<")
+        .to("#ed-validate", { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.35")
+        .to("#ed-ok", { opacity: 1, duration: 0.35 })
+        .to("#ed-save", { scale: 0.94, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.3");
+      reverts.push(function () {
+        gsap.set([edBelow, edAdd, edSlot, "#ed-form", "#ed-tok", "#ed-ok", "#ed-unsaved", "#ins-menu", "#ed-dyn"], { clearProps: "all" });
+        edSlot.setAttribute("class", "plus");
+        insQ.textContent = insWord;
       });
 
-      /* Both strategies race at their measured speeds: steady progress, so linear. */
-      var SEQ = 2.4, PAR = SEQ * 25.6 / 78.4;
-      var race = gsap.timeline({ scrollTrigger: { trigger: "#race", start: "top 85%", once: true } });
-      race.from(".lane.seq .bar i", { scaleX: 0, duration: SEQ, ease: "none" })
-        .from(".lane.par .bar i", { scaleX: 0, duration: PAR, ease: "none" }, 0);
-      gsap.utils.toArray(".lane .t").forEach(function (t, i) {
-        var end = parseFloat(t.dataset.t), o = { v: 0 };
-        race.fromTo(o, { v: 0 }, { v: end, duration: i === 0 ? SEQ : PAR, ease: "none",
-          onUpdate: function () { t.textContent = o.v.toFixed(1) + " s"; } }, 0);
-      });
-
-      /* SQL: the query is typed, Run is pressed, rows stream in page by page. */
-      // Wrap each character in a span but keep the newlines (a <pre> must stay a <pre>).
-      var pre = document.getElementById("sql-code"), original = pre.innerHTML, chars = [];
-      (function wrap(node) {
-        Array.prototype.slice.call(node.childNodes).forEach(function (c) {
-          if (c.nodeType !== 3) return wrap(c);
-          var frag = document.createDocumentFragment();
-          c.textContent.split("").forEach(function (ch) {
-            if (ch === "\n") { frag.appendChild(document.createTextNode(ch)); return; }
-            var sp = document.createElement("span"); sp.textContent = ch; chars.push(sp); frag.appendChild(sp);
-          });
-          node.replaceChild(frag, c);
-        });
-      })(pre);
-      reverts.push(function () { pre.innerHTML = original; });
-      var rowsOut = document.getElementById("rows"), counter = { n: 0 };
-      gsap.timeline({ scrollTrigger: { trigger: "#sql-demo", start: "top 75%", once: true } })
-        .from(chars, { opacity: 0, duration: 0.01, stagger: 0.01, ease: "none" })
-        .to("#runkey", { scale: 0.92, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut" }, "+=0.15")
-        .from("[data-row]", { opacity: 0, x: -10, duration: 0.35, stagger: 0.06, ease: EASE })
-        .fromTo(counter, { n: 0 }, { n: 15779, duration: 1.6, ease: "power1.out",
-          onUpdate: function () { rowsOut.textContent = Math.round(counter.n).toLocaleString("en-US"); } }, "<")
-        .from("[data-page]", { opacity: 0, scale: 0.8, duration: 0.25, stagger: 0.4, ease: "back.out(2)" }, "<");
-
-      /* FetchXML: the tree and its XML build together, the condition is picked,
-         its value comes from the choice labels, then the rows are counted. */
-      var fxRows = gsap.utils.toArray("[data-fx-row]"), fxLines = gsap.utils.toArray("[data-fx-ln]");
-      var fxCount = document.getElementById("fx-count"), fxN = { n: 0 };
-      gsap.timeline({ scrollTrigger: { trigger: "#fx-demo", start: "top 70%", once: true } })
-        .set("#fx-cond", { className: "fx-row" })
-        .set("#fx-hl", { className: "ln" })
-        .from(fxRows, { opacity: 0, x: -8, duration: 0.35, stagger: 0.09, ease: EASE })
-        .from(fxLines, { opacity: 0, duration: 0.3, stagger: 0.065, ease: "power1.out" }, "<")
-        .from("#fx-props", { opacity: 0, x: 16, duration: 0.6, ease: EASE }, "+=0.2")
-        .set("#fx-cond", { className: "fx-row sel" }, "<")
-        .from("#fx-menu", { opacity: 0, y: -6, duration: 0.35, ease: EASE }, "+=0.15")
-        .set("#fx-hl", { className: "ln hl" }, "+=0.35")
-        .fromTo(fxN, { n: 0 }, { n: 1284, duration: 1.1, ease: "power2.out",
-          onUpdate: function () { fxCount.textContent = Math.round(fxN.n).toLocaleString("en-US"); } }, "+=0.2");
+      /* Analysis: each area fills to its score, the grade lands, the findings follow. */
+      var anaN = document.getElementById("ana-actions"), anaO = { v: 0 };
+      gsap.timeline({ scrollTrigger: { trigger: "#ana-demo", start: "top 72%", once: true } })
+        .from(".cbar i", { scaleX: 0, duration: 0.9, stagger: 0.12, ease: EASE })
+        .fromTo(anaO, { v: 0 }, { v: 46, duration: 1.1, ease: "power2.out",
+          onUpdate: function () { anaN.textContent = Math.round(anaO.v); } }, 0)
+        .from("#ana-letter", { opacity: 0, scale: 0.7, duration: 0.5, ease: "back.out(2)" }, "-=0.3")
+        .from("[data-find]", { opacity: 0, y: 10, duration: 0.45, stagger: 0.1, ease: EASE }, "-=0.2");
 
       /* Flow runs: the hours fill in and the counts add up, then a failed
          child run comes forward and points at the parent run that started it. */
