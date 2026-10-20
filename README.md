@@ -7,9 +7,12 @@ a Windows desktop toolkit for Power Platform / Dataverse.
 - `favicon.svg` — the app icon
 - `media/hexa-studio-promo.mp4` + `.jpg` — the 77-second launch film shown first on the page (H.264, ~5 MB) and its poster frame
 
-The download buttons ask the GitHub API for the latest release of
-`datbe2002/hexa-studio-releases` and link its `*setup.exe`, so a new app release
-needs no change here. If the API can't be reached, they link to the Releases page.
+The download buttons link `/download`, a Vercel function (`api/download.js`,
+routed by `vercel.json`) that reads `latest.json` from the latest release of
+`datbe2002/hexa-studio-releases` and redirects to its setup.exe, so a new app
+release needs no change here. It avoids the GitHub API, which allows only 60
+requests an hour per IP. `/api/download?format=json` gives the page the version
+and size. If GitHub can't be reached, the buttons link to the Releases page.
 
 ## Deploy on Vercel
 

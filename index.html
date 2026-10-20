@@ -633,7 +633,7 @@
         <a href="#pricing">Pricing</a>
         <a href="#install">Install</a>
       </nav>
-      <a class="btn btn-primary btn-sm" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
+      <a class="btn btn-primary btn-sm" data-download href="/download">
         <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
         Download for Windows
       </a>
@@ -650,7 +650,7 @@
           <h1 id="hero-title" data-split>Read, fix and ship every flow <span class="dim">without the guesswork.</span></h1>
           <p class="lead" data-hero-in>A Windows app, free to start, to read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in Succeeded runs and review every change before it reaches your environment.</p>
           <div class="cta" data-hero-in>
-            <a class="btn btn-primary" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
+            <a class="btn btn-primary" data-download href="/download">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
               Download for Windows
             </a>
@@ -1058,7 +1058,7 @@
             <p class="for">For reading flows and everyday Dataverse work.</p>
             <p class="price"><b><sup>$</sup>0</b><span>/ forever</span></p>
             <p class="terms">No card, no sign-up</p>
-            <a class="btn btn-ghost" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
+            <a class="btn btn-ghost" data-download href="/download">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
               Download for Windows
             </a>
@@ -1175,7 +1175,7 @@
         <h2 id="install-title" data-rise>Running in a minute.</h2>
         <p class="sub" data-rise>Free for Windows 10 and 11, 64-bit, with <a href="#pricing">Pro</a> when you need to ship. It updates itself from then on.</p>
         <div class="cta" data-rise>
-          <a class="btn btn-primary" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
+          <a class="btn btn-primary" data-download href="/download">
             <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
             Download for Windows
           </a>
@@ -1189,7 +1189,7 @@
           <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Install</h3><p>It installs for your user only. The app isn't code-signed yet, so if Windows warns you, choose <kbd class="k">More info</kbd> then <kbd class="k">Run anyway</kbd>.</p></li>
           <li class="istep"><div class="pip" aria-hidden="true"></div><h3>Sign in</h3><p>Create a project, sign in with your Microsoft account and pick an environment.</p></li>
         </ol>
-        <p class="req" data-rise>About 16 MB, built with Tauri and Rust. You sign in with Microsoft and no password is stored: the token stays in Windows Credential Manager. WebView2 is installed for you if it's missing. SQL over the TDS endpoint and SQL writes also need the <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a>.</p>
+        <p class="req" data-rise>About <span data-size-num>19</span> MB, built with Tauri and Rust. You sign in with Microsoft and no password is stored: the token stays in Windows Credential Manager. WebView2 is installed for you if it's missing. SQL over the TDS endpoint and SQL writes also need the <a href="https://learn.microsoft.com/sql/connect/odbc/download-odbc-driver-for-sql-server">ODBC Driver 17 for SQL Server</a>.</p>
       </div>
     </section>
   </main>
@@ -1243,20 +1243,37 @@
     })();
 
     /* ---------------- Latest release: download links, size, version ---------------- */
-    fetch("https://api.github.com/repos/datbe2002/hexa-studio-releases/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-      .then(function (rel) {
-        var a = (rel.assets || []).filter(function (x) { return /setup\.exe$/i.test(x.name); })[0];
-        if (!a) return;
-        var mb = a.size / 1e6;
-        document.querySelectorAll("[data-download]").forEach(function (el) { el.href = a.browser_download_url; });
-        document.querySelectorAll("[data-file]").forEach(function (el) { el.textContent = a.name; });
-        document.querySelectorAll("[data-size-num]").forEach(function (el) { el.textContent = mb.toFixed(0); });
-        document.querySelectorAll("[data-meta]").forEach(function (el) {
-          el.textContent = rel.tag_name + ", " + mb.toFixed(1) + " MB, released " + new Date(rel.published_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-        });
+    // /download (api/download.js on Vercel) redirects to the newest installer. The page
+    // asks the same function for its details; a local preview has no /api, so it falls
+    // back to the GitHub API, which allows only 60 requests an hour per IP.
+    var RELEASES = "https://github.com/datbe2002/hexa-studio-releases/releases";
+    function json(r) { return r.ok ? r.json() : Promise.reject(r.status); }
+    fetch("/api/download?format=json").then(json)
+      .catch(function () {
+        return fetch("https://api.github.com/repos/datbe2002/hexa-studio-releases/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+          .then(json)
+          .then(function (rel) {
+            var a = (rel.assets || []).filter(function (x) { return /setup\.exe$/i.test(x.name); })[0];
+            if (!a) return Promise.reject("no setup.exe");
+            return { version: rel.tag_name.replace(/^v/, ""), published: rel.published_at, url: a.browser_download_url, name: a.name, size: a.size };
+          });
       })
-      .catch(function () {});
+      .then(function (rel) {
+        document.querySelectorAll("[data-download]").forEach(function (el) { el.href = rel.url; });
+        document.querySelectorAll("[data-file]").forEach(function (el) { el.textContent = rel.name; });
+        var parts = ["v" + rel.version];
+        if (rel.size) {
+          var mb = rel.size / 1e6;
+          document.querySelectorAll("[data-size-num]").forEach(function (el) { el.textContent = mb.toFixed(0); });
+          parts.push(mb.toFixed(1) + " MB");
+        }
+        parts.push("released " + new Date(rel.published).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }));
+        document.querySelectorAll("[data-meta]").forEach(function (el) { el.textContent = parts.join(", "); });
+      })
+      .catch(function () {
+        // Neither answered, so /download would fall back to the Releases page too (or not exist, locally).
+        document.querySelectorAll("[data-download]").forEach(function (el) { el.href = RELEASES + "/latest"; });
+      });
 
     /* ---------------- Mobile menu (before the GSAP guard: works without the CDN) ---------------- */
     var topBar = document.getElementById("top"), menuBtn = topBar.querySelector(".menu-btn");
