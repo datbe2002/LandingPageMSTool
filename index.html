@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hexa Studio: a desktop studio for Power Automate cloud flows</title>
-  <meta name="description" content="A free Windows app for Power Automate cloud flows: read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in your runs and review every change before it ships." />
+  <meta name="description" content="A Windows app for Power Automate cloud flows, free to start: read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in your runs and review every change before it ships." />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#131316" />
   <meta property="og:title" content="Hexa Studio" />
@@ -231,6 +231,7 @@
     .final { text-align: center; border-top: 1px solid var(--line); background: radial-gradient(60% 50% at 50% 0%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 70%); }
     .final .mark { margin: 0 auto 28px; width: 64px; height: 64px; border-radius: 15px; box-shadow: var(--shadow-md); }
     .final .sub { margin-inline: auto; }
+    .final .sub a { color: var(--brand); text-underline-offset: 3px; }
     .final .cta { justify-content: center; }
     .final .meta { margin-top: 14px; color: var(--subtle); font: 13px var(--mono); }
     .isteps { position: relative; list-style: none; padding: 0; margin: 80px auto 0; max-width: 980px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; text-align: left; }
@@ -243,6 +244,78 @@
     kbd.k { font: 500 12.5px var(--mono); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-strong); border-bottom-width: 2px; background: var(--s2); color: var(--fg); white-space: nowrap; }
     .req { margin: 56px auto 0; max-width: 60ch; color: var(--subtle); font-size: 14px; }
     .req a { color: var(--brand); text-underline-offset: 3px; }
+
+    /* ---------- Pricing: two plan cards, then the full comparison and a short FAQ ---------- */
+    .pricing .sec-head { margin-inline: auto; text-align: center; }
+    .pricing .sec-head .sub { margin-inline: auto; }
+    .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+    .plan { position: relative; display: flex; flex-direction: column; padding: 32px; border-radius: var(--r-lg); background: var(--s1); border: 1px solid var(--line-strong); box-shadow: var(--shadow-md); }
+    .plan.pro { border-color: color-mix(in oklab, var(--brand) 55%, var(--line-strong)); background: radial-gradient(90% 60% at 50% 0%, color-mix(in oklab, var(--brand) 11%, transparent), transparent 70%), var(--s1); box-shadow: 0 0 0 1px color-mix(in oklab, var(--brand) 22%, transparent), var(--shadow-lg); }
+    .plan h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+    .plan .for { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font: 550 12px/1 var(--sans); background: color-mix(in oklab, var(--brand) 16%, transparent); color: var(--brand); border: 1px solid color-mix(in oklab, var(--brand) 30%, transparent); }
+    .plan .badge { margin-left: auto; }
+    .price { display: flex; align-items: baseline; gap: 8px; margin: 28px 0 0; }
+    .price b { font-size: 56px; line-height: 1; font-weight: 620; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+    .price b sup { font-size: .45em; font-weight: 550; vertical-align: .95em; margin-right: 2px; letter-spacing: 0; }
+    .price span { color: var(--muted); font: 14px var(--mono); }
+    .plan .terms { margin: 10px 0 0; min-height: 1.6em; color: var(--subtle); font: 13px var(--mono); }
+    .plan .btn { width: 100%; margin-top: 24px; }
+    .btn-ghost { background: var(--s2); color: var(--fg); border-color: var(--line-strong); }
+    .btn-ghost:hover { background: var(--s3); }
+    .plan .note { margin: 10px 0 0; color: var(--subtle); font-size: 13px; text-align: center; }
+    .plan .note a { color: var(--brand); text-underline-offset: 3px; }
+    .feats { list-style: none; margin: 28px 0 0; padding: 24px 0 0; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 15px; }
+    .feats .lead-in { color: var(--subtle); font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .feats li:not(.lead-in) { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 12px; color: var(--muted); }
+    .feats li b { color: var(--fg); font-weight: 550; }
+    .feats svg { width: 18px; height: 18px; margin-top: 3px; color: var(--subtle); }
+    .plan.pro .feats svg { color: var(--brand); }
+
+    .cmp-wrap { max-width: 960px; margin: 96px auto 0; }
+    .cmp-wrap h3 { margin: 0 0 20px; font-size: 24px; font-weight: 600; letter-spacing: -.025em; }
+    .cmp { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .cmp th, .cmp td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .cmp thead th { position: sticky; top: var(--nav-h); z-index: 1; background: var(--bg); border-bottom-color: var(--line-strong); font-weight: 600; font-size: 15px; }
+    .cmp thead th small { display: block; color: var(--subtle); font: 400 13px var(--mono); }
+    .cmp col.c-plan { width: 180px; }
+    .cmp td { color: var(--muted); }
+    .cmp td:not(:first-child), .cmp th:not(:first-child) { text-align: center; }
+    .cmp tbody th { font-weight: 450; color: var(--fg); }
+    .cmp tbody th small { display: block; color: var(--subtle); font-size: 13.5px; }
+    .cmp .grp th { padding-top: 32px; color: var(--subtle); font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; border-bottom-color: var(--line-strong); }
+    .cmp .y svg { width: 18px; height: 18px; margin: 2px auto 0; color: var(--fg); }
+    .cmp .pro-col .y svg, .cmp td.pro-col svg { color: var(--brand); }
+    .cmp .n { display: block; width: 12px; height: 1.5px; margin: 11px auto 0; background: var(--line-strong); }
+    .cmp td.pro-col { background: color-mix(in oklab, var(--brand) 4%, transparent); }
+    .cmp thead th.pro-col { color: var(--brand); }
+
+    .faq { max-width: 960px; margin: 96px auto 0; }
+    .faq h3 { margin: 0 0 12px; font-size: 24px; font-weight: 600; letter-spacing: -.025em; }
+    .faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 14px 0; cursor: pointer; list-style: none; font-weight: 550; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 1.5px solid var(--subtle); border-bottom: 1.5px solid var(--subtle); transform: translateY(-3px) rotate(45deg); transition: transform .25s var(--ease); }
+    .faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+    .faq summary:hover { color: var(--brand); }
+    .faq details p { margin: -4px 0 18px; color: var(--muted); font-size: 15px; }
+    .faq details a { color: var(--brand); text-underline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .k-pro { display: inline-block; margin-left: 8px; padding: 3px 7px; border-radius: 5px; font: 600 10.5px/1 var(--sans); letter-spacing: .02em; vertical-align: 2px; background: color-mix(in oklab, var(--brand) 16%, transparent); color: var(--brand); }
+
+    @media (max-width: 767px) {
+      .plans { grid-template-columns: minmax(0, 1fr); }
+      .plan { padding: 24px; }
+      .price b { font-size: 48px; }
+      .cmp-wrap, .faq { margin-top: 72px; }
+      .cmp { font-size: 14px; }
+      .cmp th, .cmp td { padding: 12px 8px; }
+      .cmp th:first-child, .cmp td:first-child { padding-left: 0; }
+      .cmp col.c-plan { width: 64px; }
+      .cmp thead th small { display: none; }
+      .faq-grid { grid-template-columns: minmax(0, 1fr); }
+    }
 
     /* Flow runs: a wide monitor window, the run detail overlapping its lower corner */
     .runs-sec { padding-bottom: 112px; }
@@ -557,6 +630,7 @@
         <a href="#runs">Runs</a>
         <a href="#tasks">Tasks</a>
         <a href="#tools">More tools</a>
+        <a href="#pricing">Pricing</a>
         <a href="#install">Install</a>
       </nav>
       <a class="btn btn-primary btn-sm" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
@@ -666,7 +740,7 @@
     <section class="sec" id="edit" aria-labelledby="edit-title">
       <div class="wrap">
         <div class="sec-head">
-          <p class="kicker mono" data-rise>02 · Edit</p>
+          <p class="kicker mono" data-rise>02 · Edit<span class="k-pro">PRO</span></p>
           <h2 id="edit-title" data-rise>Change a flow without opening the portal. Or breaking production.</h2>
           <p class="sub" data-rise>Add steps from a catalog, fill them in with forms and dynamic content, and validate before anything is saved. Saving works only on connections tagged DEV, after you review the changes.</p>
         </div>
@@ -829,7 +903,7 @@
     <section class="sec" id="tasks" aria-labelledby="tasks-title" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
-          <p class="kicker mono" data-rise>05 · Review</p>
+          <p class="kicker mono" data-rise>05 · Review<span class="k-pro">PRO</span></p>
           <h2 id="tasks-title" data-rise>Hand a flow to Claude. See every change before it ships.</h2>
           <p class="sub" data-rise>Check the flows of one task out into a folder of their own. Whoever edits them, you, a teammate or Claude Code, each save is compared with the original and with the cloud.</p>
         </div>
@@ -969,6 +1043,116 @@
       </div>
     </section>
 
+    <!-- ================= Pricing ================= -->
+    <section class="sec pricing" id="pricing" aria-labelledby="pricing-title" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <p class="kicker mono" data-rise>Pricing</p>
+          <h2 id="pricing-title" data-rise>Free to read. Pro when you ship.</h2>
+          <p class="sub" data-rise>Reading flows, runs and your Dataverse is free for good. Pro is for changing things: editing flows, deploying them and writing data.</p>
+        </div>
+
+        <div class="plans">
+          <article class="plan" aria-labelledby="plan-free" data-rise>
+            <h3 id="plan-free">Free</h3>
+            <p class="for">For reading flows and finding your way around an environment.</p>
+            <p class="price"><b><sup>$</sup>0</b><span>/ forever</span></p>
+            <p class="terms">No card, no sign-up</p>
+            <a class="btn btn-ghost" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
+              <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
+              Download for Windows
+            </a>
+            <ul class="feats">
+              <li class="lead-in">Includes</li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Read any flow</b> as a diagram, JSON or outline, with step search and child flows</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Run history</b> with errors and the steps of each run</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Analysis</b>: a grade from A to F and its findings</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>SQL queries</b> and the REST builder, with code to copy</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span>Plug-in traces, system jobs, plug-in steps, dependencies, security and desktop flows</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>2 projects</b>, one per tenant</span></li>
+            </ul>
+          </article>
+
+          <article class="plan pro" aria-labelledby="plan-pro" data-rise>
+            <h3 id="plan-pro">Pro <span class="badge">For people who ship flows</span></h3>
+            <p class="for">For changing flows, deploying them and writing data, across every client.</p>
+            <p class="price"><b><sup>$</sup>9.99</b><span>/ month</span></p>
+            <p class="terms">Per person · prices in USD</p>
+            <a class="btn btn-primary" href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">
+              Get Pro
+              <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
+            </a>
+            <p class="note">Online checkout is on its way. Until then, <a href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">email us</a> for a key.</p>
+            <ul class="feats">
+              <li class="lead-in">Everything in Free, plus</li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Edit flows</b> in the Designer, validate, review the diff and save to DEV</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Find in run data</b>: search a value across runs, see where a Catch ran</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Parent and child runs</b>, and flow runs across the environment</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Tasks</b>: check flows out, compare and deploy back to DEV</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>SQL writes</b> (INSERT, UPDATE, DELETE) with a preview first</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Web resources</b>: edit, create, publish and delete</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Unlimited projects</b> for every tenant you work in</span></li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="cmp-wrap" data-rise>
+          <h3>Compare plans</h3>
+          <table class="cmp">
+            <colgroup><col /><col class="c-plan" /><col class="c-plan" /></colgroup>
+            <thead>
+              <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Free<small>$0</small></th><th scope="col" class="pro-col">Pro<small>$9.99 / month</small></th></tr>
+            </thead>
+            <tbody>
+              <tr class="grp"><th colspan="3" scope="colgroup">Cloud flows</th></tr>
+              <tr><th scope="row">Read as a diagram, JSON or outline</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Search steps and variables, open child flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Analysis<small>A grade from A to F and its findings</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Edit in the Designer<small>Validate, review the diff, save to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Tasks<small>Check flows out, compare, deploy back to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+
+              <tr class="grp"><th colspan="3" scope="colgroup">Runs</th></tr>
+              <tr><th scope="row">Run history, errors and the steps of a run</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Find in run data<small>Search a value across runs, see where a Catch ran</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Parent and child runs</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Flow runs across the environment</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+
+              <tr class="grp"><th colspan="3" scope="colgroup">Data</th></tr>
+              <tr><th scope="row">SQL queries (SELECT)</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">SQL writes<small>INSERT, UPDATE and DELETE, with a preview first</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">REST builder<small>Run reads, copy the request as code</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+
+              <tr class="grp"><th colspan="3" scope="colgroup">Dataverse tools</th></tr>
+              <tr><th scope="row">Plug-in traces, system jobs, plug-in steps</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Dependencies, security and desktop flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Web resources<small>Read and compare</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Web resources<small>Edit, create, publish and delete</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+
+              <tr class="grp"><th colspan="3" scope="colgroup">Projects</th></tr>
+              <tr><th scope="row">Projects (one per tenant)</th><td>2</td><td class="pro-col">Unlimited</td></tr>
+              <tr><th scope="row">Automatic updates</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="faq" data-rise>
+          <h3>Questions</h3>
+          <div class="faq-grid">
+            <div>
+              <details><summary>Do I need Pro to try Hexa Studio?</summary><p>No. Download it and use Free for as long as you like. Pro features carry a Pro tag in the app, and opening one shows what it unlocks in Settings › License.</p></details>
+              <details><summary>How do I buy Pro?</summary><p>Online checkout is on its way. Until then, <a href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">email us</a> with the address the key should carry. You get payment details and a license key to paste in Settings › License.</p></details>
+              <details><summary>Is a key tied to one computer?</summary><p>It can be: Settings › License shows your Computer ID. Moving to a new computer? Write to us and you get a key for it.</p></details>
+            </div>
+            <div>
+              <details><summary>What happens when Pro ends?</summary><p>Everything in Free keeps working and nothing in your environments changes. Editing, deploys and writes lock again until you add a key.</p></details>
+              <details><summary>Does the license check send my data anywhere?</summary><p>No. The key is checked on your computer, offline. Hexa Studio talks only to Microsoft, with your own sign-in.</p></details>
+              <details><summary>Buying for a team?</summary><p><a href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro%20for%20a%20team">Email us</a> how many people need it and we'll send a team price.</p></details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= About ================= -->
     <section class="sec" id="about" aria-labelledby="about-title">
       <div class="wrap about-grid">
@@ -991,7 +1175,7 @@
       <div class="wrap">
         <img class="mark" src="favicon.svg" width="64" height="64" alt="" data-rise />
         <h2 id="install-title" data-rise>Running in a minute.</h2>
-        <p class="sub" data-rise>Free for Windows 10 and 11, 64-bit. It updates itself from then on.</p>
+        <p class="sub" data-rise>Free for Windows 10 and 11, 64-bit, with <a href="#pricing">Pro</a> when you need to ship. It updates itself from then on.</p>
         <div class="cta" data-rise>
           <a class="btn btn-primary" data-download href="https://github.com/datbe2002/hexa-studio-releases/releases/latest">
             <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
