@@ -112,6 +112,16 @@
     .reel-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: oklch(0.13 0.02 278); }
     .reel-sound { position: absolute; left: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid oklch(1 0 0 / .16); background: oklch(0.16 0.02 278 / .78); color: oklch(0.96 0.005 278); font: 550 14px/1 var(--sans); cursor: pointer; backdrop-filter: blur(8px); transition: background-color .2s var(--ease), transform .2s var(--ease); }
     .reel-sound[hidden] { display: none; }
+    /* Sections switched off in the admin (api/page.js adds hidden). */
+    [data-cms-section][hidden], [data-cms-nav][hidden] { display: none !important; }
+    /* Announcement strip above the menu, and the draft preview's label (both from api/page.js). */
+    .announce { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px; padding: 9px 20px; background: var(--brand); color: oklch(0.99 0 0); font-size: 14px; line-height: 1.4; text-align: center; }
+    .announce a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    .announce .announce-btn { text-decoration: none; padding: 2px 10px; border-radius: 999px; border: 1px solid oklch(1 0 0 / .45); font-weight: 500; white-space: nowrap; }
+    .announce .announce-btn:hover { background: oklch(1 0 0 / .14); }
+    /* The strip scrolls away with the page; the fixed menu sits under it until it's gone (the script beside the strip keeps --ann). */
+    .announce ~ .top { top: var(--ann, 0px); }
+    .preview-bar { position: fixed; z-index: 100; left: 50%; bottom: 16px; transform: translateX(-50%); padding: 8px 16px; border-radius: 999px; background: oklch(0.82 0.14 85); color: oklch(0.22 0.03 85); font: 500 13px/1.3 "Geist", system-ui, sans-serif; box-shadow: var(--shadow-lg); }
     .reel-sound:hover { background: oklch(0.22 0.03 278 / .9); transform: translateY(-1px); }
     .reel-sound:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     .reel-sound .ico { width: 18px; height: 18px; }
@@ -610,7 +620,7 @@
   </style>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+  <a class="skip" href="#main">Skip to content</a><!--cms:announcement--><!--/cms:announcement-->
 
   <header class="top" id="top">
     <div class="wrap">
@@ -624,18 +634,18 @@
       </button>
       <div class="navset" id="site-nav">
       <nav aria-label="Page">
-        <a href="#flows">Read</a>
-        <a href="#edit">Edit</a>
-        <a href="#analysis">Analysis</a>
-        <a href="#runs">Runs</a>
-        <a href="#tasks">Tasks</a>
-        <a href="#tools">More tools</a>
-        <a href="#pricing">Pricing</a>
+        <a href="#flows" data-cms-nav="flows">Read</a>
+        <a href="#edit" data-cms-nav="edit">Edit</a>
+        <a href="#analysis" data-cms-nav="analysis">Analysis</a>
+        <a href="#runs" data-cms-nav="runs">Runs</a>
+        <a href="#tasks" data-cms-nav="tasks">Tasks</a>
+        <a href="#tools" data-cms-nav="tools">More tools</a>
+        <a href="#pricing" data-cms-nav="pricing">Pricing</a>
         <a href="#install">Install</a>
       </nav>
       <a class="btn btn-primary btn-sm" data-download href="/download">
         <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
-        Download for Windows
+        <!--cms:hero.ctaLabel-->Download for Windows<!--/cms:hero.ctaLabel-->
       </a>
       </div>
     </div>
@@ -646,13 +656,13 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap hero-grid">
         <div>
-          <p class="eyebrow mono" data-hero-in>For Power Automate cloud flows</p>
-          <h1 id="hero-title" data-split>Read, fix and ship every flow <span class="dim">without the guesswork.</span></h1>
-          <p class="lead" data-hero-in>A Windows app, free to start, to read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in Succeeded runs and review every change before it reaches your environment.</p>
+          <!--cms:hero.eyebrow--><p class="eyebrow mono" data-hero-in>For Power Automate cloud flows</p><!--/cms:hero.eyebrow-->
+          <h1 id="hero-title" data-split><!--cms:hero.title-->Read, fix and ship every flow <span class="dim">without the guesswork.</span><!--/cms:hero.title--></h1>
+          <p class="lead" data-hero-in><!--cms:hero.lead-->A Windows app, free to start, to read any flow as a diagram, edit it safely in DEV, grade it A to F, find the failures hidden in Succeeded runs and review every change before it reaches your environment.<!--/cms:hero.lead--></p>
           <div class="cta" data-hero-in>
             <a class="btn btn-primary" data-download href="/download">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
-              Download for Windows
+              <!--cms:hero.ctaLabel-->Download for Windows<!--/cms:hero.ctaLabel-->
             </a>
           </div>
         </div>
@@ -686,22 +696,22 @@
     </section>
 
     <!-- ================= The flow, end to end ================= -->
-    <section class="flowline" aria-labelledby="fl-title">
+    <section data-cms-section="flowline" class="flowline" aria-labelledby="fl-title">
       <div class="wrap">
         <h2 id="fl-title" class="fl-title mono">One window for the whole life of a flow</h2>
         <ol class="fl-steps" id="fl-steps">
           <li class="fl-rail" aria-hidden="true"><i></i></li>
-          <li><a href="#flows"><span class="n mono">01</span><b>Read</b><span>Any flow as a diagram, with its variables and a search across every step.</span></a></li>
-          <li><a href="#edit"><span class="n mono">02</span><b>Edit</b><span>Steps from a catalog, forms and dynamic content. Saved only to DEV.</span></a></li>
-          <li><a href="#analysis"><span class="n mono">03</span><b>Grade</b><span>A to F on speed, resources, reliability and security, with the fix.</span></a></li>
-          <li><a href="#runs"><span class="n mono">04</span><b>Debug</b><span>The failed runs, the steps that broke and the parent that called them.</span></a></li>
-          <li><a href="#tasks"><span class="n mono">05</span><b>Review</b><span>Every edit as a diff, checked, then deployed back. Or reverted.</span></a></li>
+          <li data-cms-nav="flows"><a href="#flows"><span class="n mono">01</span><b>Read</b><span>Any flow as a diagram, with its variables and a search across every step.</span></a></li>
+          <li data-cms-nav="edit"><a href="#edit"><span class="n mono">02</span><b>Edit</b><span>Steps from a catalog, forms and dynamic content. Saved only to DEV.</span></a></li>
+          <li data-cms-nav="analysis"><a href="#analysis"><span class="n mono">03</span><b>Grade</b><span>A to F on speed, resources, reliability and security, with the fix.</span></a></li>
+          <li data-cms-nav="runs"><a href="#runs"><span class="n mono">04</span><b>Debug</b><span>The failed runs, the steps that broke and the parent that called them.</span></a></li>
+          <li data-cms-nav="tasks"><a href="#tasks"><span class="n mono">05</span><b>Review</b><span>Every edit as a diff, checked, then deployed back. Or reverted.</span></a></li>
         </ol>
       </div>
     </section>
 
     <!-- ================= Launch film ================= -->
-    <section class="reel" aria-label="Hexa Studio launch video">
+    <section data-cms-section="reel" class="reel" aria-label="Hexa Studio launch video">
       <div class="wrap">
         <figure class="reel-frame">
           <video id="reel" src="media/hexa-studio-promo.mp4" poster="media/hexa-studio-promo.jpg" muted playsinline loop preload="metadata" aria-label="Hexa Studio in 77 seconds: querying Dataverse in SQL with a preview before every write, reading and grading cloud flows, finding the failures hidden in Succeeded runs (a Catch that ran, a child flow that failed), reviewing flow and web resource changes as a diff, and building Dataverse Web API requests."></video>
@@ -715,7 +725,7 @@
     </section>
 
     <!-- ================= Flows (pinned story) ================= -->
-    <section class="story" id="flows" aria-labelledby="flows-title">
+    <section data-cms-section="flows" class="story" id="flows" aria-labelledby="flows-title">
       <div class="wrap">
         <div>
           <p class="kicker mono" data-rise>01 · Read</p>
@@ -737,7 +747,7 @@
     </section>
 
     <!-- ================= Edit in the Designer ================= -->
-    <section class="sec" id="edit" aria-labelledby="edit-title">
+    <section data-cms-section="edit" class="sec" id="edit" aria-labelledby="edit-title">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>02 · Edit<span class="k-pro">PRO</span></p>
@@ -803,7 +813,7 @@
     </section>
 
     <!-- ================= Analysis ================= -->
-    <section class="sec" id="analysis" aria-labelledby="ana-title" style="padding-top:0">
+    <section data-cms-section="analysis" class="sec" id="analysis" aria-labelledby="ana-title" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>03 · Grade</p>
@@ -842,7 +852,7 @@
     </section>
 
     <!-- ================= Flow runs ================= -->
-    <section class="sec runs-sec" id="runs" aria-labelledby="runs-title">
+    <section data-cms-section="runs" class="sec runs-sec" id="runs" aria-labelledby="runs-title">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>04 · Debug</p>
@@ -900,7 +910,7 @@
     </section>
 
     <!-- ================= Flow tasks ================= -->
-    <section class="sec" id="tasks" aria-labelledby="tasks-title" style="padding-top:0">
+    <section data-cms-section="tasks" class="sec" id="tasks" aria-labelledby="tasks-title" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>05 · Review<span class="k-pro">PRO</span></p>
@@ -966,7 +976,7 @@
     </section>
 
     <!-- ================= Other tools ================= -->
-    <section class="sec" id="tools" aria-labelledby="tools-title" style="padding-top:0">
+    <section data-cms-section="tools" class="sec" id="tools" aria-labelledby="tools-title" style="padding-top:0">
       <div class="wrap tools-grid">
         <div class="tools-head">
           <p class="kicker mono" data-rise>And the rest</p>
@@ -1031,7 +1041,7 @@
     </section>
 
     <!-- ================= Projects ================= -->
-    <section class="sec tenants-sec" aria-labelledby="t-title">
+    <section data-cms-section="tenants" class="sec tenants-sec" aria-labelledby="t-title">
       <div class="wrap">
         <h2 id="t-title" class="statement" data-rise>
           <span class="nw"><span class="tn" data-state><span class="sq"><b>C</b></span>Contoso</span>,</span>
@@ -1044,26 +1054,26 @@
     </section>
 
     <!-- ================= Pricing ================= -->
-    <section class="sec pricing" id="pricing" aria-labelledby="pricing-title" style="padding-top:0">
+    <section data-cms-section="pricing" class="sec pricing" id="pricing" aria-labelledby="pricing-title" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>Pricing</p>
-          <h2 id="pricing-title" data-rise>Free to read. Pro to dig in and ship.</h2>
-          <p class="sub" data-rise>Reading flows and their run history, SQL, web resources and the rest of your Dataverse toolbox are free for good. Pro is for editing and deploying flows, and for tracing failures across runs.</p>
+          <h2 id="pricing-title" data-rise><!--cms:pricing.heading-->Free to read. Pro to dig in and ship.<!--/cms:pricing.heading--></h2>
+          <!--cms:pricing.sub--><p class="sub" data-rise>Reading flows and their run history, SQL, web resources and the rest of your Dataverse toolbox are free for good. Pro is for editing and deploying flows, and for tracing failures across runs.</p><!--/cms:pricing.sub-->
         </div>
 
         <div class="plans">
           <article class="plan" aria-labelledby="plan-free" data-rise>
             <h3 id="plan-free">Free</h3>
-            <p class="for">For reading flows and everyday Dataverse work.</p>
-            <p class="price"><b><sup>$</sup>0</b><span>/ forever</span></p>
-            <p class="terms">No card, no sign-up</p>
+            <p class="for"><!--cms:pricing.free.tagline-->For reading flows and everyday Dataverse work.<!--/cms:pricing.free.tagline--></p>
+            <p class="price"><!--cms:pricing.free.price--><b><sup>$</sup>0</b><span>/ forever</span><!--/cms:pricing.free.price--></p>
+            <!--cms:pricing.free.terms--><p class="terms">No card, no sign-up</p><!--/cms:pricing.free.terms-->
             <a class="btn btn-ghost" data-download href="/download">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
-              Download for Windows
+              <!--cms:hero.ctaLabel-->Download for Windows<!--/cms:hero.ctaLabel-->
             </a>
             <ul class="feats">
-              <li class="lead-in">Includes</li>
+              <li class="lead-in">Includes</li><!--cms:pricing.free.features-->
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Read any flow</b> as a diagram, JSON or outline, with step search and child flows</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Run history</b> with errors and the steps of each run</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Analysis</b>: a grade from A to F and its findings</span></li>
@@ -1071,27 +1081,27 @@
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Web resources</b>: edit, create, publish and delete, with a diff first</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>REST builder</b>, with code to copy</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span>Plug-in traces, system jobs, plug-in steps, dependencies, security and desktop flows</span></li>
-              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>2 projects</b>, one per tenant</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>2 projects</b>, one per tenant</span></li><!--/cms:pricing.free.features-->
             </ul>
           </article>
 
           <article class="plan pro" aria-labelledby="plan-pro" data-rise>
-            <h3 id="plan-pro">Pro <span class="badge">For people who ship flows</span></h3>
-            <p class="for">For editing and deploying flows and tracing failures across runs, across every client.</p>
-            <p class="price"><b><sup>$</sup>9.99</b><span>/ month</span></p>
-            <p class="terms">Per person · prices in USD</p>
-            <a class="btn btn-primary" href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">
-              Get Pro
+            <h3 id="plan-pro">Pro<!--cms:pricing.pro.badge--> <span class="badge">For people who ship flows</span><!--/cms:pricing.pro.badge--></h3>
+            <p class="for"><!--cms:pricing.pro.tagline-->For editing and deploying flows and tracing failures across runs, across every client.<!--/cms:pricing.pro.tagline--></p>
+            <p class="price"><!--cms:pricing.pro.price--><b><sup>$</sup>9.99</b><span>/ month</span><!--/cms:pricing.pro.price--></p>
+            <!--cms:pricing.pro.terms--><p class="terms">Per person · prices in USD</p><!--/cms:pricing.pro.terms-->
+            <a class="btn btn-primary" href="<!--cms:pricing.pro.ctaUrl-->mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro<!--/cms:pricing.pro.ctaUrl-->">
+              <!--cms:pricing.pro.ctaLabel-->Get Pro<!--/cms:pricing.pro.ctaLabel-->
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
             </a>
-            <p class="note">Online checkout is on its way. Until then, <a href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">email us</a> for a key.</p>
+            <!--cms:pricing.pro.note--><p class="note">Online checkout is on its way. Until then, <a href="mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro">email us</a> for a key.</p><!--/cms:pricing.pro.note-->
             <ul class="feats">
-              <li class="lead-in">Everything in Free, plus</li>
+              <li class="lead-in">Everything in Free, plus</li><!--cms:pricing.pro.features-->
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Edit flows</b> in the Designer, validate, review the diff and save to DEV</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Find in run data</b>: search a value across runs, see where a Catch ran</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Parent and child runs</b>, and flow runs across the environment</span></li>
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Tasks</b>: check flows out, compare and deploy back to DEV</span></li>
-              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Unlimited projects</b> for every tenant you work in</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Unlimited projects</b> for every tenant you work in</span></li><!--/cms:pricing.pro.features-->
             </ul>
           </article>
         </div>
@@ -1101,7 +1111,7 @@
           <table class="cmp">
             <colgroup><col /><col class="c-plan" /><col class="c-plan" /></colgroup>
             <thead>
-              <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Free<small>$0</small></th><th scope="col" class="pro-col">Pro<small>$9.99 / month</small></th></tr>
+              <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Free<small><!--cms:pricing.free.short-->$0<!--/cms:pricing.free.short--></small></th><th scope="col" class="pro-col">Pro<small><!--cms:pricing.pro.short-->$9.99 / month<!--/cms:pricing.pro.short--></small></th></tr>
             </thead>
             <tbody>
               <tr class="grp"><th colspan="3" scope="colgroup">Cloud flows</th></tr>
@@ -1152,7 +1162,7 @@
     </section>
 
     <!-- ================= About ================= -->
-    <section class="sec" id="about" aria-labelledby="about-title">
+    <section data-cms-section="about" class="sec" id="about" aria-labelledby="about-title">
       <div class="wrap about-grid">
         <div>
           <h2 id="about-title" data-rise>About Hexa Studio</h2>
@@ -1177,7 +1187,7 @@
         <div class="cta" data-rise>
           <a class="btn btn-primary" data-download href="/download">
             <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
-            Download for Windows
+            <!--cms:hero.ctaLabel-->Download for Windows<!--/cms:hero.ctaLabel-->
           </a>
         </div>
         <div class="meta" data-meta data-rise>Latest release on GitHub</div>

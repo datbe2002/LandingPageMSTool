@@ -1,3 +1,10 @@
 {
-  "rewrites": [{ "source": "/download", "destination": "/api/download" }]
+  "rewrites": [
+    { "source": "/", "destination": "/api/page" },
+    { "source": "/index.html", "destination": "/api/page" },
+    { "source": "/download", "destination": "/api/download" }
+  ],
+  "functions": {
+    "api/page.js": { "includeFiles": "page.html" }
+  }
 }
