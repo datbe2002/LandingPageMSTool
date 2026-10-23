@@ -30,13 +30,50 @@ test("applies the hero, the announcement and the pricing", () => {
   assert.ok(html.includes('<h1 id="hero-title" data-split>Ship flows faster</h1>'));
   assert.equal(html.split("Get it free").length - 1, 4);
   assert.ok(!html.includes("Download for Windows"));
-  assert.ok(html.includes("<b><sup>$</sup>12</b><span>/ year</span>"));
-  assert.ok(html.includes("<small>$12 / year</small>"));
+  // No billing in the config: annual billing as page.html is written (20% off).
+  assert.ok(html.includes('<span class="pm"><b><sup>$</sup>12</b><span class="per">/ year</span></span><span class="pa"><b><sup>$</sup>9.60</b>'));
+  assert.ok(html.includes('<small><span class="pm">$12 / year</span><span class="pa">$9.60 / year</span></small>'));
   assert.ok(html.includes('href="https://buy.example/pro"'));
-  assert.ok(!html.includes('<p class="note">'));
+  assert.ok(!html.includes("for a key.</p>"), "the Pro note is gone");
+  assert.ok(html.includes('<b class="quote">Custom</b>'), "no Enterprise in the config: the card as written");
   assert.ok(!html.includes('class="badge"'));
   assert.ok(html.includes("<span><b>Three</b></span>"));
   assert.ok(!html.includes("<b>Edit flows</b>"));
+});
+
+test("annual billing: both prices, the discount on the switch, the period shown first", () => {
+  const plan = (price) => ({ tagline: "t", price, period: "month", terms: "", features: ["x"] });
+  const pricing = (billing, enterprise) => ({
+    heading: "h",
+    sub: "",
+    billing,
+    free: plan("0"),
+    pro: { ...plan("9.99"), badge: "", ctaLabel: "Buy", ctaUrl: "https://buy.example", note: "" },
+    enterprise,
+  });
+  const ent = { enabled: true, badge: "Teams", tagline: "For teams", price: "", priceLabel: "Ask us", period: "month", terms: "", features: ["**All** of it"], ctaLabel: "Talk", ctaUrl: "mailto:sales@hexa.example", note: "" };
+
+  let html = render(page, { pricing: pricing({ annual: true, annualDiscount: 25, defaultPeriod: "monthly" }, ent) });
+  assert.ok(html.includes('data-billing="monthly"'));
+  assert.ok(html.includes('<span class="save">Save 25%</span>'));
+  assert.ok(html.includes('data-period="monthly" aria-pressed="true"') && html.includes('data-period="annually" aria-pressed="false"'));
+  // 9.99 × 12 × 0.75 = 89.91 a year, 7.49 a month
+  assert.ok(html.includes('<span class="pa"><b><sup>$</sup>7.49</b><span class="per">/ month</span></span>'));
+  assert.ok(html.includes('<span class="pa">$89.91 billed yearly</span>'));
+  assert.ok(html.includes('<b class="quote">Ask us</b>') && html.includes("<small>Ask us</small>"));
+  assert.ok(html.includes('<h3 id="plan-ent">Enterprise <span class="badge">Teams</span></h3>'));
+  assert.ok(html.includes('href="mailto:sales@hexa.example"') && html.includes("<span><b>All</b> of it</span>"));
+  assert.ok(!/data-cms-plan="enterprise" hidden/.test(html));
+
+  html = render(page, { pricing: pricing({ annual: true, annualDiscount: 0, defaultPeriod: "annually" }, { ...ent, price: "30" }) });
+  assert.ok(html.includes('data-billing="annually"') && !html.includes('class="save"'));
+  assert.ok(html.includes('<span class="pa">$360 billed yearly</span>'));
+
+  html = render(page, { pricing: pricing({ annual: false, annualDiscount: 20, defaultPeriod: "annually" }, { ...ent, enabled: false }) });
+  assert.ok(html.includes('data-billing="monthly"') && !html.includes('class="billing"') && !html.includes('class="billed"'));
+  assert.ok(html.includes('<p class="price"><b><sup>$</sup>9.99</b><span class="per">/ month</span></p>'));
+  assert.ok(/<article class="plan ent" aria-labelledby="plan-ent" data-cms-plan="enterprise" hidden/.test(html));
+  assert.ok(/<th scope="col" data-cms-plan="enterprise" hidden>/.test(html));
 });
 
 test("hides switched-off sections and their links, keeping the elements", () => {

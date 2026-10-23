@@ -258,7 +258,8 @@
     /* ---------- Pricing: two plan cards, then the full comparison and a short FAQ ---------- */
     .pricing .sec-head { margin-inline: auto; text-align: center; }
     .pricing .sec-head .sub { margin-inline: auto; }
-    .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+    .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+    .plans:has(> [data-cms-plan][hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 960px; }
     .plan { position: relative; display: flex; flex-direction: column; padding: 32px; border-radius: var(--r-lg); background: var(--s1); border: 1px solid var(--line-strong); box-shadow: var(--shadow-md); }
     .plan.pro { border-color: color-mix(in oklab, var(--brand) 55%, var(--line-strong)); background: radial-gradient(90% 60% at 50% 0%, color-mix(in oklab, var(--brand) 11%, transparent), transparent 70%), var(--s1); box-shadow: 0 0 0 1px color-mix(in oklab, var(--brand) 22%, transparent), var(--shadow-lg); }
     .plan h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
@@ -268,7 +269,21 @@
     .price { display: flex; align-items: baseline; gap: 8px; margin: 28px 0 0; }
     .price b { font-size: 56px; line-height: 1; font-weight: 620; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
     .price b sup { font-size: .45em; font-weight: 550; vertical-align: .95em; margin-right: 2px; letter-spacing: 0; }
-    .price span { color: var(--muted); font: 14px var(--mono); }
+    .price .per { color: var(--muted); font: 14px var(--mono); }
+    .price .pm, .price .pa { display: inline-flex; align-items: baseline; gap: 8px; }
+    .price b.quote { font-size: 44px; line-height: 56px; letter-spacing: -.035em; }
+    /* Monthly / Annually: api/page.js renders both prices, the switch shows one (data-billing on the section). */
+    [data-billing="monthly"] .pa, [data-billing="annually"] .pm { display: none !important; }
+    .plan .billed { margin: 6px 0 0; min-height: 1.5em; color: var(--muted); font-size: 13.5px; }
+    .billing { display: none; justify-content: center; margin: 0 auto 32px; }
+    .js .billing { display: flex; }
+    .billing .seg { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--s1); border: 1px solid var(--line-strong); }
+    .billing button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: 550 14px/1 var(--sans); cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease); }
+    .billing button:hover { color: var(--fg); }
+    .billing button[aria-pressed="true"] { background: var(--s3); color: var(--fg); }
+    .billing .save { padding: 3px 8px; border-radius: 999px; background: color-mix(in oklab, var(--success) 16%, transparent); color: var(--success); font: 600 11.5px/1 var(--sans); }
+    /* Enterprise can be switched off in the admin (api/page.js adds hidden to its card and column). */
+    [data-cms-plan][hidden] { display: none !important; }
     .plan .terms { margin: 10px 0 0; min-height: 1.6em; color: var(--subtle); font: 13px var(--mono); }
     .plan .btn { width: 100%; margin-top: 24px; }
     .btn-ghost { background: var(--s2); color: var(--fg); border-color: var(--line-strong); }
@@ -338,7 +353,7 @@
     .k-pro { display: inline-block; margin-left: 8px; padding: 3px 7px; border-radius: 5px; font: 600 10.5px/1 var(--sans); letter-spacing: .02em; vertical-align: 2px; background: color-mix(in oklab, var(--brand) 16%, transparent); color: var(--brand); }
 
     @media (max-width: 767px) {
-      .plans { grid-template-columns: minmax(0, 1fr); }
+      .plans, .plans:has(> [data-cms-plan][hidden]) { grid-template-columns: minmax(0, 1fr); }
       .plan { padding: 24px; }
       .price b { font-size: 48px; }
       .cmp-wrap, .faq { margin-top: 72px; }
@@ -1077,7 +1092,7 @@
     </section>
 
     <!-- ================= Pricing ================= -->
-    <section data-cms-section="pricing" class="sec pricing" id="pricing" aria-labelledby="pricing-title" style="padding-top:0">
+    <section data-cms-section="pricing" class="sec pricing" id="pricing" aria-labelledby="pricing-title" data-billing="<!--cms:pricing.billing.default-->annually<!--/cms:pricing.billing.default-->" style="padding-top:0">
       <div class="wrap">
         <div class="sec-head">
           <p class="kicker mono" data-rise>Pricing</p>
@@ -1085,11 +1100,13 @@
           <!--cms:pricing.sub--><p class="sub" data-rise>Reading flows and their run history, SQL, web resources and the rest of your Dataverse toolbox are free for good. Pro is for editing and deploying flows, and for tracing failures across runs.</p><!--/cms:pricing.sub-->
         </div>
 
+        <!--cms:pricing.billing.switch--><div class="billing" data-rise><div class="seg" role="group" aria-label="Billing period"><button type="button" data-period="monthly" aria-pressed="false">Monthly</button><button type="button" data-period="annually" aria-pressed="true">Annually <span class="save">Save 20%</span></button></div></div><!--/cms:pricing.billing.switch-->
         <div class="plans">
           <article class="plan" aria-labelledby="plan-free" data-rise>
             <h3 id="plan-free">Free</h3>
             <p class="for"><!--cms:pricing.free.tagline-->For reading flows and everyday Dataverse work.<!--/cms:pricing.free.tagline--></p>
-            <p class="price"><!--cms:pricing.free.price--><b><sup>$</sup>0</b><span>/ forever</span><!--/cms:pricing.free.price--></p>
+            <p class="price"><!--cms:pricing.free.price--><b><sup>$</sup>0</b><span class="per">/ forever</span><!--/cms:pricing.free.price--></p>
+            <!--cms:pricing.free.billed--><p class="billed" aria-hidden="true"></p><!--/cms:pricing.free.billed-->
             <!--cms:pricing.free.terms--><p class="terms">No card, no sign-up</p><!--/cms:pricing.free.terms-->
             <a class="btn btn-ghost" data-download href="/download">
               <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>
@@ -1111,7 +1128,8 @@
           <article class="plan pro" aria-labelledby="plan-pro" data-rise>
             <h3 id="plan-pro">Pro<!--cms:pricing.pro.badge--> <span class="badge">For people who ship flows</span><!--/cms:pricing.pro.badge--></h3>
             <p class="for"><!--cms:pricing.pro.tagline-->For editing and deploying flows and tracing failures across runs, across every client.<!--/cms:pricing.pro.tagline--></p>
-            <p class="price"><!--cms:pricing.pro.price--><b><sup>$</sup>9.99</b><span>/ month</span><!--/cms:pricing.pro.price--></p>
+            <p class="price"><!--cms:pricing.pro.price--><span class="pm"><b><sup>$</sup>9.99</b><span class="per">/ month</span></span><span class="pa"><b><sup>$</sup>7.99</b><span class="per">/ month</span></span><!--/cms:pricing.pro.price--></p>
+            <!--cms:pricing.pro.billed--><p class="billed"><span class="pm">Billed monthly</span><span class="pa">$95.90 billed yearly</span></p><!--/cms:pricing.pro.billed-->
             <!--cms:pricing.pro.terms--><p class="terms">Per person · prices in USD</p><!--/cms:pricing.pro.terms-->
             <a class="btn btn-primary" href="<!--cms:pricing.pro.ctaUrl-->mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Pro<!--/cms:pricing.pro.ctaUrl-->">
               <!--cms:pricing.pro.ctaLabel-->Get Pro<!--/cms:pricing.pro.ctaLabel-->
@@ -1127,41 +1145,65 @@
               <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Unlimited projects</b> for every tenant you work in</span></li><!--/cms:pricing.pro.features-->
             </ul>
           </article>
+
+          <article class="plan ent" aria-labelledby="plan-ent" data-cms-plan="enterprise" data-rise>
+            <h3 id="plan-ent">Enterprise<!--cms:pricing.enterprise.badge--><!--/cms:pricing.enterprise.badge--></h3>
+            <p class="for"><!--cms:pricing.enterprise.tagline-->For teams and partners rolling Hexa Studio out to many people at once.<!--/cms:pricing.enterprise.tagline--></p>
+            <p class="price"><!--cms:pricing.enterprise.price--><b class="quote">Custom</b><!--/cms:pricing.enterprise.price--></p>
+            <!--cms:pricing.enterprise.billed--><p class="billed" aria-hidden="true"></p><!--/cms:pricing.enterprise.billed-->
+            <!--cms:pricing.enterprise.terms--><p class="terms">Volume pricing · invoiced</p><!--/cms:pricing.enterprise.terms-->
+            <a class="btn btn-ghost" href="<!--cms:pricing.enterprise.ctaUrl-->mailto:founder@hexastudio.com.vn?subject=Hexa%20Studio%20Enterprise<!--/cms:pricing.enterprise.ctaUrl-->">
+              <!--cms:pricing.enterprise.ctaLabel-->Contact us<!--/cms:pricing.enterprise.ctaLabel-->
+              <svg class="ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg>
+            </a>
+            <!--cms:pricing.enterprise.note--><p class="note">Tell us how many people need it and we'll send a quote.</p><!--/cms:pricing.enterprise.note-->
+            <ul class="feats">
+              <li class="lead-in">Everything in Pro, plus</li><!--cms:pricing.enterprise.features-->
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Volume pricing</b> for the whole team</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Invoice and purchase order</b> billing</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Priority support</b> by email</span></li>
+              <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg><span><b>Onboarding call</b> for your team</span></li><!--/cms:pricing.enterprise.features-->
+            </ul>
+          </article>
         </div>
 
         <div class="cmp-wrap" data-rise>
           <h3>Compare plans</h3>
           <table class="cmp">
-            <colgroup><col /><col class="c-plan" /><col class="c-plan" /></colgroup>
+            <colgroup><col /><col class="c-plan" /><col class="c-plan" /><col class="c-plan" data-cms-plan="enterprise" /></colgroup>
             <thead>
-              <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Free<small><!--cms:pricing.free.short-->$0<!--/cms:pricing.free.short--></small></th><th scope="col" class="pro-col">Pro<small><!--cms:pricing.pro.short-->$9.99 / month<!--/cms:pricing.pro.short--></small></th></tr>
+              <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Free<small><!--cms:pricing.free.short-->$0<!--/cms:pricing.free.short--></small></th><th scope="col" class="pro-col">Pro<small><!--cms:pricing.pro.short--><span class="pm">$9.99 / month</span><span class="pa">$7.99 / month</span><!--/cms:pricing.pro.short--></small></th><th scope="col" data-cms-plan="enterprise">Enterprise<small><!--cms:pricing.enterprise.short-->Custom<!--/cms:pricing.enterprise.short--></small></th></tr>
             </thead>
             <tbody>
-              <tr class="grp"><th colspan="3" scope="colgroup">Cloud flows</th></tr>
-              <tr><th scope="row">Read as a diagram, JSON or outline</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Search steps and variables, open child flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Analysis<small>A grade from A to F and its findings</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Edit in the Designer<small>Validate, review the diff, save to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Tasks<small>Check flows out, compare, deploy back to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Cloud flows</th></tr>
+              <tr><th scope="row">Read as a diagram, JSON or outline</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Search steps and variables, open child flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Analysis<small>A grade from A to F and its findings</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Edit in the Designer<small>Validate, review the diff, save to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Tasks<small>Check flows out, compare, deploy back to DEV</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
 
-              <tr class="grp"><th colspan="3" scope="colgroup">Runs</th></tr>
-              <tr><th scope="row">Run history, errors and the steps of a run</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Find in run data<small>Search a value across runs, see where a Catch ran</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Parent and child runs</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Flow runs across the environment</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Runs</th></tr>
+              <tr><th scope="row">Run history, errors and the steps of a run</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Find in run data<small>Search a value across runs, see where a Catch ran</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Parent and child runs</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Flow runs across the environment</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
 
-              <tr class="grp"><th colspan="3" scope="colgroup">Data</th></tr>
-              <tr><th scope="row">SQL queries and writes<small>SELECT, INSERT, UPDATE and DELETE, with a preview before every write</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">REST builder<small>Run reads, copy the request as code</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Data</th></tr>
+              <tr><th scope="row">SQL queries and writes<small>SELECT, INSERT, UPDATE and DELETE, with a preview before every write</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">REST builder<small>Run reads, copy the request as code</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
 
-              <tr class="grp"><th colspan="3" scope="colgroup">Dataverse tools</th></tr>
-              <tr><th scope="row">Plug-in traces, system jobs, plug-in steps</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Dependencies, security and desktop flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
-              <tr><th scope="row">Web resources<small>Edit, create, publish and delete, with a diff first</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Dataverse tools</th></tr>
+              <tr><th scope="row">Plug-in traces, system jobs, plug-in steps</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Dependencies, security and desktop flows</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr><th scope="row">Web resources<small>Edit, create, publish and delete, with a diff first</small></th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
 
-              <tr class="grp"><th colspan="3" scope="colgroup">Projects</th></tr>
-              <tr><th scope="row">Projects (one per tenant)</th><td>2</td><td class="pro-col">Unlimited</td></tr>
-              <tr><th scope="row">Automatic updates</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr class="grp"><th colspan="4" scope="colgroup">Projects</th></tr>
+              <tr><th scope="row">Projects (one per tenant)</th><td>2</td><td class="pro-col">Unlimited</td><td data-cms-plan="enterprise">Unlimited</td></tr>
+              <tr><th scope="row">Automatic updates</th><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y pro-col"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td><td class="y" data-cms-plan="enterprise"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+
+              <tr class="grp" data-cms-plan="enterprise"><th colspan="4" scope="colgroup">For teams</th></tr>
+              <tr data-cms-plan="enterprise"><th scope="row">Volume pricing and invoicing<small>Invoice and purchase order billing</small></th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="pro-col"><span class="n" role="img" aria-label="Not included"></span></td><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
+              <tr data-cms-plan="enterprise"><th scope="row">Priority support and onboarding</th><td><span class="n" role="img" aria-label="Not included"></span></td><td class="pro-col"><span class="n" role="img" aria-label="Not included"></span></td><td class="y"><svg viewBox="0 0 256 256" fill="currentColor" role="img" aria-label="Included"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></td></tr>
             </tbody>
           </table>
         </div>
@@ -1359,6 +1401,19 @@
         });
       })
       .catch(function () {});
+
+    /* ---------------- Pricing: Monthly / Annually (api/page.js puts both prices on the page) ---------------- */
+    (function () {
+      var sec = document.getElementById("pricing"), sw = sec && sec.querySelector(".billing");
+      if (!sw) return;
+      var buttons = sw.querySelectorAll("button[data-period]");
+      function show(period) {
+        sec.setAttribute("data-billing", period);
+        buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-period") === period)); });
+      }
+      buttons.forEach(function (b) { b.addEventListener("click", function () { show(b.getAttribute("data-period")); }); });
+      show(sec.getAttribute("data-billing") === "monthly" ? "monthly" : "annually");
+    })();
 
     /* ---------------- Mobile menu (before the GSAP guard: works without the CDN) ---------------- */
     var topBar = document.getElementById("top"), menuBtn = topBar.querySelector(".menu-btn");

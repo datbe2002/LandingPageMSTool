@@ -46,15 +46,59 @@ function fill(html, key, fn) {
 /** Drops the markers that are left, keeping what they wrap. */
 const unmark = (html) => html.replace(/<!--\/?cms:[\w.]+-->/g, "");
 
-function renderPlan(html, name, plan, checkIcon) {
+// What page.html is written with, for a config saved before billing existed.
+const BUILT_IN_BILLING = { annual: true, annualDiscount: 20, defaultPeriod: "annually" };
+
+const PRICE = /^\d{1,5}(\.\d{1,2})?$/;
+const money = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
+
+/** A monthly price billed annually, `discount` percent off: per month and per year (shared/site.ts does the same sum). */
+function annualPrice(monthly, discount) {
+  const year = Math.round(Number(monthly) * 12 * (100 - discount)) / 100;
+  return { perMonth: money(Math.round((year / 12) * 100) / 100), perYear: money(year) };
+}
+
+/** The billing the config asks for, or null when it's missing or makes no sense. */
+function readBilling(b) {
+  if (!b || typeof b !== "object") return null;
+  const d = b.annualDiscount;
+  if (!Number.isInteger(d) || d < 0 || d > 90) return null;
+  return { annual: b.annual === true, annualDiscount: d, defaultPeriod: b.annual === true && b.defaultPeriod === "monthly" ? "monthly" : "annually" };
+}
+
+/**
+ * A price, its "Billed …" line and the comparison table's short form. A paid plan billed
+ * annually gets both prices (class pm / pa); the section's Monthly / Annually switch shows one.
+ */
+function priceParts(price, period, billing) {
+  const per = `<span class="per">/ ${esc(period)}</span>`;
+  const monthly = `<b><sup>$</sup>${esc(price)}</b>${per}`;
+  if (Number(price) === 0) return { price: monthly, billed: billing.annual ? '<p class="billed" aria-hidden="true"></p>' : "", short: `$${esc(price)}` };
+  if (!billing.annual) return { price: monthly, billed: "", short: `$${esc(price)} / ${esc(period)}` };
+  const a = annualPrice(price, billing.annualDiscount);
+  return {
+    price: `<span class="pm">${monthly}</span><span class="pa"><b><sup>$</sup>${a.perMonth}</b>${per}</span>`,
+    billed: `<p class="billed"><span class="pm">Billed monthly</span><span class="pa">$${a.perYear} billed yearly</span></p>`,
+    short: `<span class="pm">$${esc(price)} / ${esc(period)}</span><span class="pa">$${a.perMonth} / ${esc(period)}</span>`,
+  };
+}
+
+function renderPlan(html, name, plan, checkIcon, billing) {
   if (!plan || typeof plan !== "object") return html;
   html = fill(html, `pricing.${name}.tagline`, () => (str(plan.tagline) !== null ? esc(plan.tagline) : null));
   const price = str(plan.price);
   const period = str(plan.period);
-  if (price !== null && period !== null) {
-    html = fill(html, `pricing.${name}.price`, () => `<b><sup>$</sup>${esc(price)}</b><span>/ ${esc(period)}</span>`);
+  if (price !== null && period !== null && PRICE.test(price.trim())) {
+    const parts = priceParts(price.trim(), period, billing);
+    html = fill(html, `pricing.${name}.price`, () => parts.price);
+    html = fill(html, `pricing.${name}.billed`, () => parts.billed);
     // The comparison table's header: "$0" for a free plan, "$9.99 / month" otherwise.
-    html = fill(html, `pricing.${name}.short`, () => (Number(price) === 0 ? `$${esc(price)}` : `$${esc(price)} / ${esc(period)}`));
+    html = fill(html, `pricing.${name}.short`, () => parts.short);
+  } else if (name === "enterprise" && str(plan.priceLabel) && !(price || "").trim()) {
+    // No price: a quote ("Custom").
+    html = fill(html, `pricing.${name}.price`, () => `<b class="quote">${esc(plan.priceLabel)}</b>`);
+    html = fill(html, `pricing.${name}.billed`, () => (billing.annual ? '<p class="billed" aria-hidden="true"></p>' : ""));
+    html = fill(html, `pricing.${name}.short`, () => esc(plan.priceLabel));
   }
   html = fill(html, `pricing.${name}.terms`, () => (str(plan.terms) === null ? null : plan.terms.trim() ? `<p class="terms">${esc(plan.terms)}</p>` : ""));
   if (Array.isArray(plan.features) && checkIcon) {
@@ -114,8 +158,27 @@ function render(template, config, { preview = false } = {}) {
   const checkIcon = (/<!--cms:pricing\.free\.features-->[\s\S]*?<li>(<svg[\s\S]*?<\/svg>)/.exec(html) || [])[1];
   html = fill(html, "pricing.heading", () => (str(pricing.heading) ? esc(pricing.heading) : null));
   html = fill(html, "pricing.sub", () => (str(pricing.sub) === null ? null : pricing.sub.trim() ? `<p class="sub" data-rise>${esc(pricing.sub)}</p>` : ""));
-  html = renderPlan(html, "free", pricing.free, checkIcon);
-  html = renderPlan(html, "pro", pricing.pro, checkIcon);
+  const billing = readBilling(pricing.billing) || BUILT_IN_BILLING;
+  // Without annual billing there is no switch and only the monthly prices show.
+  html = fill(html, "pricing.billing.default", () => (billing.annual ? billing.defaultPeriod : "monthly"));
+  html = fill(html, "pricing.billing.switch", (inner) =>
+    !billing.annual
+      ? ""
+      : inner
+          .replace(/ <span class="save">[^<]*<\/span>/, billing.annualDiscount > 0 ? ` <span class="save">Save ${billing.annualDiscount}%</span>` : "")
+          .replace(/(data-period="(monthly|annually)" aria-pressed=")(true|false)/g, (w, start, period) => start + String(period === billing.defaultPeriod)),
+  );
+  html = renderPlan(html, "free", pricing.free, checkIcon, billing);
+  html = renderPlan(html, "pro", pricing.pro, checkIcon, billing);
+  const ent = pricing.enterprise;
+  if (ent && typeof ent === "object") {
+    if (ent.enabled === false) html = html.replace(/(data-cms-plan="enterprise")/g, "$1 hidden");
+    html = renderPlan(html, "enterprise", ent, checkIcon, billing);
+    html = fill(html, "pricing.enterprise.badge", () => (str(ent.badge) === null ? null : ent.badge.trim() ? ` <span class="badge">${esc(ent.badge)}</span>` : ""));
+    html = fill(html, "pricing.enterprise.ctaLabel", () => (str(ent.ctaLabel) ? esc(ent.ctaLabel) : null));
+    html = fill(html, "pricing.enterprise.ctaUrl", () => (safeUrl(ent.ctaUrl) ? esc(safeUrl(ent.ctaUrl)) : null));
+    html = fill(html, "pricing.enterprise.note", () => (str(ent.note) === null ? null : ent.note.trim() ? `<p class="note">${inline(ent.note.trim())}</p>` : ""));
+  }
   const pro = pricing.pro || {};
   html = fill(html, "pricing.pro.badge", () => (str(pro.badge) === null ? null : pro.badge.trim() ? ` <span class="badge">${esc(pro.badge)}</span>` : ""));
   html = fill(html, "pricing.pro.ctaLabel", () => (str(pro.ctaLabel) ? esc(pro.ctaLabel) : null));
