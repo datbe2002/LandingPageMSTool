@@ -9,12 +9,13 @@ const site = process.argv.find((a) => a.startsWith("--site="));
 if (site) process.env.SITE_CONFIG_URL = site.slice("--site=".length);
 const page = require("../api/page");
 const download = require("../api/download");
+const changelog = require("../api/changelog");
 
 const ROOT = join(__dirname, "..");
 const PORT = Number(process.argv.slice(2).find((a) => /^\d+$/.test(a))) || 5510;
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".mp4": "video/mp4", ".jpg": "image/jpeg", ".png": "image/png", ".txt": "text/plain" };
 
-/** Just enough of Vercel's req/res for the two functions. */
+/** Just enough of Vercel's req/res for the functions. */
 function vercelish(req, res) {
   const url = new URL(req.url, "http://localhost");
   req.query = Object.fromEntries(url.searchParams);
@@ -28,6 +29,7 @@ http
     try {
       if (url.pathname === "/" || url.pathname === "/index.html") return await page(req, res);
       if (url.pathname === "/download" || url.pathname === "/api/download") return await download(req, res);
+      if (url.pathname === "/changelog" || url.pathname === "/api/changelog") return await changelog(req, res);
       const file = normalize(join(ROOT, decodeURIComponent(url.pathname)));
       if (!file.startsWith(ROOT) || /[\\/](api|scripts|tests|\.git)[\\/]/.test(file.slice(ROOT.length))) throw Object.assign(new Error("nope"), { code: "ENOENT" });
       const body = await readFile(file);

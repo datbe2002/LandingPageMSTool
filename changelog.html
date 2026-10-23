@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Changelog · Hexa Studio</title>
+  <meta name="description" content="What's new in every Hexa Studio release: new tools, changes and fixes, newest first." />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="legal.css" />
+  <style>
+    /* Changelog: one section per version, the versions as the table of contents. */
+    .toc .rels { display: grid; gap: 2px; max-height: calc(100vh - var(--nav-h) - 140px); overflow-y: auto; }
+    .doc .toc .rels a { color: var(--muted); }
+    .doc .toc .rels a:hover { color: var(--fg); }
+    .toc .rels a { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-family: var(--mono); }
+    .toc .rels small { color: var(--subtle); font-size: 12px; white-space: nowrap; }
+    .doc .lede { margin: 20px 0 0; font-size: 18px; }
+    .doc .rel { margin-top: 0; padding: 40px 0; border-top: 1px solid var(--line); }
+    .doc .rel:first-of-type { margin-top: 40px; }
+    .rel > header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 20px; }
+    .doc .rel h2 { margin: 0; font: 600 26px/1.2 var(--mono); letter-spacing: -.02em; }
+    .doc .rel h2 a { color: var(--fg); text-decoration: none; }
+    .doc .rel h2 a:hover { color: var(--brand); }
+    .tag.latest { background: color-mix(in oklab, var(--brand) 16%, transparent); color: var(--brand); border: 1px solid color-mix(in oklab, var(--brand) 30%, transparent); }
+    .rel .when { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 0; color: var(--subtle); font: 13px var(--mono); }
+    .rel .when a { color: var(--muted); }
+    .notes h3 { margin: 28px 0 10px; font-size: 16px; }
+    .notes h3:first-child { margin-top: 0; }
+    .notes h3 small { color: var(--subtle); font-weight: 400; font-size: 14px; }
+    .notes ul ul { margin: 6px 0 0; }
+    .notes > :last-child { margin-bottom: 0; }
+    /* Narrow: the versions become one row of chips that scrolls sideways, above the notes. */
+    @media (max-width: 860px) {
+      .toc { min-width: 0; }
+      .toc .rels { grid-column: 1 / -1; display: flex; gap: 8px; max-height: none; overflow-x: auto; margin: 0 -20px; padding: 0 20px 6px; scrollbar-width: none; }
+      .toc .rels::-webkit-scrollbar { display: none; }
+      .toc .rels a { flex: none; min-height: 40px; align-items: center; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 999px; }
+      .toc .rels small { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="Hexa Studio home">
+        <img src="favicon.svg" width="26" height="26" alt="" />
+        Hexa Studio
+      </a>
+      <div class="navset">
+        <a class="back" href="/">Back to the product</a>
+        <a class="btn btn-primary btn-sm" href="/download">Download for Windows</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="doc">
+    <div class="wrap doc-grid">
+      <nav class="toc" aria-label="Releases">
+        <span class="label">Releases</span>
+        <div class="rels"><!--toc-->
+        </div>
+      </nav>
+
+      <article>
+        <span class="kicker">Changelog</span>
+        <h1>What's new in Hexa Studio</h1>
+        <p class="updated">Every release, newest first<!--latest--></p>
+        <p class="lede">Hexa Studio updates itself: look for <strong>Restart to update</strong> in the sidebar. New here? <a href="/download">Download the latest version</a>.</p>
+<!--releases-->
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span class="brand"><img src="favicon.svg" width="18" height="18" alt="" />Hexa Studio</span>
+      <span class="sp"></span>
+      <a href="https://github.com/datbe2002/hexa-studio-releases/releases">Releases</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html">Security</a>
+      <a href="mailto:founder@hexastudio.com.vn">founder@hexastudio.com.vn</a>
+    </div>
+  </footer>
+</body>
+</html>

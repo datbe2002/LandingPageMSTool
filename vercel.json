@@ -1,13 +1,16 @@
 {
   "redirects": [
-    { "source": "/page.html", "destination": "/", "permanent": true }
+    { "source": "/page.html", "destination": "/", "permanent": true },
+    { "source": "/changelog.html", "destination": "/changelog", "permanent": true }
   ],
   "rewrites": [
     { "source": "/", "destination": "/api/page" },
     { "source": "/index.html", "destination": "/api/page" },
-    { "source": "/download", "destination": "/api/download" }
+    { "source": "/download", "destination": "/api/download" },
+    { "source": "/changelog", "destination": "/api/changelog" }
   ],
   "functions": {
-    "api/page.js": { "includeFiles": "page.html" }
+    "api/page.js": { "includeFiles": "page.html" },
+    "api/changelog.js": { "includeFiles": "changelog.html" }
   }
 }

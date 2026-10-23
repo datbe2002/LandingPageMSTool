@@ -16,6 +16,20 @@ release needs no change here. It avoids the GitHub API, which allows only 60
 requests an hour per IP. `/api/download?format=json` gives the page the version
 and size. If GitHub can't be reached, the buttons link to the Releases page.
 
+## Changelog and Recent releases
+
+`/changelog` (`api/changelog.js`, template `changelog.html`) lists every version's release
+notes, newest first; the page's **Recent releases** section shows the newest three from
+`/api/changelog?format=json`, each linking to its notes. Nothing to edit here for a new
+release: the app's release workflow publishes `.github/release-notes.md` as each GitHub
+release's body, and that file keeps a `### What's new in x.y.z` section for every version,
+so the newest body is the whole changelog (`api/_lib/releases.js` parses it; the date of
+each version comes from its release, or from `EARLIER_DATES` for the ones before
+`hexa-studio-releases` existed). This uses one GitHub API call, cached by Vercel's edge for
+10 minutes; set a `GITHUB_TOKEN` environment variable on Vercel if the 60-an-hour limit is
+ever hit. If GitHub can't be reached, the page says so and the section keeps its link.
+Tests: `node --test tests/releases.test.js`.
+
 ## Content from the admin dashboard
 
 The hero, an announcement strip, which sections show, the pricing, the contact address
@@ -34,7 +48,7 @@ or redeploy here.
   valid for an hour), labelled as a preview and kept out of search.
 - A text change to a part that isn't editable is still a commit to `page.html`. Keep the
   markers around the editable parts when editing them by hand.
-- Tests: `node --test tests/render.test.js`.
+- Tests: `node --test tests/render.test.js tests/releases.test.js`.
 
 ## Deploy on Vercel
 
